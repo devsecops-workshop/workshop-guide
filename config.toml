@@ -1,4 +1,3 @@
-#baseurl = "https://people.redhat.com/grieger/summit2020_labs/"
 baseurl = "https://ansible-labs-crew.github.io/"
 contentdir    = "content"
 layoutdir     = "layouts"
