@@ -1,4 +1,4 @@
-baseurl = "https://ansible-labs-crew.github.io/"
+baseurl = "https://devsecops-workshop.github.io/"
 contentdir    = "content"
 layoutdir     = "layouts"
 publishdir    = "public"
