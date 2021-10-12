@@ -2,7 +2,6 @@ baseurl = "https://ansible-labs-crew.github.io/"
 contentdir    = "content"
 layoutdir     = "layouts"
 publishdir    = "public"
-# test
 title = "DevSecOps Workshop 2021"
 canonifyurls = true
 paginate = 10
