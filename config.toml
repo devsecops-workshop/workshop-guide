@@ -25,12 +25,11 @@ home = [ "HTML", "RSS", "JSON"]
   disableInlineCopyToClipBoard = "false"
 
 ## Use those parameters with {{< param "param_name" >}}
-  deployment = "agnosticd"
+  deployment = "production"
 
 [[menu.shortcuts]]
 name = "<i class='fas fa-home'></i> Homepage"
-#url = "https://people.redhat.com/grieger/summit2020_labs/"
-url = "https://goetzrieger.github.io/"
+url = "https://devsecops-workshop.github.io/"
 weight = 10
 
 [markup]

@@ -1,5 +1,5 @@
 +++
-title = "Introduction to the DevSecOps Workshop"
+title = "The DevSecOps Workshop"
 weight = 1
 +++
 

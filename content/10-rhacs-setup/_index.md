@@ -1,6 +1,6 @@
 +++
-title = "Install and Configure Advanced Cluster Security"
-weight = 2
+title = "Install and Configure ACS"
+weight = 10
 +++
 ## Install RHACS
 ### Install the Operator
@@ -78,30 +78,36 @@ Now go to your **RHACS Portal** again, after a couple of minutes you should see 
 ### Create a serviceaccount to scan the internal registry
 To enable scanning of images in the internal registry, you'll have to add a serviceaccount and configure an **Integration**.
 
+**Create ServiceAccount the read from Registry**
 - Make sure you are in the `stackrox` **Project**
-- **User Management -> Service account -> Create ServiceAccount**
-- Check Token below
-- Copy Token for login
-- Give the sa the right to **read** images for all projects:
+- **User Management -> ServiceAccounts -> Create ServiceAccount**
+- Replace the example name with `acs-registry-reader` and click **Create**
+- In the new ServiceAccount, under **Secrets** click the `...-token-...` secret
+- Under **Data** copy the Token
+- Give the ServiceAccount the right to **read** images from all projects:
 
 ```
 oc adm policy add-cluster-role-to-user 'system:image-puller' -z registry01 -n stackrox
 ```
 
-oder
+or
 
 
 ```
 oc adm policy add-cluster-role-to-user 'system:image-puller' system:serviceaccount:stackrox:registry01 -n stackrox
 ```
+And you'll need the service address for the registry, get it e.g. from the **Environment** of a registry pod.
+  - It should be something like: `image-registry.openshift-image-registry.svc:5000`
 
+
+**Add Registry Integration to ACS**
 
 Access the **RHACS Portal** and add an integration of type **Generic Docker Registry** from the **Platform Configuration -> Integrations menu**.
 
 Fill in the fields:
 - Give the integration a unique name that should include the cluster name
 - Set **Types** to **Registry**
-- Set **Endpoint** to the route you exposed for the registry
-- Put in the username and token you collected above when exposing the registry
+- Set **Endpoint** to the registry service address
+- Put in the ServiceAccount name as username and the token you copied above
 - Select Disable TLS certificate validation
 - Press the test button to validate the connection and press **Save** when the test is successful.
