@@ -1,6 +1,6 @@
 +++
 title = "Getting to know ACS"
-weight = 11
+weight = 20
 +++
 
 Before we start to integrate **Red Hat Advanced Cluster Security** in our setup, you should become familiar with the basic concepts.
@@ -36,23 +36,20 @@ Now start to explore the Security Use Cases ACS targets as provided in the left 
 
 - **Network Graph**:
   - The Network Graph is a flow diagram, firewall diagram, and firewall rule builder in one.
-  - In the upper left you’ll see the dropdown for clusters so I can easily navigate between any of the clusters that are connected to ACS.
-  - The default view, Active, shows the actual traffic for the Past Hour between the deployments in all of the namespaces.
+  - In the upper left you’ll see the dropdown for clusters.
+  - The default view **Active** the actual traffic for the Past Hour between the deployments in all namespaces is shown.
   - You can change the time frame in the upper right dropdown, and the legend at bottom left
 
 - **Violations**:
-  - Violations record all of the specific times where a policy criteria has been met by any of the objects in your cluster - images and their components, deployments, runtime activity.
-  - It is like a “stream” of events that have occurred.
+  - Violations record all times where a policy criteria was triggered by any of the objects in your cluster - images, components, deployments, runtime activity.
 
 - **Compliance**:
   - The compliance reports gather information for configuration, industry standards, and best practices for container-based workloads running in OpenShift.
-  - The compliance features are tied to controls in Risk, in the Network Graph, and in Policies
+  - The compliance features are tied to controls in Risk, in the Network Graph, and in Policies.
 
 - **Vulnerability Management**:
-  - Vulnerability Management is a familiar topic for most security teams.
-  - The overview provides several important reports - where the vulnerabilities are, which are the most widespread or the most recent, where my Docker images are coming from, and important vulnerabilities in OpenShift itself.
-  - More important than fixing any one vulnerability is establishing a process to keep container images updated and to prevent the promotion through the pipeline for images that have serious, fixable vulnerabilities.
-  - In the upper right, you’ll see buttons to link you to all policies, CVEs, and images, and a menu to bring you to reports by cluster, namespace, deployment, and co.
+  - Vulnerability Management provides several important reports - where the vulnerabilities are, which are the most widespread or the most recent, where my Docker images are coming from, and important vulnerabilities in OpenShift itself.
+  - In the upper right are buttons to link to all policies, CVEs, and images, and a menu to bring you to reports by cluster, namespace, deployment, and co.
 
 - **Configuration Management**:
   - Configuration management provides visibility into a number of infrastructure components: clusters and nodes, namespaces and deployments, and Kubernetes systems like RBAC and secrets.
@@ -66,8 +63,8 @@ Now start to explore the Security Use Cases ACS targets as provided in the left 
 
 ## System Policies
 
-As the foundation of ACS are the **System Policies**, have a good look around:
-- Navigate to the **System Policies** page from **Platform Configuration** in the left side menu
+As the foundation of ACS are the **system policies**, have a good look around:
+- Navigate to the **System Policies** section from **Platform Configuration** in the left side menu.
 - You will get an overview of the Built-in Policies
 - All of the policies that ship with the product are designed with the goal of providing targeted remediation that improves security hardening.
 - You’ll see this list contains many **Build** and **Deploy** time policies to catch misconfigurations early in the pipeline, but also **Runtime** policies that point back to specific hardening recommendations.
