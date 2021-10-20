@@ -15,12 +15,11 @@ After this create a new deployment of your game-changing application:
 - Create a new project `deepspace-int`
 - Click the **+Add** menu entry to the right and choose **From Git**
 - As **Git Repo URL** enter your Gitea clone URL
-- As **Builder Image** select **Red Hat OpenJDK 11 (RHEL 7)**
+- As **Builder Image** keep or select **Red Hat OpenJDK 11 (RHEL 7)**
+- Remove `-git` from all names
 - Check **Add pipeline**
-- click **Create**
-- Create Tekton Pipeline
-- Remove git from names
-- Cancel Pipeline Build
+- Click **Create**
+- Observe how the Tekton Pipeline is created
 
 Now your build pipeline has been set up and is ready to run. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it.
 
