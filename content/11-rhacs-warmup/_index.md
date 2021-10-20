@@ -36,30 +36,24 @@ Now start to explore the Security Use Cases ACS targets as provided in the left 
 
 - **Network Graph**:
   - The Network Graph is a flow diagram, firewall diagram, and firewall rule builder in one.
-  - In the upper left you’ll see the dropdown for clusters.
   - The default view **Active** the actual traffic for the Past Hour between the deployments in all namespaces is shown.
-  - You can change the time frame in the upper right dropdown, and the legend at bottom left
 
 - **Violations**:
   - Violations record all times where a policy criteria was triggered by any of the objects in your cluster - images, components, deployments, runtime activity.
 
 - **Compliance**:
   - The compliance reports gather information for configuration, industry standards, and best practices for container-based workloads running in OpenShift.
-  - The compliance features are tied to controls in Risk, in the Network Graph, and in Policies.
 
 - **Vulnerability Management**:
-  - Vulnerability Management provides several important reports - where the vulnerabilities are, which are the most widespread or the most recent, where my Docker images are coming from, and important vulnerabilities in OpenShift itself.
+  - Vulnerability Management provides several important reports - where the vulnerabilities are, which are the most widespread or the most recent, where my images are coming from.
   - In the upper right are buttons to link to all policies, CVEs, and images, and a menu to bring you to reports by cluster, namespace, deployment, and co.
 
 - **Configuration Management**:
   - Configuration management provides visibility into a number of infrastructure components: clusters and nodes, namespaces and deployments, and Kubernetes systems like RBAC and secrets.
 
 - **Risk**:
-  - The Risk view goes beyond the basics of vulnerabilities to understand how deployment configuration and runtime activity impact the likelihood of an exploit occurring and how successful those exploits will be.
+  - The Risk view goes beyond the basics of vulnerabilities. It helps to understand how deployment configuration and runtime activity impact the likelihood of an exploit occurring and how successful those exploits will be.
   - This list view shows all deployments, in all clusters and namespaces, ordered by Risk priority.
-  - Risk is also influenced by runtime activity - and Deployments that have activity that could indicate a breach in progress have a red dot on the left.
-  - Obviously - the first one in the list should be our first focus.
-  - The reality of security is that it’s just not possible to tackle all sources of Risk, so organizations end up prioritizing their efforts - We want ACS to help inform that prioritization.
 
 ## System Policies
 
@@ -67,14 +61,15 @@ As the foundation of ACS are the **system policies**, have a good look around:
 - Navigate to the **System Policies** section from **Platform Configuration** in the left side menu.
 - You will get an overview of the Built-in Policies
 - All of the policies that ship with the product are designed with the goal of providing targeted remediation that improves security hardening.
-- You’ll see this list contains many **Build** and **Deploy** time policies to catch misconfigurations early in the pipeline, but also **Runtime** policies that point back to specific hardening recommendations.
+- You’ll see this list contains many **Build** and **Deploy** time policies to catch misconfigurations early in the pipeline, but also **Runtime** policies.
 - These policies come from us at Red Hat - our expertise, our interpretation of industry best practice, and our interpretation of common compliance standards, but you can modify them or create your own.
 
 ## Filters
 Most UI pages have a filters section at the top that allows you to narrow the reporting view to matching or non-matching criteria. Almost all of the attributes that ACS gathers are filterable, try it out:
-  - Go to the **Risk** view
-  - Click in the **Filters** Bar
-  - Start typing `Process Name` and select the `Process Name` key
-  - Type `java` and press enter; click away to get the filters dropdown to clear
-  - You should see your deployment that has been “seen” running Java since it started
-  - At the upper right there’s a **Create Policy** button. Now that we’ve searched for interesting criteria, we can create a policy from the search filter to automatically identify this criteria going forward.
+- Go to the **Risk** view
+- Click in the **Filters** Bar
+- Start typing `Process Name` and select the `Process Name` key
+- Type `java` and press enter; click away to get the filters dropdown to clear
+- You should see your deployment that has been “seen” running Java since it started
+- Try another one: limit the filter to your Project namespace only
+- Note the **Create Policy** button. It can be used to create a policy from the search filter to automatically identify this criteria.

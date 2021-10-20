@@ -2,6 +2,10 @@
 title = "Install and Configure ACS"
 weight = 15
 +++
+During the workshop you went through the OpenShift developer experience starting from software development using Quarkus and `odo`, moving on to automating build and deployment using Tekton pipelines and finally using GitOps for production deployments.
+
+Now it's time to add another extremely important piece to the setup; enhancing application security in a conainerized world. Using the most recent addition to the OpenShift portfolio: **Red Hat Advanced Cluster Security for Kubernetes**!
+
 ## Install RHACS
 ### Install the Operator
 - Install the "Advanced Cluster Security for Kubernetes" operator from OperatorHub with the default values.

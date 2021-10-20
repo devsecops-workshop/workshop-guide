@@ -3,18 +3,32 @@ title = "Outer Loop"
 weight = 8
 +++
 
-- Install OpenShift Pipelines from OperatorHub
-- Go to OpenShift Developer Console
-- Create Project deepspace-int
-- Add “From Git”
-- Enter Git URL
-- Java 11 Builder
-- Create Deployment
+Now that you have seen how a developer can quickly start to code using modern tooling, it's time to learn how to proceed with the application to production. The first step is to implement a build pipeline to automate new builds. Let's call this stage `int`.
+
+To create and run the build pipeline you'll use OpenShift Pipelines/Tekton. The first step is to install it:
+
+- Install `OpenShift Pipelines` from OperatorHub
+
+After this create a new deployment of your game-changing application:
+
+- Switch to the **OpenShift Developer Console**
+- Create a new project `deepspace-int`
+- Click the **+Add** menu entry to the right and choose **From Git**
+- As **Git Repo URL** enter your Gitea clone URL
+- As **Builder Image** select **Red Hat OpenJDK 11 (RHEL 7)**
+- Check **Add pipeline**
+- click **Create**
 - Create Tekton Pipeline
 - Remove git from names
 - Cancel Pipeline Build
-- Create Old Image Stream Tag
-- NS : openshift, Tag : java-old-image
+
+Now your build pipeline has been set up and is ready to run. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it.
+
+- In the default `Java` image stream create another **Image Stream Tag** that points to an older version.
+- Using the Administrator view, switch to the project `openshift` and under **Builds** access the **ImageStreams** Tag : java-old-image
+- Search and open the **ImageStream** `Java`
+- Switch to YAML view and add the following snippet to the `tags:` section.
+  - Be careful to keep the needed indents!
 
 ```
 - name: java-old-image
@@ -36,7 +50,8 @@ weight = 8
        type: Local
 ```
 
-
-- Have look at https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185dd19c775cddc4ce5?tag=1.10-1.1630314161&push_date=1630540002000&container-tabs=security
+This will add a tag java-old-image that points to an older version. The image can be inspected here:
+https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185dd19c775cddc4ce5?tag=1.10-1.1630314161&push_date=1630540002000&container-tabs=security
 - Have a look at version 1.1-9
-- Build the pipeline again but choose Image java-old-image
+
+Now run the pipeline again but choose Image java-old-image this time.
