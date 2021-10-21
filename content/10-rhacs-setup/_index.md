@@ -80,7 +80,7 @@ Now you are ready to install the **SecuredClusters** instance, this will deploy 
 
 Now go to your **RHACS Portal** again, after a couple of minutes you should see you secured cluster under **Platform Configuration->Clusters**. Wait until all **Cluster Status** indicators become green.
 
-<!-- ### Create a serviceaccount to scan the internal registry
+### Create a serviceaccount to scan the internal registry
 To enable scanning of all images in the internal registry, you'll have to
 -  add a serviceaccount
 - assign it the needed privileges
@@ -117,4 +117,10 @@ Fill in the fields:
 - Set **Endpoint** to the registry service address
 - Put in the ServiceAccount name as username and the token you copied above
 - Select Disable TLS certificate validation
-- Press the test button to validate the connection and press **Save** when the test is successful. -->
+- Press the test button to validate the connection and press **Save** when the test is successful.
+
+{{% notice tip %}}
+You can also (this might be easier to maintain) just change the user and password for the exisintg, auto-generated entries for the entries `https://image-registry.openshift-image-registry.svc:5000
+` and `https://image-registry.openshift-image-registry.svc.cluster.local:5000
+`.
+{{% /notice %}}

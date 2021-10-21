@@ -82,7 +82,7 @@ spec:
       image: registry.access.redhat.com/ubi8/ubi-minimal:latest
       name: rox-image-check
       resources: {}
-      script: >-
+      script: >
         #!/usr/bin/env bash
 
         set +x
