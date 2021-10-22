@@ -149,17 +149,7 @@ spec:
 
         git status
 
-
-        #git remote add auth-origin $(echo $(params.GIT_REPOSITORY) | sed -E \
-        #"s#http://(.*)#http://$(params.GIT_USERNAME):$(params.GIT_PASSWORD)@\1#g")
-
-        git remote add auth-origin
-        https://gitea:gitea@repository-gitea.apps.{YOUR_DOMAIN}/gitea/openshift-gitops-getting-started.git
-
-
-        git show-ref
-
-        git push auth-origin main
+        git push
 
 
 
@@ -222,6 +212,30 @@ spec:
        - name: workspace
          workspace: workspace
 
+```
+- Create a secret with credentails for your gitea repository
+```yaml
+kind: Secret
+apiVersion: v1
+metadata:
+  name: gitea
+  namespace: deepspace-int
+  annotations:
+    tekton.dev/git-0: 'https://repository-git.apps.{YOUR DOMAIN}'
+data:
+  password: Z2l0ZWE=
+  username: Z2l0ZWE=
+type: kubernetes.io/basic-auth
+```
+- Edit the serviceaccount "pipeline" and add the secret to it:
+```yaml
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: pipeline
+  namespace: deepspace-int
+secrets:
+  - name: gitea
 ```
 - Run the pipeline and see that in your Gitea repo /environment/dev/kustomize.yaml is updated with the newImage version
 - This will tell ArgoCD to update the Deployment with this new Image version
