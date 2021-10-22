@@ -41,7 +41,7 @@ First create the system policy. In the **ACS Portal** do the following:
 ## Test the Policy
 
 Start the pipeline with the affected image version:
-- Go to the Pipeline, Start it and set **Version** to `java-old-test`
+- Go to the Pipeline, Start it and set **Version** to `java-old-image`
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments (`Quarkus-Build-Options-Git-Gsklhg-Build-...`) come and go when they are finished.
