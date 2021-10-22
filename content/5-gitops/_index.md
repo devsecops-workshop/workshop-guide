@@ -92,7 +92,7 @@ spec:
         kustomize version
 
 
-        kustomize edit set image \
+        kustomize edit set image
         $(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)
 
 
