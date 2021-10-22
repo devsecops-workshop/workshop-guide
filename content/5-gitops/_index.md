@@ -180,7 +180,7 @@ spec:
         #"s#http://(.*)#http://$(params.GIT_USERNAME):$(params.GIT_PASSWORD)@\1#g")
 
         git remote add auth-origin
-        https://gitea:gitea@repository-gitea.apps.ocp4.nexus-eight.com/gitea/openshift-gitops-getting-started.git
+        https://gitea:gitea@repository-gitea.apps.{YOUR_DOMAIN}/gitea/openshift-gitops-getting-started.git
 
 
         git show-ref
