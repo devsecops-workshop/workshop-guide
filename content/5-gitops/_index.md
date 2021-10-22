@@ -4,14 +4,14 @@ weight = 10
 +++
 
 - Install GitOps Operator from Operator Hub
-- Clone GitOps Repo to Gitea
+- Clone Config GitOps Repo to Gitea
  https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
 - Create OpenShift Project deepspace-prod
-Give ACS Permissions to create objects in namespace deepspace-prod
+Give ArgoCD Permissions to create objects in namespace deepspace-prod
 ```
  oc adm policy add-role-to-user admin system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n deepspace-prod
  ```
-- Give namespace deepspace-prod Permissions to pull Images from deepspace-int
+- Give namespace deepspace-prod permissions to pull images from deepspace-int
 ```
 oc policy add-role-to-user \
     system:image-puller system:serviceaccount:deepspace-prod:default \
@@ -27,8 +27,8 @@ oc policy add-role-to-user \
   - Path : environments/dev
   - Cluster URL : https://kubernetes.default.svc
   - Namespace : deepspace-prod
-- Watch the resources get rolled out to the namespace deepspace-prod
-- Add a new custom Tekton task (Pipelines > Tasks > New Task) to push changes to the git repo.
+- Watch the resources (Deployment, Service, Route)get rolled out to the namespace deepspace-prod
+- Add a new custom Tekton task (Switch to Administrator Perspective > Pipelines > Tasks > New Task) that can push to a git repo.
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -216,7 +216,7 @@ spec:
       name: workspace
 
 ```
-- Add a Task to your pipeline like this
+- Add this Task to your Pipeline by adding it to the YAML like this
 ```yaml
 - name: git-update-deployment
      params:
@@ -247,7 +247,8 @@ spec:
          workspace: workspace
 
 ```
-- Run pipeline and see that the git /environment/dev/kustomize.yaml is updated
-- Check that the new image is rolled out (you may need to Sync manually in ArgoCD)
+- Run the pipeline and see that in your Gitea repo /environment/dev/kustomize.yaml is updated with the newImage version
+- This will tell ArgoCD to update the Deployment with this new Image version
+- Check that the new image is rolled out (you may need to Sync manually in ArgoCD to speed it up)
 
 
