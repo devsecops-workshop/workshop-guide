@@ -7,7 +7,7 @@ weight = 10
 - Clone GitOps Repo to Gitea
  https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
 - Create OpenShift Project deepspace-prod
-Give ACS Permissions to create objects in namespace deepspace-prod
+- Give ACS Permissions to create objects in namespace deepspace-prod
 ```
  oc adm policy add-role-to-user admin system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n deepspace-prod
  ```
@@ -18,10 +18,11 @@ oc policy add-role-to-user \
     --namespace=deepspace-int
 ```
 - Go to ArgoCD URL (The is new shortcut at the top right menu with the squares)
-- User is admin and password will be in namespace openshift-gitops in Secret openshift-gitops-cluster
-- Create App
+- User is admin and password will be in the secret `openshift-gitops-cluster` in the namespace `openshift-gitops` 
+- Create an App
   - Application name : quarkus-options
   - Project : default
+  - Sync: Automatic
   - Self Heal true
   - Repo URL : https://repository-gitea.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git
   - Path : environments/dev
@@ -36,34 +37,7 @@ metadata:
  annotations:
    tekton.dev/pipelines.minVersion: 0.12.1
    tekton.dev/tags: git
- resourceVersion: '94554874'
  name: git-update-deployment
- uid: 0099bf67-93ee-4cfb-9e09-94ed743b26bf
- creationTimestamp: '2021-10-20T17:15:32Z'
- generation: 52
- managedFields:
-   - apiVersion: tekton.dev/v1beta1
-     fieldsType: FieldsV1
-     fieldsV1:
-       'f:metadata':
-         'f:annotations':
-           .: {}
-           'f:tekton.dev/pipelines.minVersion': {}
-           'f:tekton.dev/tags': {}
-         'f:labels':
-           .: {}
-           'f:app.kubernetes.io/version': {}
-           'f:operator.tekton.dev/provider-type': {}
-       'f:spec':
-         .: {}
-         'f:description': {}
-         'f:params': {}
-         'f:results': {}
-         'f:steps': {}
-         'f:workspaces': {}
-     manager: Mozilla
-     operation: Update
-     time: '2021-10-20T17:15:32Z'
  namespace: deepspace-int
  labels:
    app.kubernetes.io/version: '0.1'
