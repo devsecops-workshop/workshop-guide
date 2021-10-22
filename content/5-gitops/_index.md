@@ -33,154 +33,154 @@ oc policy add-role-to-user \
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
- annotations:
-   tekton.dev/pipelines.minVersion: 0.12.1
-   tekton.dev/tags: git
- resourceVersion: '94554874'
- name: git-update-deployment
- uid: 0099bf67-93ee-4cfb-9e09-94ed743b26bf
- creationTimestamp: '2021-10-20T17:15:32Z'
- generation: 52
- managedFields:
-   - apiVersion: tekton.dev/v1beta1
-     fieldsType: FieldsV1
-     fieldsV1:
-       'f:metadata':
-         'f:annotations':
-           .: {}
-           'f:tekton.dev/pipelines.minVersion': {}
-           'f:tekton.dev/tags': {}
-         'f:labels':
-           .: {}
-           'f:app.kubernetes.io/version': {}
-           'f:operator.tekton.dev/provider-type': {}
-       'f:spec':
-         .: {}
-         'f:description': {}
-         'f:params': {}
-         'f:results': {}
-         'f:steps': {}
-         'f:workspaces': {}
-     manager: Mozilla
-     operation: Update
-     time: '2021-10-20T17:15:32Z'
- namespace: deepspace-int
- labels:
-   app.kubernetes.io/version: '0.1'
-   operator.tekton.dev/provider-type: community
+  annotations:
+    tekton.dev/pipelines.minVersion: 0.12.1
+    tekton.dev/tags: git
+  resourceVersion: '94554874'
+  name: git-update-deployment
+  uid: 0099bf67-93ee-4cfb-9e09-94ed743b26bf
+  creationTimestamp: '2021-10-20T17:15:32Z'
+  generation: 52
+  managedFields:
+    - apiVersion: tekton.dev/v1beta1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:tekton.dev/pipelines.minVersion': {}
+            'f:tekton.dev/tags': {}
+          'f:labels':
+            .: {}
+            'f:app.kubernetes.io/version': {}
+            'f:operator.tekton.dev/provider-type': {}
+        'f:spec':
+          .: {}
+          'f:description': {}
+          'f:params': {}
+          'f:results': {}
+          'f:steps': {}
+          'f:workspaces': {}
+      manager: Mozilla
+      operation: Update
+      time: '2021-10-20T17:15:32Z'
+  namespace: deepspace-int
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/provider-type: community
 spec:
- description: This Task can be used to update image digest in a Git repo using kustomize
- params:
-   - name: GIT_REPOSITORY
-     type: string
-   - name: GIT_USERNAME
-     type: string
-   - name: GIT_PASSWORD
-     type: string
-   - name: CURRENT_IMAGE
-     type: string
-   - name: NEW_IMAGE
-     type: string
-   - name: NEW_DIGEST
-     type: string
-   - name: KUSTOMIZATION_PATH
-     type: string
- results:
-   - description: The commit SHA
-     name: commit
- steps:
-   - image: 'docker.io/alpine/git:v2.26.2'
-     name: git-clone
-     resources: {}
-     script: |
-       rm -rf git-update-digest-workdir
-       git clone $(params.GIT_REPOSITORY) git-update-digest-workdir
-     workingDir: $(workspaces.workspace.path)
-   - image: 'quay.io/wpernath/kustomize-ubi:latest'
-     name: update-digest
-     resources: {}
-     script: >
-       #!/usr/bin/env bash
- 
-       echo "Start"
- 
-       pwd
- 
-       cd git-update-digest-workdir/$(params.KUSTOMIZATION_PATH)
- 
-       pwd
- 
- 
-       #echo "kustomize edit set image
-       #$(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)"
- 
- 
-       kustomize version
- 
- 
-       kustomize edit set image \
-       $(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)
- 
- 
-       echo "##########################"
- 
- 
- 
-       echo "### kustomization.yaml ###"
- 
- 
- 
-       echo "##########################"
- 
- 
-       ls
- 
- 
-       cat kustomization.yaml
-     workingDir: $(workspaces.workspace.path)
-   - image: 'docker.io/alpine/git:v2.26.2'
-     name: git-commit
-     resources: {}
-     script: >
-       pwd
- 
- 
-       cd git-update-digest-workdir
- 
- 
- 
-       git config user.email "tekton-pipelines-ci@redhat.com"
- 
- 
- 
-       git config user.name "tekton-pipelines-ci"
- 
- 
- 
-       git status
+  description: This Task can be used to update image digest in a Git repo using kustomize
+  params:
+    - name: GIT_REPOSITORY
+      type: string
+    - name: GIT_USERNAME
+      type: string
+    - name: GIT_PASSWORD
+      type: string
+    - name: CURRENT_IMAGE
+      type: string
+    - name: NEW_IMAGE
+      type: string
+    - name: NEW_DIGEST
+      type: string
+    - name: KUSTOMIZATION_PATH
+      type: string
+  results:
+    - description: The commit SHA
+      name: commit
+  steps:
+    - image: 'docker.io/alpine/git:v2.26.2'
+      name: git-clone
+      resources: {}
+      script: |
+        rm -rf git-update-digest-workdir
+        git clone $(params.GIT_REPOSITORY) git-update-digest-workdir
+      workingDir: $(workspaces.workspace.path)
+    - image: 'quay.io/wpernath/kustomize-ubi:latest'
+      name: update-digest
+      resources: {}
+      script: >
+        #!/usr/bin/env bash
+
+        echo "Start"
+
+        pwd
+
+        cd git-update-digest-workdir/$(params.KUSTOMIZATION_PATH)
+
+        pwd
 
 
-       git add $(params.KUSTOMIZATION_PATH)/kustomization.yaml
+        #echo "kustomize edit set image
+        #$(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)"
+
+
+        kustomize version
+
+
+        kustomize edit set image \
+        $(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)
+
+
+        echo "##########################"
+
+
+
+        echo "### kustomization.yaml ###"
+
+
+
+        echo "##########################"
+
+
+        ls
+
+
+        cat kustomization.yaml
+      workingDir: $(workspaces.workspace.path)
+    - image: 'docker.io/alpine/git:v2.26.2'
+      name: git-commit
+      resources: {}
+      script: >
+        pwd
+
+
+        cd git-update-digest-workdir
+
+
+
+        git config user.email "tekton-pipelines-ci@redhat.com"
+
+
+
+        git config user.name "tekton-pipelines-ci"
+
+
+
+        git status
+
+
+
+        git add $(params.KUSTOMIZATION_PATH)/kustomization.yaml
 
 
         # git commit -m "[$(context.pipelineRun.name)] Image digest updated"
 
 
-       git status
+        git status
 
 
-       git commit -m "[ci] Image digest updated"
+        git commit -m "[ci] Image digest updated"
 
 
-       git status
+        git status
 
-        # Challenge
+
         #git remote add auth-origin $(echo $(params.GIT_REPOSITORY) | sed -E \
         #"s#http://(.*)#http://$(params.GIT_USERNAME):$(params.GIT_PASSWORD)@\1#g")
 
-        #Manual
         git remote add auth-origin
-        https://gitea:gitea@repository-gitea.apps.{YOUR DOMAIN}/gitea/openshift-gitops-getting-started.git
+        https://gitea:gitea@repository-gitea.apps.ocp4.nexus-eight.com/gitea/openshift-gitops-getting-started.git
 
 
         git show-ref
@@ -214,7 +214,6 @@ spec:
   workspaces:
     - description: The workspace consisting of maven project.
       name: workspace
-
 
 ```
 - Add a Task to your pipeline like this
