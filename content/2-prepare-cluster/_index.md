@@ -71,7 +71,7 @@ https://<codeready-openshift-workspaces.apps.cluster-mqpmq.mqpmq.sandbox283.open
 
 Have a good look around the UI, it should look familiar if you have ever worked with VSCode and the like. To prepare the Workspace for developing with OpenShift, ru the following steps:
 
-- In the CRW shortcuts menu to the left
+- In the CRW shortcuts menu to the right
   - Run **install oc**
   - Run **install odo**
 - Close the tabs the installation opened.
