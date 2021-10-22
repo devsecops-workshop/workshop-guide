@@ -4,14 +4,14 @@ weight = 10
 +++
 
 - Install GitOps Operator from Operator Hub
-- Clone GitOps Repo to Gitea
+- Clone Config GitOps Repo to Gitea
  https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
 - Create OpenShift Project deepspace-prod
 - Give ACS Permissions to create objects in namespace deepspace-prod
 ```
  oc adm policy add-role-to-user admin system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n deepspace-prod
  ```
-- Give namespace deepspace-prod Permissions to pull Images from deepspace-int
+- Give namespace deepspace-prod permissions to pull images from deepspace-int
 ```
 oc policy add-role-to-user \
     system:image-puller system:serviceaccount:deepspace-prod:default \
@@ -28,133 +28,135 @@ oc policy add-role-to-user \
   - Path : environments/dev
   - Cluster URL : https://kubernetes.default.svc
   - Namespace : deepspace-prod
-- Click on the newly created App and watch the resources get rolled out to the namespace deepspace-prod
+- Click on the newly created App and watch the resources (Deployment, Service, Route) get rolled out to the namespace deepspace-prod
+  - It is expected that the pods are not starting successfully
 - Move back to the OpenShift Console and add a new custom Tekton task (Pipelines > Tasks > New Task) to push changes to the git repo.
+- Make sure to replace {YOUR_DOMAIN}
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
- annotations:
-   tekton.dev/pipelines.minVersion: 0.12.1
-   tekton.dev/tags: git
- name: git-update-deployment
- namespace: deepspace-int
- labels:
-   app.kubernetes.io/version: '0.1'
-   operator.tekton.dev/provider-type: community
+  annotations:
+    tekton.dev/pipelines.minVersion: 0.12.1
+    tekton.dev/tags: git
+  name: git-update-deployment
+  namespace: deepspace-int
+  labels:
+    app.kubernetes.io/version: '0.1'
+    operator.tekton.dev/provider-type: community
 spec:
- description: This Task can be used to update image digest in a Git repo using kustomize
- params:
-   - name: GIT_REPOSITORY
-     type: string
-   - name: GIT_USERNAME
-     type: string
-   - name: GIT_PASSWORD
-     type: string
-   - name: CURRENT_IMAGE
-     type: string
-   - name: NEW_IMAGE
-     type: string
-   - name: NEW_DIGEST
-     type: string
-   - name: KUSTOMIZATION_PATH
-     type: string
- results:
-   - description: The commit SHA
-     name: commit
- steps:
-   - image: 'docker.io/alpine/git:v2.26.2'
-     name: git-clone
-     resources: {}
-     script: |
-       rm -rf git-update-digest-workdir
-       git clone $(params.GIT_REPOSITORY) git-update-digest-workdir
-     workingDir: $(workspaces.workspace.path)
-   - image: 'quay.io/wpernath/kustomize-ubi:latest'
-     name: update-digest
-     resources: {}
-     script: >
-       #!/usr/bin/env bash
- 
-       echo "Start"
- 
-       pwd
- 
-       cd git-update-digest-workdir/$(params.KUSTOMIZATION_PATH)
- 
-       pwd
- 
- 
-       #echo "kustomize edit set image
-       #$(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)"
- 
- 
-       kustomize version
- 
- 
-       kustomize edit set image \
-       $(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)
- 
- 
-       echo "##########################"
- 
- 
- 
-       echo "### kustomization.yaml ###"
- 
- 
- 
-       echo "##########################"
- 
- 
-       ls
- 
- 
-       cat kustomization.yaml
-     workingDir: $(workspaces.workspace.path)
-   - image: 'docker.io/alpine/git:v2.26.2'
-     name: git-commit
-     resources: {}
-     script: >
-       pwd
- 
- 
-       cd git-update-digest-workdir
- 
- 
- 
-       git config user.email "tekton-pipelines-ci@redhat.com"
- 
- 
- 
-       git config user.name "tekton-pipelines-ci"
- 
- 
- 
-       git status
+  description: This Task can be used to update image digest in a Git repo using kustomize
+  params:
+    - name: GIT_REPOSITORY
+      type: string
+    - name: GIT_USERNAME
+      type: string
+    - name: GIT_PASSWORD
+      type: string
+    - name: CURRENT_IMAGE
+      type: string
+    - name: NEW_IMAGE
+      type: string
+    - name: NEW_DIGEST
+      type: string
+    - name: KUSTOMIZATION_PATH
+      type: string
+  results:
+    - description: The commit SHA
+      name: commit
+  steps:
+    - image: 'docker.io/alpine/git:v2.26.2'
+      name: git-clone
+      resources: {}
+      script: |
+        rm -rf git-update-digest-workdir
+        git clone $(params.GIT_REPOSITORY) git-update-digest-workdir
+      workingDir: $(workspaces.workspace.path)
+    - image: 'quay.io/wpernath/kustomize-ubi:latest'
+      name: update-digest
+      resources: {}
+      script: >
+        #!/usr/bin/env bash
+
+        echo "Start"
+
+        pwd
+
+        cd git-update-digest-workdir/$(params.KUSTOMIZATION_PATH)
+
+        pwd
 
 
-       git add $(params.KUSTOMIZATION_PATH)/kustomization.yaml
+        #echo "kustomize edit set image
+        #$(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)"
+
+
+        kustomize version
+
+
+        kustomize edit set image \
+        $(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)
+
+
+        echo "##########################"
+
+
+
+        echo "### kustomization.yaml ###"
+
+
+
+        echo "##########################"
+
+
+        ls
+
+
+        cat kustomization.yaml
+      workingDir: $(workspaces.workspace.path)
+    - image: 'docker.io/alpine/git:v2.26.2'
+      name: git-commit
+      resources: {}
+      script: >
+        pwd
+
+
+        cd git-update-digest-workdir
+
+
+
+        git config user.email "tekton-pipelines-ci@redhat.com"
+
+
+
+        git config user.name "tekton-pipelines-ci"
+
+
+
+        git status
+
+
+
+        git add $(params.KUSTOMIZATION_PATH)/kustomization.yaml
 
 
         # git commit -m "[$(context.pipelineRun.name)] Image digest updated"
 
 
-       git status
+        git status
 
 
-       git commit -m "[ci] Image digest updated"
+        git commit -m "[ci] Image digest updated"
 
 
-       git status
+        git status
 
-        # Challenge
+
         #git remote add auth-origin $(echo $(params.GIT_REPOSITORY) | sed -E \
         #"s#http://(.*)#http://$(params.GIT_USERNAME):$(params.GIT_PASSWORD)@\1#g")
 
-        #Manual
         git remote add auth-origin
-        https://gitea:gitea@repository-gitea.apps.{YOUR DOMAIN}/gitea/openshift-gitops-getting-started.git
+        https://gitea:gitea@repository-gitea.apps.{YOUR_DOMAIN}/gitea/openshift-gitops-getting-started.git
 
 
         git show-ref
@@ -189,10 +191,11 @@ spec:
     - description: The workspace consisting of maven project.
       name: workspace
 
-
 ```
-- Add a Task to your pipeline like this
+- Add this Task to your Pipeline by adding it to the YAML like this
+- Make sure to replace {YOUR_DOMAIN}
 ```yaml
+...
 - name: git-update-deployment
      params:
        - name: GIT_REPOSITORY
@@ -222,7 +225,8 @@ spec:
          workspace: workspace
 
 ```
-- Run pipeline and see that the git /environment/dev/kustomize.yaml is updated
-- Check that the new image is rolled out (you may need to Sync manually in ArgoCD)
+- Run the pipeline and see that in your Gitea repo /environment/dev/kustomize.yaml is updated with the newImage version
+- This will tell ArgoCD to update the Deployment with this new Image version
+- Check that the new image is rolled out (you may need to Sync manually in ArgoCD to speed it up)
 
 
