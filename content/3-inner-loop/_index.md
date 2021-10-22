@@ -34,8 +34,8 @@ And finally push the app to OpenShift
 ```
 To test the app:
 - In OpenShift open the `deepspace-dev` project and switch to the **Developer Console**
-- Open the **Topology** tab, show details of the deployment by clicking on the round circle with the OpenShift icon
-- In the opened **Resources** view on the right, click on the URL displayed under the route deepdive-app-app
+- Open the **Topology** tab and click on the round circle with the OpenShift icon to display details of the deployment
+- In the opened **Resources** view on the right, click on the URL displayed under the route `deepdive-app-app`
 - Your app should show up as a simple web page. In the `RESTEasy JAX-RS` section click the `@Path` endpoint `/hello` to see the result.
 
 Now for the fun part: Using `odo` you can just dynamically change your code and push it out again without doing a new build! No dev magic involved:
