@@ -12,6 +12,9 @@ As an example you'll create a new Quarkus application. You don't need to have pr
   - In **My Workspace** to the right click **New Terminal**
 - Copy the login command from your OpenShift cluster, and use it to log in `oc` in the CRW terminal.
 - Create a new project `deepspace-dev`
+```
+./oc new-project deepspace-dev
+```
 - First use `odo` ("OpenShift Do") to list the programming languages/frameworks it supports
   - Note that not all languages `odo` works with are officially supported!
 ```
@@ -31,7 +34,8 @@ And finally push the app to OpenShift
 ```
 To test the app:
 - In OpenShift open the `deepspace-dev` project and switch to the **Developer Console**
-- Open the deployment and access the route
+- Open the **Topology** tab and click on the round circle with the OpenShift icon to display details of the deployment
+- In the opened **Resources** view on the right, click on the URL displayed under the route `deepdive-app-app`
 - Your app should show up as a simple web page. In the `RESTEasy JAX-RS` section click the `@Path` endpoint `/hello` to see the result.
 
 Now for the fun part: Using `odo` you can just dynamically change your code and push it out again without doing a new build! No dev magic involved:
