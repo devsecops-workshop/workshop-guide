@@ -3,9 +3,9 @@ title = "Outer Loop"
 weight = 8
 +++
 
-Now that you have seen how a developer can quickly start to code using modern tooling, it's time to learn how to proceed with the application to production. The first step is to implement a build pipeline to automate new builds. Let's call this stage `int`.
+Now that you have seen how a developer can quickly start to code using modern tooling, it's time to learn how to proceed with the application to production. The first step is to implement a build pipeline to automate new builds. Let's call this stage `int` for integration.
 
-To create and run the build pipeline you'll use OpenShift Pipelines/Tekton. The first step is to install it:
+To create and run the build pipeline you'll use OpenShift Pipelines (Tekton). The first step is to install it:
 
 - Install `OpenShift Pipelines` from OperatorHub
 
@@ -14,12 +14,12 @@ After this create a new deployment of your game-changing application:
 - Switch to the **OpenShift Developer Console**
 - Create a new project `deepspace-int`
 - Click the **+Add** menu entry to the right and choose **From Git**
-- As **Git Repo URL** enter your Gitea clone URL
+- As **Git Repo URL** enter your Gitea clone URL (There my may be warning about the repo url that you can ignore)
 - As **Builder Image** keep or select **Red Hat OpenJDK 11 (RHEL 7)**
-- Remove `-git` from all names
+- Remove the segment `-git` from Application and Name
 - Check **Add pipeline**
 - Click **Create**
-- Observe how the Tekton Pipeline is created
+- In the main menu left, click in Pipeline and observe how the Tekton Pipeline is created
 
 Now your build pipeline has been set up and is ready to run. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it.
 
@@ -29,7 +29,7 @@ Now your build pipeline has been set up and is ready to run. There is one more s
 - Switch to YAML view and add the following snippet to the `tags:` section.
   - Be careful to keep the needed indents!
 
-```
+```yaml
 - name: java-old-image
      annotations:
        description: Build and run Java applications using Maven and OpenJDK 8.
