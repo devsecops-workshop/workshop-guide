@@ -51,7 +51,7 @@ In the cloned repository you'll find a `devfile.yml` for use with CodeReady Work
 
 ## Install and Prepare CodeReady Workspaces (CRW)
 - Install the CRW Operator from OperatorHub (not the Tech Preview one!) using default settings.
-- Open the operator and create a new **CodeReady Workspaces** instance using the default settings.
+- Go to **Installed Operators -> CodeReady Workspaces** and create a new instance (CodeReady Workspaces instance Specification) using the default settings.
 - Wait until deployment has finished.
 
 As you'll start your CRW workspace using the devfile mechanism, you have to compose the URL from the codeready route and the devfile location.
