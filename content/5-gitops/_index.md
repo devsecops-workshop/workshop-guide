@@ -3,8 +3,8 @@ title = "Configure GitOps"
 weight = 10
 +++
 
-- Install GitOps Operator from Operator Hub
-- Clone Config GitOps Repo to Gitea
+- Install GitOps Operator from OperatorHub
+- Clone the Config GitOps Repo to Gitea
  https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
 - Create OpenShift Project deepspace-prod
 Give ArgoCD Permissions to create objects in namespace deepspace-prod
@@ -27,7 +27,7 @@ oc policy add-role-to-user \
   - Path : environments/dev
   - Cluster URL : https://kubernetes.default.svc
   - Namespace : deepspace-prod
-- Watch the resources (Deployment, Service, Route)get rolled out to the namespace deepspace-prod
+- Watch the resources (Deployment, Service, Route) get rolled out to the namespace deepspace-prod
 - Add a new custom Tekton task (Switch to Administrator Perspective > Pipelines > Tasks > New Task) that can push to a git repo.
 - Make sure to replace {YOUR_DOMAIN}
 ```yaml
