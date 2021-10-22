@@ -53,4 +53,4 @@ This will add a tag java-old-image that points to an older version. The image ca
 https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185dd19c775cddc4ce5?tag=1.10-1.1630314161&push_date=1630540002000&container-tabs=security
 - Have a look at version 1.1-9
 
-Now run the pipeline again but choose Image java-old-image this time.
+Now run the pipeline again. Open your quarkus-build-options pipeline and choose "Run" from the pull down menu of the "Actions" button on the upper right hand side. Edit the  "VERSION" parameter and use "java-old-image" tag.
