@@ -55,7 +55,7 @@ In the cloned repository you'll find a `devfile.yml` for use with CodeReady Work
 - Wait until deployment has finished.
 
 As you'll start your CRW workspace using the devfile mechanism, you have to compose the URL from the codeready route and the devfile location.
-- First look up the `codeready` route and the full URL to access the `devfile.yml` in Gitea.
+- First look up the `codeready` route and the full URL to access the `devfile.yml` in Gitea by using the "raw" format button.
 - Now use both components to build an URL like below:
 ```
 https://<codeready-openshift-route>/f?url=<full URL to devfile.yml>
