@@ -41,7 +41,7 @@ In the **RHACS Portal**:
 
 - Navigate to **Platform Configuration → Integrations**.
 - Under the **Authentication Tokens** section, click on **Cluster Init Bundle**.
-- Click **New Integration**
+- Click **Generate bundle**
 - Enter a name for the cluster init bundle and click **Generate**.
 - Click **Download Kubernetes Secret File** to download the generated bundle.
 
