@@ -118,7 +118,7 @@ After you added it you have to fill in values for the parameters the task define
   - Click **Save**
 
 ## Test the Scan Task
-With our Deepspace **Security Policy** still not set to `enforce` we first are going to test the pipeline integration. Start the pipeline with Java **Version** `java-old-test`
+With our Deepspace **Security Policy** still not set to `enforce` we first are going to test the pipeline integration. Start the pipeline with Java **Version** `java-old-image`
 - Expected Result:
   - The `rox-image-check` task should succeed, but if you have a look at the output (click the task in the visual representation) you should see that the **build violated our policy**!
 
@@ -130,7 +130,7 @@ To test the fixed image, just start the task with the default (latest) Java vers
 The last step is to enforce the Security Policy. If the policy is violated the pipeline should be stopped and the application should not be deployed.
 
 - Edit the **Security Policy** in **ACS Portal** and set enforcement to **On** for the stages **Build** and **Deploy**
-- Run the pipeline again, first with Java **Version** `java-old-test` and then with the latest default version.
+- Run the pipeline again, first with Java **Version** `java-old-image` and then with the latest default version.
 - Expecte results:
   - We are sure you know by now what to expect!
   - The pipeline should fail with the old Java image version and succeed with the latest image version!
