@@ -23,13 +23,13 @@ oc policy add-role-to-user \
   - Application name : quarkus-options
   - Project : default
   - Sync: Automatic
-  - Self Heal true
-  - Repo URL : https://repository-gitea.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git
+  - Self Heal: true
+  - Repo URL : `https://repository-gitea.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`
   - Path : environments/dev
   - Cluster URL : https://kubernetes.default.svc
   - Namespace : deepspace-prod
-- Watch the resources get rolled out to the namespace deepspace-prod
-- Add a new custom Tekton task (Pipelines > Tasks > New Task) to push changes to the git repo.
+- Click on the newly created App and watch the resources get rolled out to the namespace deepspace-prod
+- Move back to the OpenShift Console and add a new custom Tekton task (Pipelines > Tasks > New Task) to push changes to the git repo.
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Task
