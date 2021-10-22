@@ -29,6 +29,7 @@ oc policy add-role-to-user \
   - Namespace : deepspace-prod
 - Watch the resources (Deployment, Service, Route)get rolled out to the namespace deepspace-prod
 - Add a new custom Tekton task (Switch to Administrator Perspective > Pipelines > Tasks > New Task) that can push to a git repo.
+- Make sure to replace {YOUR_DOMAIN}
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -36,34 +37,7 @@ metadata:
   annotations:
     tekton.dev/pipelines.minVersion: 0.12.1
     tekton.dev/tags: git
-  resourceVersion: '94554874'
   name: git-update-deployment
-  uid: 0099bf67-93ee-4cfb-9e09-94ed743b26bf
-  creationTimestamp: '2021-10-20T17:15:32Z'
-  generation: 52
-  managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:metadata':
-          'f:annotations':
-            .: {}
-            'f:tekton.dev/pipelines.minVersion': {}
-            'f:tekton.dev/tags': {}
-          'f:labels':
-            .: {}
-            'f:app.kubernetes.io/version': {}
-            'f:operator.tekton.dev/provider-type': {}
-        'f:spec':
-          .: {}
-          'f:description': {}
-          'f:params': {}
-          'f:results': {}
-          'f:steps': {}
-          'f:workspaces': {}
-      manager: Mozilla
-      operation: Update
-      time: '2021-10-20T17:15:32Z'
   namespace: deepspace-int
   labels:
     app.kubernetes.io/version: '0.1'
@@ -217,7 +191,9 @@ spec:
 
 ```
 - Add this Task to your Pipeline by adding it to the YAML like this
+- Make sure to replace {YOUR_DOMAIN}
 ```yaml
+...
 - name: git-update-deployment
      params:
        - name: GIT_REPOSITORY
