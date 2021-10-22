@@ -24,7 +24,7 @@ After this create a new deployment of your game-changing application:
 Now your build pipeline has been set up and is ready to run. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it.
 
 - In the default `Java` image stream create another **Image Stream Tag** that points to an older version.
-- Using the Administrator view, switch to the project `openshift` and under **Builds** access the **ImageStreams** Tag : java-old-image
+- Using the Administrator view, switch to the project `openshift` and under **Builds** access the **ImageStreams**
 - Search and open the **ImageStream** `Java`
 - Switch to YAML view and add the following snippet to the `tags:` section.
   - Be careful to keep the needed indents!
