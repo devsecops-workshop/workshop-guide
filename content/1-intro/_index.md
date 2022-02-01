@@ -10,7 +10,7 @@ This is the storyline you'll follow today:
 
 - Create application using CodeReady Workspaces
 - Inner Dev Loop
-  - Use `odo` to create, push, change apps on the fly
+  - Use [odo](https://developers.redhat.com/products/odo/overview) to create, push, change apps on the fly
 - Outer Dev Loop
   - Learn to work with Tekton Pipelines
   - Use GitOps with ArgoCD
