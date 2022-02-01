@@ -19,7 +19,7 @@ This is a good example of how you can integrate an operator into your catalog th
 ```
 oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea-operator/master/catalog_source.yaml
 ```
-- Go to OperatorHub and search for `Gitea`
+- Go to OperatorHub and search for `Gitea` (You may need to disable search filters)
 - Install the `Gitea Operator` with default settings
 - Create a new project `git`
 - Go to **Installed Operators -> Gitea Operator** and click **Create instance** in the new project.
@@ -35,8 +35,9 @@ spec:
 - Click **Create**
 
 After creation has finished:
-- Look up and access the `repository` route, this will take you to the Gitea web UI
-- Login to Gitea with user `gitea` and password `gitea`
+- On the left click on 'Networking > Routes > repository > Location' 
+- This will take you to the Gitea web UI
+- Sign-In to Gitea with user `gitea` and password `gitea`
 - Clone the example repo:
   - Click the **+** dropdown and choose **New Migration**
   - As type choose **Git**
@@ -52,24 +53,20 @@ In the cloned repository you'll find a `devfile.yml` for use with CodeReady Work
 ## Install and Prepare CodeReady Workspaces (CRW)
 - Install the CRW Operator from OperatorHub (not the Tech Preview one!) using default settings.
 - Go to **Installed Operators -> CodeReady Workspaces** and create a new instance (CodeReady Workspaces instance Specification) using the default settings.
-- Wait until deployment has finished.
+- Wait until deployment has finished. This may take a couple of minutes as several components will be deployed. 
+- Once the instance status is ready look up the `codeready` Route in the 'openshift-workspaces' namespace
+- Open the link in a new tab and log in with your OCP credentials
+- Apply permissions
+- Enter an email, First Name and Last Name to set up your account
 
-As you'll start your CRW workspace using the devfile mechanism, you have to compose the URL from the codeready route and the devfile location.
-- First look up the `codeready` route and the full URL to access the `devfile.yml` in Gitea by using the "raw" format button.
-- Now use both components to build an URL like below:
-```
-https://<codeready-openshift-route>/f?url=<full URL to devfile.yml>
-```
-For example it could look like this:
-```
-https://<codeready-openshift-workspaces.apps.cluster-mqpmq.mqpmq.sandbox283.opentlc.com/f?url=https://repository-git.apps.cluster-mqpmq.mqpmq.sandbox283.opentlc.com/gitea/quarkus-build-options/raw/branch/master/devfile.yml
-```
-- Now use this URL to launch your CRW Workspace in your Browser
-  - Log in as User opentlc-mgr
-  - Apply permissions
-  - In the next form add an email address, it will be added to Keycloak
+We could create a workspace from one of the templates that come with CodeReady but we want to use a customized workspace with some additional defined plugins in a devfile in our git repo. 
 
-Have a good look around the UI, it should look familiar if you have ever worked with VSCode and the like. To prepare the Workspace for developing with OpenShift, ru the following steps:
+- So at the top click on 'Custom Workspace'
+- In 'Enter the devfile URL' enter the raw URL to your `devfile.yml` in Gitea repository by clicking on the file and then on the 'Raw' button
+- Once the content of the devfile is loaded click on 'Create & Open' at the buttom
+- Give the workspace containers some time to spin up  
+
+Have a good look around the UI, it should look familiar if you have ever worked with VSCode and the like. To prepare the Workspace for developing with OpenShift, run the following steps:
 
 - In the CRW shortcuts menu to the right ("cube icon")
   - Run **install oc**
