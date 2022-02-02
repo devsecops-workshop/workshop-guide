@@ -11,10 +11,14 @@ As an example you'll create a new Java application. You don't need to have prior
 We will use an application based on the [Quarkus](https://quarkus.io/) stack. Quarkus enables you to create much smaller and faster containerized Java applications than ever before.  You can even transcompile these apps to native Linux binaries that start blazingly fast.  Fun fact : Every OpenShift Subscription already comes with a Quarkus Subscription.      
 {{% /notice %}}
 
-- Bring up your CodeReady Workspace in your browser.
+Let's clone our project into our workspace :
+- Bring up your CodeReady Workspace in your browser
+- In the bottom left click on **Clone Repository** and then enter the Git URL to your Gitea Repo (You can copy the URL by clicking on clipboard icon)
+
+Then we want to create a new OpenShift project for our app 
 - Open a Terminal
   - In **My Workspace** (cube icon) to the right click **New Terminal**
-- Copy the `oc login` command from your OpenShift cluster (top right > Username > Copy login command), and execute in the terminal to log into the OpenShift cluster.
+- Copy the `oc login` command from your OpenShift cluster (top right > Username > Copy login command) and execute in the terminal to log into the OpenShift cluster
 - Create a new project `workshop-dev`
 ```
 oc new-project workshop-dev
@@ -41,7 +45,7 @@ To test the app:
 - Your app should show up as a simple web page. In the `RESTEasy JAX-RS` section click the `@Path` endpoint `/hello` to see the result.
 
 Now for the fun part: Using `odo` you can just dynamically change your code and push it out again without doing a new image build! No dev magic involved:
-- In your CRW Workspace on the left, expand the file tree to open file `src/main/java/org/acmeGreetingRessource.java` and change the string "Hello RESTEasy" to "Hello Deepdive"
+- In your CRW Workspace on the left, expand the file tree to open file `src/main/java/org/acmeGreetingRessource.java` and change the string "Hello RESTEasy" to "Hello Workshop"
 - Push the code to OpenShift again
 ```
 ./odo push
