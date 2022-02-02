@@ -3,7 +3,7 @@ title = "Inner Loop"
 weight = 7
 +++
 
-In this part of the workshop you'll experience how modern software development using the OpenShift tooling can be done in a fast, iterative way. **Inner loop** here means `this is the way`, sorry, process, for developers to try out new things and quickly change and test their code on OpenShift without having to build new images all the time or being a Kubernetes expert.
+In this part of the workshop you'll experience how modern software development using the OpenShift tooling can be done in a fast, iterative way. **Inner loop** here means `this is the way`, sorry, `process`, for developers to try out new things and quickly change and test their code on OpenShift without having to build new images all the time or being a Kubernetes expert.
 
 As an example you'll create a new Java application. You don't need to have prior experience programming in Java as this will be kept really simple.
 
