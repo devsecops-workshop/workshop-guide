@@ -33,7 +33,7 @@ Now initialize a new Quarkus application
 ```
 Make the app accessible via http
 ```
-./odo url create deepdive-app
+./odo url create workshop-app
 ```
 And finally push the app to OpenShift
 ```
