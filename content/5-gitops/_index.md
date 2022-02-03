@@ -6,16 +6,16 @@ weight = 10
 - Install GitOps Operator from OperatorHub
 - Clone the Config GitOps Repo to Gitea
  https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
-- Create OpenShift Project deepspace-prod
-Give ArgoCD Permissions to create objects in namespace deepspace-prod
+- Create OpenShift Project workshop-prod
+Give ArgoCD Permissions to create objects in namespace workshop-prod
 ```
- oc adm policy add-role-to-user admin system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n deepspace-prod
+ oc adm policy add-role-to-user admin system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n workshop-prod
  ```
-- Give namespace deepspace-prod permissions to pull images from deepspace-int
+- Give namespace workshop-prod permissions to pull images from workshop-int
 ```
 oc policy add-role-to-user \
-    system:image-puller system:serviceaccount:deepspace-prod:default \
-    --namespace=deepspace-int
+    system:image-puller system:serviceaccount:workshop-prod:default \
+    --namespace=workshop-int
 ```
 - Go to ArgoCD URL (The is new shortcut at the top right menu with the squares)
 - User is admin and password will be in namespace openshift-gitops in Secret openshift-gitops-cluster
@@ -26,8 +26,8 @@ oc policy add-role-to-user \
   - Repo URL : https://repository-gitea.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git
   - Path : environments/dev
   - Cluster URL : https://kubernetes.default.svc
-  - Namespace : deepspace-prod
-- Watch the resources (Deployment, Service, Route) get rolled out to the namespace deepspace-prod
+  - Namespace : workshop-prod
+- Watch the resources (Deployment, Service, Route) get rolled out to the namespace workshop-prod
 - Add a new custom Tekton task (Switch to Administrator Perspective > Pipelines > Tasks > New Task) that can push to a git repo.
 - Make sure to replace {YOUR_DOMAIN}
 ```yaml
@@ -38,7 +38,7 @@ metadata:
     tekton.dev/pipelines.minVersion: 0.12.1
     tekton.dev/tags: git
   name: git-update-deployment
-  namespace: deepspace-int
+  namespace: workshop-int
   labels:
     app.kubernetes.io/version: '0.1'
     operator.tekton.dev/provider-type: community
@@ -195,10 +195,10 @@ spec:
          value: gitea
        - name: CURRENT_IMAGE
          value: >-
-           image-registry.openshift-image-registry.svc:5000/deepspace-int/quarkus-build:latest
+           image-registry.openshift-image-registry.svc:5000/workshop-int/quarkus-build:latest
        - name: NEW_IMAGE
          value: >-
-           image-registry.openshift-image-registry.svc:5000/deepspace-int/quarkus-build
+           image-registry.openshift-image-registry.svc:5000/workshop-int/quarkus-build
        - name: NEW_DIGEST
          value: $(tasks.build.results.IMAGE_DIGEST)
        - name: KUSTOMIZATION_PATH
@@ -219,7 +219,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: gitea
-  namespace: deepspace-int
+  namespace: workshop-int
   annotations:
     tekton.dev/git-0: 'https://repository-git.apps.{YOUR DOMAIN}'
 data:
@@ -233,7 +233,7 @@ kind: ServiceAccount
 apiVersion: v1
 metadata:
   name: pipeline
-  namespace: deepspace-int
+  namespace: workshop-int
 secrets:
   - name: gitea
 ```

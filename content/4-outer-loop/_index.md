@@ -12,7 +12,7 @@ To create and run the build pipeline you'll use OpenShift Pipelines (Tekton). Th
 After this create a new deployment of your game-changing application:
 
 - Switch to the **OpenShift Developer Console**
-- Create a new project `deepspace-int`
+- Create a new project `workshop-int`
 - Click the **+Add** menu entry to the right and choose **From Git**
 - As **Git Repo URL** enter your Gitea clone URL (There my may be warning about the repo url that you can ignore)
 - As **Builder Image** keep or select **Red Hat OpenJDK 11 (RHEL 7)**

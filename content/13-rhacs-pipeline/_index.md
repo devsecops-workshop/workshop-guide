@@ -93,7 +93,7 @@ spec:
 
         chmod +x ./roxctl  > /dev/null
 
-        ./roxctl image check -c Deepspace --insecure-skip-tls-verify -e $ROX_CENTRAL_ENDPOINT
+        ./roxctl image check -c Workshop --insecure-skip-tls-verify -e $ROX_CENTRAL_ENDPOINT
         --image $(params.image)@$(params.image_digest)
 ```
 Take your time to **understand** the Tekton task definition:
@@ -101,7 +101,7 @@ Take your time to **understand** the Tekton task definition:
 - The script action pulls the `roxctl` binary into the pipeline workspace so you'll always have a version compatible with your ACS version.
 - The most important bit is the `roxctl` execution, of course.
   - it executes the `image check` command
-  - only checks against policies from category **Deepspace** that was created above. This way you can check against a subset of policies!
+  - only checks against policies from category **Workshop** that was created above. This way you can check against a subset of policies!
   - defines the image to check and it's digest
 
 ### Add the Task to the Pipeline
@@ -111,14 +111,14 @@ Take your time to **understand** the Tekton task definition:
 After you added it you have to fill in values for the parameters the task defines. Click the task, a form with the parameters will open, fill it in:
   - **rox_central_endpoint**: `roxsecrets`
   - **rox_api_token**: `roxsecrets`
-  - **image**: `image-registry.openshift-image-registry.svc:5000/deepspace-int/quarkus-deepspace`
+  - **image**: `image-registry.openshift-image-registry.svc:5000/workshop-int/quarkus-workshop`
     - Adapt the Project name if you changed it
   - **image_digest**: $(tasks.build.results.IMAGE_DIGEST)
     - This variable takes the result of the **build** task and uses it in the scan task.
   - Click **Save**
 
 ## Test the Scan Task
-With our Deepspace **Security Policy** still not set to `enforce` we first are going to test the pipeline integration. Start the pipeline with Java **Version** `java-old-image`
+With our Workshop **Security Policy** still not set to `enforce` we first are going to test the pipeline integration. Start the pipeline with Java **Version** `java-old-image`
 - Expected Result:
   - The `rox-image-check` task should succeed, but if you have a look at the output (click the task in the visual representation) you should see that the **build violated our policy**!
 

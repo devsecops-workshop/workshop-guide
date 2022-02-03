@@ -23,10 +23,10 @@ These are the steps you will go through:
 First create the system policy. In the **ACS Portal** do the following:
 
 - **System Policies->Create Policy**
-- **NAME:** Deepspace RHSA-2020:5566
+- **NAME:** Workshop RHSA-2020:5566
 - **Severity:** Critical
 - **Lifecycle Stages:** Build, Deploy
-- **Categories:** Deepspace
+- **Categories:** Workshop
   - This will create a new Category if it doesn't exist
 - **->Next**
 - Click **Add a new condition**
@@ -45,7 +45,7 @@ Start the pipeline with the affected image version:
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments (`Quarkus-Build-Options-Git-Gsklhg-Build-...`) come and go when they are finished.
-  - When the final build is deployed you'll see a violation in **ACS Portal** for policy `Deepspace RHSA-2020:5566` (Check the Time of the violation)
+  - When the final build is deployed you'll see a violation in **ACS Portal** for policy `Workshop RHSA-2020:5566` (Check the Time of the violation)
 
 Now start the pipeline with the fixed image version that doesn't contain the CVE anymore:
 - Start the pipeline again but this time leave the Java **Version** as is.

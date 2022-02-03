@@ -10,17 +10,44 @@ Now it's time to add another extremely important piece to the setup; enhancing a
 ### Install the Operator
 - Install the "Advanced Cluster Security for Kubernetes" operator from OperatorHub with the default values.
 
+{{% notice info %}}
+Red Hat recommends installing the Red Hat Advanced Cluster Security for Kubernetes Operator in the **rhacs-operators** namespace. This will happen by default..
+{{% /notice %}}
+
 ### Install the main component **Central**
+
+{{% notice info %}}
+You must install the ACS Central instance in its own project and not in the **rhacs-operator** and **openshift-operator** projects, or in any project in which you have installed the ACS Operator!
+{{% /notice %}}
+
 - Navigate to **Operators → Installed Operators**
 - Select the ACS operator
-- You are probably in the **openshift-operator** project, create a new project **stackrox** (use the **Project** drop-down)
+- You should now be in the **rhacs-operator** project the Operator created, create a new **Project** for the Central instance:
+  - Select **Project: rhacs-operator → Create project**
+  - Create a new project **stackrox** (Red Hat recommends using **stackrox** as the project name.)
 - Select **Provided APIs → Central → Create Central**
-- Change the name if you like and accept the default values
-- Click **Create Central**
-- After deployment has finished (**Status** "Conditions: Deployed, Initialized") access the RHACS Portal to verify the installation
-  -  Look up the **central-htpasswd** secret that was created to get the password
+- Accept the name to **stackrox-central-services** and accept the default values
+- Click **Create**
+
+After deployment has finished ("**Status** Conditions: Deployed, Initialized") it can take some time until the application is completely up and running. One easy way to check the state is to switch to the **Developer** console view at the upper left. Then make sure you are in the **rhacs-operator** project and open the **Topology** map. You'll see the three deployments of an **Central** instance:
+- **scanner-db** 
+- **scanner**
+- **centrals**
+
+Wait until all Pods have been scaled up properly.
+
+**Verify the Installation**
+
+Switch to the **Administrator** console view again. Now to check the installation of your **Central** instance, access the RHACS Portal:
+  - Look up the **central-htpasswd** secret that was created to get the password
+
+{{% notice info %}}
+If you access the details of your **Central** instance you'll find the complete commandline using `oc` to retrieve the password from the secret under `Admin Credentials Info`. Just sayin... ;)
+{{% /notice %}}
+  
   - Look up  and access the route **central** which was also generated automatically.
-- This will get you to the RHACS portal, accept the self-signed certificate and login as user **admin** with the password from the secret.
+
+This will get you to the RHACS portal, accept the self-signed certificate and login as user **admin** with the password from the secret.
 
 Now you have a **Central** instance that provides the following services in an
 RHACS setup:
@@ -31,7 +58,7 @@ RHACS setup:
 
 To actually do and see anything you need to add a **SecuredCluster** (be it the same or another OpenShift cluster). For effect go to the **RHACS Portal**, the Dashboard should by pretty empty, click on the **Compliance** link in the menu to the left, lots of zero's and empty panels, too.
 
-Because you don't have a monitored and secured OpenShift cluster yet.
+This is because you don't have a monitored and secured OpenShift cluster yet.
 
 ### Prepare to add Secured Clusters
 
@@ -73,8 +100,8 @@ Now you are ready to install the **SecuredClusters** instance, this will deploy 
 - Change the **Cluster Name** for the cluster if you want, it'll appear under this name in the RHACS Portal
 - And most importantly for **Central Endpoint**  enter the address and port number of your **Central** instance, this is the same as the **RACS Portal**.
   - If the RHACS Portal is available at `https://central-stackrox.apps.cluster-65h4j.65h4j.sandbox1803.opentlc.com/` the endpoint is `central-stackrox.apps.cluster-65h4j.65h4j.sandbox1803.opentlc.com:443`.
-- Under **Admission Control Settings**
-  - enable **listenOnCreates** and **listenOnUpdates**
+- Under **Admission Control Settings** make sure
+  - **listenOnCreates**, **listenOnUpdates** and **Listen On Events** is enabled
   - Set **Contact Image Scanners** to **ScanIfMissing**
 - Click **Create**
 
