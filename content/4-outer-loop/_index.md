@@ -31,23 +31,23 @@ Now your build pipeline has been set up and is ready. There is one more step in 
   - Be careful to keep the needed indents!
 
 ```yaml
-- name: java-old-image
-  annotations:
-   description: Build and run Java applications using Maven and OpenJDK 8.
-   iconClass: icon-rh-openjdk
-   openshift.io/display-name: Red Hat OpenJDK 8 (UBI 8)
-   sampleContextDir: undertow-servlet
-   sampleRepo: 'https://github.com/jboss-openshift/openshift-quickstarts'
-   supports: 'java:8,java'
-   tags: 'builder,java,openjdk'
-   version: '8'
+    - name: java-old-image
+    annotations:
+    description: Build and run Java applications using Maven and OpenJDK 8.
+    iconClass: icon-rh-openjdk
+    openshift.io/display-name: Red Hat OpenJDK 8 (UBI 8)
+    sampleContextDir: undertow-servlet
+    sampleRepo: 'https://github.com/jboss-openshift/openshift-quickstarts'
+    supports: 'java:8,java'
+    tags: 'builder,java,openjdk'
+    version: '8'
   from:
-   kind: DockerImage
-   name: 'registry.redhat.io/openjdk/openjdk-11-rhel7:1.1-9'
+    kind: DockerImage
+    name: 'registry.redhat.io/openjdk/openjdk-11-rhel7:1.1-9'
   generation: 4
   importPolicy: {}
   referencePolicy:
-   type: Local
+  type: Local
 ```
 
 This will add a tag java-old-image that points to an older version. The image can be inspected here:
