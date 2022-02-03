@@ -28,7 +28,7 @@ Now your build pipeline has been set up and is ready. There is one more step in 
 - Using the Administrator view, switch to the project `openshift` and under **Builds** click on the **ImageStreams**
 - Search and open the **ImageStream** `Java`
 - Switch to YAML view and add the following snippet to the `tags:` section.
-  - Be careful to keep the needed indents!
+  - Be careful to keep the needed indentation!
 
 ```yaml
     - name: java-old-image
