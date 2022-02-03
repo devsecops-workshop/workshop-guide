@@ -50,8 +50,15 @@ Now your build pipeline has been set up and is ready. There is one more step in 
   type: Local
 ```
 
-This will add a tag java-old-image that points to an older version. The image can be inspected here:
+This will add a tag `java-old-image` that points to an older version of the RHEL Java image. The image and security vulnerabilities can be inspected in the Red Hat Software Catalog here:
 https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185dd19c775cddc4ce5?tag=1.10-1.1630314161&push_date=1630540002000&container-tabs=security
-- Have a look at version 1.1-9
+- Have a look at version `1.1-9`
 
-Now run the pipeline again. Open your quarkus-build-options pipeline and choose "Run" from the pull down menu of the "Actions" button on the upper right hand side. Edit the  "VERSION" parameter and use "java-old-image" tag.
+Now run the pipeline again
+- Open your `ẁorkshop` pipeline and choose **Start** from the pull down menu
+
+Since we want to find a vulnerabiliy later in this workshop we will tell the pipeline to use a base image with the older version
+- Edit the **VERSION** parameter and use `java-old-image` tag.
+- Then click on **Start** to trigger the pipeline build
+
+At the end of the pipeline in the deploy task, the application will be automatically deployed to the workshop-int project e.g for interation oder user acceptance testing. Have a look in the **Developer Perspective** if you want. 
