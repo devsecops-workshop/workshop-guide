@@ -32,5 +32,5 @@ jobs:
         commitMessage: ${{ github.event.head_commit.message }}
         deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
         external_repository: devsecops-workshop/devsecops-workshop.github.io
-        publish_branch: main
+        publish_branch: master
         publish_dir: ./public
