@@ -147,4 +147,4 @@ For each click **Edit integration** using the three dots at the right:
 - Select Disable TLS certificate validation
 - Press the **Test** button to validate the connection and press **Save** when the test is successful.
 
-ACS is now able to scan images in the internal registry!
+**ACS is now able to scan images in the internal registry!**
