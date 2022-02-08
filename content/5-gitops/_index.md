@@ -23,6 +23,13 @@ oc policy add-role-to-user \
 ```
 - Go to **ArgoCD** URL (There is new shortcut at the top right menu with the squares)
 - User is `admin` and password will be in namespace `openshift-gitops` in Secret `openshift-gitops-cluster`
+- Modify ckuster settings
+  - Click the gears on the left
+  - Go to 'clusters'
+  - Go to 'in-cluster'
+  - Click **edit**
+  - Modify `namespaces` to 'workshop-prod'
+  - Click **save**
 - Create App
   - Application name : workshop
   - Project : default
