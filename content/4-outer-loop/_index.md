@@ -61,4 +61,4 @@ Since we want to find a vulnerabiliy later in this workshop we will tell the pip
 - Edit the **VERSION** parameter and use `java-old-image` tag.
 - Then click on **Start** to trigger the pipeline build
 
-At the end of the pipeline in the deploy task, the application will be automatically deployed to the workshop-int project e.g for interation oder user acceptance testing. Have a look in the **Developer Perspective** if you want. 
+At the end of the pipeline in the deploy task, the application will be automatically deployed to the workshop-int project e.g for interation or user acceptance testing. Have a look in the **Developer Perspective** if you want. 
