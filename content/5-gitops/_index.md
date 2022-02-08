@@ -195,7 +195,6 @@ spec:
 - Add this Task to your Pipeline by adding it to the YAML like this
 - Make sure to replace {YOUR_DOMAIN}
 ```yaml
-...
 - name: git-update-deployment
      params:
        - name: GIT_REPOSITORY
