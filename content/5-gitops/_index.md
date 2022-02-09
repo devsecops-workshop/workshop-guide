@@ -39,15 +39,15 @@ oc policy add-role-to-user \
   - Namespace : workshop-prod
   - ENABLE AUTO-SYNC
   - Click **Create**
-- In the **NAMESPACES** filter in the bottom left filter to `ẁorkspace-prod`
+- In the **NAMESPACES** filter in the bottom left filter to `workspace-prod`
 - Watch the resources (Deployment, Service, Route) get rolled out to the namespace `workshop-prod`. Notice we have also scaled our app to 2 pods in the prod stage as we want some HA. 
 
-Our complete prod stage is now configured and controlled though GitOps. But how do we now tell ArgoCD that there is a new version of our app to deploy? Weel, we will add a step to our build pipeline updating the config repo. Since ArgoCD permanently watches this repo it will react to a chnage immediately.  
+Our complete prod stage is now configured and controlled though GitOps. But how do we now tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo. Since ArgoCD permanently watches this repo it will react to a chnage immediately.  
 
 It is also possible to update the repo with a Pull request. Then you have an approval process for your prod deployment.  
 
 Let's add a new custom Tekton task that can push to a git repo
-- In the namespace`ẁorkshop-int` switch to Administrator Perspective > Pipelines > Tasks > New Task
+- In the namespace `workshop-int` switch to Administrator Perspective > Pipelines > Tasks > New Task
 - And enter
 ```yaml
 apiVersion: tekton.dev/v1beta1

@@ -22,8 +22,8 @@ These are the steps you will go through:
 
 First create the system policy. In the **ACS Portal** do the following:
 
-- **System Policies->Create Policy**
-- **NAME:** Workshop RHSA-2020:5566
+- **System Policies->New Policy**
+- **Name:** Workshop RHSA-2020:5566
 - **Severity:** Critical
 - **Lifecycle Stages:** Build, Deploy
 - **Categories:** Workshop
