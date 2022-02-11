@@ -1,6 +1,6 @@
 +++
 title = "Advanced Pipeline"
-weight = 30
+weight = 31
 +++
 
 ## Optimizing our DevSecOps Pipeline
