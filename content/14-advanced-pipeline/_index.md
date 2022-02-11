@@ -6,9 +6,9 @@ weight = 30
 ## Optimizing our DevSecOps Pipeline
 
 In the chapter before we created a Pipeline which builds, checks and deploys our image, if the image passes all ACS checks. But what should happen, if the image doesn't pass the ACS check? It doesn't seems to be a good idea to save an unsafe image in the internal OpenShift registry. 
-So lets modify our pipeline to a advanced one, which deletes an image, if it doesn't pass the ACS checks. 
+So lets modify our pipeline to an advanced one, which deletes an image, if it doesn't pass the ACS checks. 
 
-### Let's go: Create our advancede Pipeline
+### Let's go: Create our advanced Pipeline
 
 In OpenShift administration view: 
 
