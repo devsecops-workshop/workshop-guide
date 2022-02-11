@@ -8,6 +8,18 @@ weight = 30
 In the chapter before we created a Pipeline which builds, checks and deploys our image, if the image passes all ACS checks. But what should happen, if the image doesn't pass the ACS check? It doesn't seems to be a good idea to save an unsafe image in the internal OpenShift registry. 
 So lets modify our pipeline to an advanced one, which deletes an image, if it doesn't pass the ACS checks. 
 
+### Prerequisites
+There is a major security vulnerability in our code, but ACS is not able to detect it at the moment. So first of all navigate to ACS and follow these steps: 
+- navigate to **Platform Configuration > System Policies**
+- search for `Log4Shell` and click on it. In the right top corner should be **Clone**
+- clone the policy and rename it
+- remove the current categorie and add `Workshop`
+- go next until you are at the enforcement card and enable both `build` and `deploy` 
+- save the policy
+
+ACS is now able to detect the vulnerability. It is time now to implement your advanced Pipeline. 
+
+
 ### Let's go: Create our advanced Pipeline
 
 In OpenShift administration view: 
@@ -186,4 +198,11 @@ Lets see what has changed in the Pipeline:
 ### Test the advanced Pipeline
 
 Go ahead and start your newly created advanced Pipeline. See what happens and play a little bit around with it. Have fun! 
+
+#### Examples
+Go to Gitea and remove the vulnerabilities and start the Pipeline again! 
+
+{{% notice tip %}}
+You have to remove them from `pom.xml` and `GreetingResource.java` in the `quarkus-build-options` repository! 
+{{% /notice %}}
 
