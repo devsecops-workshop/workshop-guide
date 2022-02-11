@@ -174,4 +174,16 @@ spec:
     - name: workspace
 ```
 
+Lets see what has changed in the Pipeline:
+
+- the image which was build through the **build task** will be pushed in a new **ImageStreamTag** called `dev`
+- if the image passes the ACS checks, the image will be pushed to the **ImageStreamTag** called `latest` and the `dev`tag will be removed
+- if the image doesn't pass the ACS checks, the **ImageStreamTag** called `dev` will be removed. This is handled by a function called `finally`and a `when expression`
+  - have a look at your Pipeline YAML and try to understand how this works
+- the last three steps stays the same as before
+
+
+### Test the advanced Pipeline
+
+Go ahead and start your newly created advanced Pipeline. See what happens and play a little bit around with it. Have fun! 
 
