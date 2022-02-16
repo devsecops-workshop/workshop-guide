@@ -3,18 +3,22 @@ title = "Outer Loop"
 weight = 8
 +++
 
-Now that you have seen how a developer can quickly start to code using modern tooling, it's time to learn how to proceed with the application towards production. The first step is to implement a CI/CD pipeline to automate new builds. Let's call this stage `int` for integration.
+Now that you have seen how a developer can quickly start to code using modern cloud native tooling, it's time to learn how to proceed with the application towards production. The first step is to implement a CI/CD pipeline to automate new builds. Let's call this stage `int` for integration.
+
+## Install OpenShift Pipelines
 
 To create and run the build pipeline you'll use OpenShift Pipelines based on project Tekton. The first step is to install it:
 
-- Install `OpenShift Pipelines` from OperatorHub
+- Install `OpenShift Pipelines` from OperatorHub with default settings and give it a few minutes to set up all resources
+
+## Create App Deployment and Build Pipeline
 
 After installing the Operator create a new deployment of your game-changing application:
 
 - Create a new OpenShift project `workshop-int`
 - Switch to the **OpenShift Developer Console**
 - Click the **+Add** menu entry to the left and choose **Import from Git**
-- As **Git Repo URL** enter your Gitea clone URL (There might be a warning about the repo url that you can ignore)
+- As **Git Repo URL** enter your `Gitea` clone URL (There might be a warning about the repo url that you can ignore)
 - As **Import Strategy** select **Builder Image**
 - As **Builder Image** select **Java** and **Red Hat OpenJDK 11 (RHEL 7)**
 - As **Application Name** enter **workshop-app**
@@ -28,10 +32,12 @@ If you don't have the checkbox **Add pipeline** and get the message `There are n
 - Click **Create**
 - In the main menu left, click on **Pipelines** and observe how the Tekton Pipeline is created and run.
 
-Now your build pipeline has been set up and is ready. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it. For that we will add another **ImageStream Tag** in the default `Java` **ImageStream** that points to an older version.
+## Create an ImageStream Tag with an Old Image Version 
 
-- Using the Administrator view, switch to the project `openshift` and under **Builds** click on the **ImageStreams**
-- Search and open the **ImageStream** `Java`
+Now your build pipeline has been set up and is ready. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it. For that we will add another ImageStream `Tag` in the default `Java` ImageStream that points to an older version.
+
+- Using the **Administrator** view, switch to the project `openshift` and under **Builds** click on the **ImageStreams**
+- Search and open the **ImageStream** `java`
 - Switch to YAML view and add the following snippet to the `tags:` section.
   - Be careful to keep the needed indentation!
 
@@ -66,4 +72,4 @@ Since we want to find a vulnerabiliy later in this workshop we will tell the pip
 - Edit the **VERSION** parameter and use `java-old-image` tag.
 - Then click on **Start** to trigger the pipeline build
 
-At the end of the pipeline in the deploy task, the application will be automatically deployed to the workshop-int project e.g for interation or user acceptance testing. Have a look in the **Developer Perspective** if you want. 
+At the end of the pipeline in the `deploy` task, the application will be automatically deployed to the `workshop-int` project e.g for interation or user acceptance testing. Have a look in the **Developer Perspective** if you want. 
