@@ -3,15 +3,14 @@ title = "Configure GitOps"
 weight = 10
 +++
 
-Now that our CI/CD build and integration stage is really we could promote the app version directly to a production stage.  But with the help of the GitOps approach we can leverage our Git System to handle promotion that is tracked through commits and can deploy and configure the whole production environment.  This stage is just too critical to configuare manually and without audit.
+Now that our CI/CD build and integration stage is really we could promote the app version directly to a production stage.  But with the help of the GitOps approach we can leverage our Git System to handle promotion that is tracked through commits and can deploy and configure the whole production environment.  This stage is just too critical to configure manually and without audit.
 
 So let's start be installing the OpenShift GitOps Operator based on project ArgoCD. 
 
 - Install the **Red Hat OpenShift GitOps** Operator from OperatorHub
-- Create a new Migration and clone the **Config GitOps Repository** to Gitea. This will be the repository that contains our GitOps infrastructure components and state
- - https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
-- Create OpenShift Project `workshop-prod`
-Give ArgoCD Permissions to create objects in namespace workshop-prod
+- In Gitea create a new Migration and clone the **Config GitOps Repository** to Gitea. This will be the repository that contains our GitOps infrastructure components and state, this is the URL: https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
+- Create a new OpenShift Project `workshop-prod`
+- Give ArgoCD Permissions to create objects in namespace workshop-prod:
 ```
  oc adm policy add-role-to-user admin system:serviceaccount:openshift-gitops:openshift-gitops-argocd-application-controller -n workshop-prod
  ```
@@ -31,24 +30,26 @@ oc policy add-role-to-user \
   - Modify `namespaces` to `workshop-prod`
   - Click **save**
 - Create App
+  - Click the `manage your applications` icon on the left
+  - Click **Create Application**
   - Application name : workshop
   - Project : default
-  - Repo URL : https://repository-gitea.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git (replacing {YOUR DOMAIN) so this matches your Gitea config repo)
-  - Path : environments/dev
+  - Repository URL: Copy the URL of your repo from Gitea. It should resemble `https://repository-gitea.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`
+  - Path: environments/dev
   - Cluster URL : https://kubernetes.default.svc
-  - Namespace : workshop-prod
-  - ENABLE AUTO-SYNC
+  - Namespace: workshop-prod
+  - Set **SYNC POLICY** to `Automatic`
   - Click **Create**
 - In the **NAMESPACES** filter in the bottom left filter to `workspace-prod`
 - Watch the resources (Deployment, Service, Route) get rolled out to the namespace `workshop-prod`. Notice we have also scaled our app to 2 pods in the prod stage as we want some HA. 
 
-Our complete prod stage is now configured and controlled though GitOps. But how do we now tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo. Since ArgoCD permanently watches this repo it will react to a chnage immediately.  
+Our complete prod stage is now configured and controlled though GitOps. But how do we now tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo. Since ArgoCD permanently watches this repo it will react to a changes immediately.  
 
 It is also possible to update the repo with a Pull request. Then you have an approval process for your prod deployment.  
 
 Let's add a new custom Tekton task that can push to a git repo
-- In the namespace `workshop-int` switch to Administrator Perspective > Pipelines > Tasks > New Task
-- And enter
+- In the namespace `workshop-int` switch to the Administrator Perspective and go to **Pipelines > Tasks > Create Task**
+- Replace the YAML definition with the following and click **Create**:
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: Task

@@ -26,7 +26,7 @@ If you don't have the checkbox **Add pipeline** and get the message `There are n
 {{% /notice %}}
 
 - Click **Create**
-- In the main menu left, click on **Pipelines** and observe how the Tekton Pipeline is created adn run
+- In the main menu left, click on **Pipelines** and observe how the Tekton Pipeline is created and run.
 
 Now your build pipeline has been set up and is ready. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it. For that we will add another **ImageStream Tag** in the default `Java` **ImageStream** that points to an older version.
 
@@ -37,22 +37,22 @@ Now your build pipeline has been set up and is ready. There is one more step in 
 
 ```yaml
     - name: java-old-image
-    annotations:
-    description: Build and run Java applications using Maven and OpenJDK 8.
-    iconClass: icon-rh-openjdk
-    openshift.io/display-name: Red Hat OpenJDK 8 (UBI 8)
-    sampleContextDir: undertow-servlet
-    sampleRepo: 'https://github.com/jboss-openshift/openshift-quickstarts'
-    supports: 'java:8,java'
-    tags: 'builder,java,openjdk'
-    version: '8'
-  from:
-    kind: DockerImage
-    name: 'registry.redhat.io/openjdk/openjdk-11-rhel7:1.1-9'
-  generation: 4
-  importPolicy: {}
-  referencePolicy:
-  type: Local
+      annotations:
+        description: Build and run Java applications using Maven and OpenJDK 8.
+        iconClass: icon-rh-openjdk
+        openshift.io/display-name: Red Hat OpenJDK 8 (UBI 8)
+        sampleContextDir: undertow-servlet
+        sampleRepo: 'https://github.com/jboss-openshift/openshift-quickstarts'
+        supports: 'java:8,java'
+        tags: 'builder,java,openjdk'
+        version: '8'
+      from:
+        kind: DockerImage
+        name: 'registry.redhat.io/openjdk/openjdk-11-rhel7:1.1-9'
+      generation: 4
+      importPolicy: {}
+      referencePolicy:
+        type: Local
 ```
 
 This will add a tag `java-old-image` that points to an older version of the RHEL Java image. The image and security vulnerabilities can be inspected in the Red Hat Software Catalog here:
@@ -60,7 +60,7 @@ https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185
 - Have a look at version `1.1-9`
 
 Now run the pipeline again
-- Open your `ẁorkshop` pipeline and choose **Start** from the pull down menu
+- Switch back to your `workshop-int` Project and open your `workshop` pipeline. Choose **Start** from the pull down menu
 
 Since we want to find a vulnerabiliy later in this workshop we will tell the pipeline to use a base image with the older version
 - Edit the **VERSION** parameter and use `java-old-image` tag.
