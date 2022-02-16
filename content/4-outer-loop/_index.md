@@ -9,17 +9,22 @@ To create and run the build pipeline you'll use OpenShift Pipelines based on pro
 
 - Install `OpenShift Pipelines` from OperatorHub
 
-After this create a new deployment of your game-changing application:
+After installing the Operator create a new deployment of your game-changing application:
 
 - Create a new OpenShift project `workshop-int`
 - Switch to the **OpenShift Developer Console**
 - Click the **+Add** menu entry to the left and choose **Import from Git**
-- As **Git Repo URL** enter your Gitea clone URL (There my may be warning about the repo url that you can ignore)
+- As **Git Repo URL** enter your Gitea clone URL (There might be a warning about the repo url that you can ignore)
 - As **Import Strategy** select **Builder Image**
 - As **Builder Image** select **Java** and **Red Hat OpenJDK 11 (RHEL 7)**
 - As **Application Name** enter **workshop-app**
 - As **Name** enter **workshop** 
 - Check **Add pipeline**
+
+{{% notice tip %}}
+If you don't have the checkbox **Add pipeline** and get the message `There are no pipeline templates available for Java and Deployment combination` it's because the OpenShift Pipelines Operator has not finished deploying all resources. Have a quick coffee and then re-create the deployment. 
+{{% /notice %}}
+
 - Click **Create**
 - In the main menu left, click on **Pipelines** and observe how the Tekton Pipeline is created adn run
 

@@ -19,10 +19,10 @@ This is a good example of how you can integrate an operator into your catalog th
 ```
 oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea-operator/master/catalog_source.yaml
 ```
-- Go to OperatorHub and search for `Gitea` (You may need to disable search filters)
+- Int the web UI, go to **Operators->OperatorHub** and search for `Gitea` (You may need to disable search filters)
 - Install the `Gitea Operator` with default settings
 - Create a new OpenShift project called `git`
-- Go to **Installed Operators -> Gitea Operator** and click **Create instance** in the `git` project
+- Go to **Installed Operators -> Gitea Operator** and click **Create Gitea** in the `git` project
 - On the **Create Gitea** page switch to the YAML view and make sure the following `spec` values are set:
 
 ```
@@ -35,7 +35,7 @@ spec:
 - Click **Create**
 
 After creation has finished:
-- On the left click on **Networking > Routes > repository > Location** 
+- Access the route you'll find e.g. in **Networking > Routes > repository > Location** 
 - This will take you to the Gitea web UI
 - Sign-In to Gitea with user `gitea` and password `gitea`
 - Clone the example repo:
@@ -47,25 +47,28 @@ After creation has finished:
 In the cloned repository you'll find a `devfile.yml`. We will need the URL to the file soon, so keep the tab open.
 
 ## Install and Prepare CodeReady Workspaces (CRW)
-- Install the CRW Operator from OperatorHub (not the Tech Preview one!)
+- Install the **Red Hat CodeReady Workspaces for Devfile v1 and v2** Operator from OperatorHub (not the Tech Preview one!)
 - Go to **Installed Operators -> CodeReady Workspaces** and create a new instance (CodeReady Workspaces instance Specification) using the default settings
 - Wait until deployment has finished. This may take a couple of minutes as several components will be deployed. 
-- Once the instance status is ready (You can check the YAML of the instance : status > cheClusterRunning: Available ), look up the `codeready` Route in the 'openshift-workspaces' namespace (You may need to toggle the **Show default project** button). 
-- Open the link in a new browser tab and log in with your OCP credentials
-- Apply permissions
-- Enter an email, First Name and Last Name to set up your account
+- Once the instance status is ready (You can check the YAML of the instance: `status > cheClusterRunning: Available`), look up the `codeready` Route in the `openshift-workspaces` namespace (You may need to toggle the **Show default project** button). 
+- Open the link in a new browser tab, choose `htpasswd_provider` and log in with your OCP credentials
+- Allow selected permissions
+- Enter an email address, First Name and Last Name to set up your account (you can make these up).
 
 {{% notice tip %}}
 We could create a workspace from one of the templates that come with CodeReady, but we want to use a customized workspace with some additionally defined plugins in a [v1 devfile](https://redhat-developer.github.io/devfile/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a button you will end up in a fully configured project in your browser.       
 {{% /notice %}}
 
-- So at the top click on 'Custom Workspace'
-- In 'Enter the devfile URL' enter the **raw URL*** to your `devfile.yml` in Gitea repository by clicking on the file and then on the **Raw** button
-- Once the content of the devfile is loaded click on **Create & Open** at the buttom
-- Give the workspace containers some time to spin up  
+- At the top click on **Custom Workspace**
+- Copy the **raw URL** of the `devfile.yml` file in your Gitea repository by clicking on the file and then on the **Raw** button.
+- Paste the full URL into the `Enter devfile URL` field and click **Load Devfile**
+- Once the content of the devfile is loaded click on **Create & Open** at the button
+- You'll get into the **Starting workspace ...** view, give the workspace containers some time to spin up.  
 
-Have a good look around the UI. It should look familiar if you have ever worked with VSCode or similar IDEs. To install the `odo`cli into your workspace, run the following steps:
+When your workspace has finally started, have a good look around in the UI. It should look familiar if you have ever worked with VSCode or similar IDEs. To install the `odo` cli into your workspace, run the following steps:
 
-- In the CRW shortcuts menu to the right ("cube icon") run `install odo`
-- odo cli will be downloaded and unpacked in your project folder
-- Close the terminal tab the installation opened
+- From the CRW shortcuts menu to the right (the "cube icon") run `install odo`
+- odo cli will be downloaded and unpacked in your project folder, you can safely ignore the warning about file or directory not found
+- Close the `install odo` terminal tab the installation opened
+
+Your cluster is now prepared for the next step, proceed to `Inner Loop`.

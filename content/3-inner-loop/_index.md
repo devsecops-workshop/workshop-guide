@@ -8,17 +8,19 @@ In this part of the workshop you'll experience how modern software development u
 As an example you'll create a new Java application. You don't need to have prior experience programming in Java as this will be kept really simple.
 
 {{% notice tip %}}
-We will use an application based on the [Quarkus](https://quarkus.io/) stack. Quarkus enables you to create much smaller and faster containerized Java applications than ever before.  You can even transcompile these apps to native Linux binaries that start blazingly fast.  Fun fact : Every OpenShift Subscription already comes with a Quarkus Subscription.      
+We will use an application based on the [Quarkus](https://quarkus.io/) stack. Quarkus enables you to create much smaller and faster containerized Java applications than ever before.  You can even transcompile these apps to native Linux binaries that start blazingly fast.  Fun fact: Every OpenShift Subscription already comes with a Quarkus Subscription.      
 {{% /notice %}}
 
 Let's clone our project into our workspace :
 - Bring up your CodeReady Workspace in your browser
-- In the bottom left click on **Clone Repository** and then enter the Git URL to your Gitea Repo (You can copy the URL by clicking on clipboard icon)
+- In the bottom left click on **Clone Repository** and then enter the Git URL to your Gitea Repo (You can copy the URL by clicking on the clipboard icon)
+- Press enter and select the default location.
 
-Then we want to create a new OpenShift project for our app 
+You should be greeted by the `README.md` file. Now we want to create a new OpenShift project for our app:
+
 - Open a Terminal
   - In **My Workspace** (cube icon) to the right click **New Terminal**
-- Copy the `oc login` command from your OpenShift cluster (top right > Username > Copy login command) and execute in the terminal to log into the OpenShift cluster
+- Copy the `oc login` command from your OpenShift cluster (At the top right **Username > Copy login command**) and execute in the terminal to log into the OpenShift cluster
 - Create a new project `workshop-dev`
 ```
 oc new-project workshop-dev
@@ -41,7 +43,7 @@ And finally push the app to OpenShift
 ```
 To test the app:
 - In OpenShift open the `workshop-dev` project and switch to the **Developer Console**
-- Open the **Topology** view and click on the top right link of OpenShift icon to display the website of the app
+- Open the **Topology** view and click on the top right link of Application icon to display the website of the app
 - Your app should show up as a simple web page. In the `RESTEasy JAX-RS` section click the `@Path` endpoint `/hello` to see the result.
 
 Now for the fun part: Using `odo` you can just dynamically change your code and push it out again without doing a new image build! No dev magic involved:
