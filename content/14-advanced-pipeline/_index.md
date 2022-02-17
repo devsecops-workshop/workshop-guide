@@ -92,7 +92,6 @@ spec:
         - name: KUSTOMIZATION_PATH
           value: environments/dev
       runAfter:
-        - tag-checked-image
         - remove-dev-tag
       taskRef:
         kind: Task
@@ -137,7 +136,6 @@ spec:
         - name: SCRIPT
           value: oc rollout status deploy/$(params.APP_NAME)
       runAfter:
-        - tag-checked-image
         - remove-dev-tag
       taskRef:
         kind: ClusterTask
@@ -176,7 +174,7 @@ spec:
         - name: VERSION
           value: latest
       runAfter:
-        - image-check
+        - tag-checked-image
       taskRef:
         kind: ClusterTask
         name: openshift-client
