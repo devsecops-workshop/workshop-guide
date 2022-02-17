@@ -17,12 +17,12 @@ You should have created and build a custom policy in ACS and tested it for trigg
 
 ### Let's go: Prepare `roxctl`
 
-Build-time policies require the use of the `roxctl` command-line tool which is available for download from the ACS Central UI, in the upper right corner of the dashboard. `Roxctl` needs to authenticate to **ACS Central** to do anything. It can use either username and password authentication to Central, or API token based. It's good practice to use a token so that's what you'll do.
+Build-time policies require the use of the `roxctl` command-line tool which is available for download from the ACS Central UI, in the upper right corner of the dashboard. `Roxctl` needs to authenticate to **ACS Central** to do anything. It can use either username and password API tokens to authenticate against Central. It's good practice to use a token so that's what we'll do.
 
 ### Create the `roxctl` token
 
 On the ACS portal:
-- navigate to **Configure > Integrations**.
+- Navigate to **Platform Configure > Integrations**.
 - Scroll down to the **Authentication Tokens** category, and select **API Token**.
 - Click **Generate Token**. Enter the name `pipeline` for the token and select the role **Admin**.
 - Select **Generate**
@@ -31,10 +31,10 @@ On the ACS portal:
 ### Create OCP secret with token
 In your OCP cluster, create a secret with the API token in the project your pipeline lives in:
 - In the UI switch to your Project
-- Create a new key/value secret named **roxsecrets**
+- Create a new key/value `Secret` named **roxsecrets**
 - Introduce these key/values into the secret:
   - **rox_central_endpoint**: \<the URL to your **ACS Portal**>
-    - It should be something like central-stackrox.apps.cluster-psslb.psslb.sandbox555.opentlc.com:443"
+    - It should be something like central-stackrox.apps.cluster-psslb.psslb.sandbox555.opentlc.com:443
   - **rox_api_token**: \<the API token you generated>
 
 ### Create a Scan Task
@@ -111,7 +111,7 @@ Take your time to **understand** the Tekton task definition:
 After you added it you have to fill in values for the parameters the task defines. Click the task, a form with the parameters will open, fill it in:
   - **rox_central_endpoint**: `roxsecrets`
   - **rox_api_token**: `roxsecrets`
-  - **image**: `image-registry.openshift-image-registry.svc:5000/workshop-int/quarkus-workshop`
+  - **image**: `image-registry.openshift-image-registry.svc:5000/workshop-int/workshop`
     - Adapt the Project name if you changed it
   - **image_digest**: $(tasks.build.results.IMAGE_DIGEST)
     - This variable takes the result of the **build** task and uses it in the scan task.

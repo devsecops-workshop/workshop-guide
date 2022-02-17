@@ -75,6 +75,5 @@ As the foundation of ACS are the **system policies**, have a good look around:
 
 {{% notice tip %}}
 Here is a great tip for you: By default only some policies are enabled. If you want to get an overview which ones, you can use the filter view introduced above. But there is one catch: the filter value needed is not as straight forward as it could be... until this has been fixed, use this:
-
 Use `Enforcement` as filter key and `FAIL_BUILD_ENFORCEMENT` as the magic ingredient, eh, value. ;-)
 {{% /notice %}}

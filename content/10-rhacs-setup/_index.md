@@ -4,7 +4,7 @@ weight = 15
 +++
 During the workshop you went through the OpenShift developer experience starting from software development using Quarkus and `odo`, moving on to automating build and deployment using Tekton pipelines and finally using GitOps for production deployments.
 
-Now it's time to add another extremely important piece to the setup; enhancing application security in a conainerized world. Using the most recent addition to the OpenShift portfolio: **Red Hat Advanced Cluster Security for Kubernetes**!
+Now it's time to add another extremely important piece to the setup; enhancing application security in a containerized world. Using the most recent addition to the OpenShift portfolio: **Red Hat Advanced Cluster Security for Kubernetes**!
 
 ## Install RHACS
 ### Install the Operator
@@ -22,11 +22,11 @@ You must install the ACS Central instance in its own project and not in the **rh
 
 - Navigate to **Operators → Installed Operators**
 - Select the ACS operator
-- You should now be in the **rhacs-operator** project the Operator created, create a new **Project** for the Central instance:
+- You should now be in the **rhacs-operator** project the Operator created, create a new OpenShift **Project** for the **Central** instance:
   - Select **Project: rhacs-operator → Create project**
-  - Create a new project **stackrox** (Red Hat recommends using **stackrox** as the project name.)
-- Select **Provided APIs → Central → Create Central**
-- Accept the name **stackrox-central-services** and adjust the memory limit of the central instances to 6Gi (**Central Component Settings->Resources->Memory**).
+  - Create a new project called **stackrox** (Red Hat recommends using **stackrox** as the project name.)
+- In the Operator view select the tile **Provided APIs → Central → Create Instance**
+- Accept the name **stackrox-central-services** and in the *Form* view adjust the memory limit of the central instances to 6Gi (**Central Component Settings->Resources->Limits>Memory**).
 - Click **Create**
 
 After deployment has finished ("**Status** Conditions: Deployed, Initialized") it can take some time until the application is completely up and running. One easy way to check the state is to switch to the **Developer** console view at the upper left. Then make sure you are in the **stackrox** project and open the **Topology** map. You'll see the three deployments of an **Central** instance:
@@ -107,15 +107,15 @@ Now you are ready to install the **SecuredClusters** instance, this will deploy 
 
 Now go to your **RHACS Portal** again, after a couple of minutes you should see you secured cluster under **Platform Configuration->Clusters**. Wait until all **Cluster Status** indicators become green.
 
-### Create a serviceaccount to scan the internal registry
-The integrations to the internal registry where created automatically. To enable scanning of images in the internal registry, you'll have to configure credentials, so this is what you'll do:
+### Create a serviceaccount to scan the internal OpenShift registry
+The integrations to the internal registry were created automatically. To enable scanning of images in the internal registry, you'll have to configure credentials, so this is what you'll do:
 
 - add a serviceaccount
 - assign it the needed privileges
 - configure the **Integrations** in ACS with the credentials
 
 **Create ServiceAccount to read images from Registry**
-- Make sure you are in the `stackrox` **Project**
+- In the OCP Web Console make sure you are in the `stackrox` **Project**
 - **User Management -> ServiceAccounts -> Create ServiceAccount**
 - Replace the example name in the YAML with `acs-registry-reader` and click **Create**
 - In the new ServiceAccount, under **Secrets** click one of the `acs-registry-reader-token-...` secrets

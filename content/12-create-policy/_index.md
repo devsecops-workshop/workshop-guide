@@ -40,7 +40,7 @@ First create the system policy. In the **ACS Portal** do the following:
 
 ## Modify Log4Shell Policy
 
-We have to add the Log4Shell policy to the `workshop` categorie.
+We have to add the Log4Shell policy to the `workshop` category.
 
 - search for `Log4Shell` and click on it.
 - remove the current categorie and add `Workshop`
@@ -49,14 +49,14 @@ We have to add the Log4Shell policy to the `workshop` categorie.
 ## Test the Policy
 
 Start the pipeline with the affected image version:
-- Go to the Pipeline in your `workshop-int` project, start it and set **Version** to `java-old-image`
+- In OpenShift go to the Pipeline in your `workshop-int` project, start it and set **Version** to `java-old-image` (Remember how we set up this `ImageStream` `tag` to point to an old and vulnerable version of the image?)
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments (`Quarkus-Build-Options-Git-Gsklhg-Build-...`) come and go when they are finished.
   - When the final build is deployed you'll see a violation in **ACS Portal** for policy `Workshop RHSA-2020:5566` (Check the Time of the violation)
 
 {{% notice tip %}}
-There will be other policy violations listed, triggered by default policies, have a look around. Note none of the policies is enforced (as in stop the pipeline build) yet!
+There will be other policy violations listed, triggered by default policies, have a look around. Note that none of the policies is enforced (as in stop the pipeline build) yet!
 {{% /notice %}}
 
 Now start the pipeline with the fixed image version that doesn't contain the CVE anymore:

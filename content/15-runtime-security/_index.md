@@ -31,7 +31,7 @@ To see how the alert would look like, we have to trigger the condition:
 
 - You should have a namespace with your Quarkus application runnning
 - In the OCP UI navigate to the pod and open a terminal into the container
-- Run `yum search test`. Or whatever.
+- Run `yum search test`
 - Go to the **Violations** view in the **ACS Portal**.
 - You should see a violation of the policy, if you click it, you'll get the details.
 - Run several `yum` commands in the terminal and check back with the **Violations** view:
@@ -49,5 +49,5 @@ But the real fun starts when you enforce the policy. Using the included policy, 
 
 Now trigger the policy again by opening a terminal into the pod and executing `yum`. See what happens:
 - Runtime enforcement will kill the pod immediately (via k8s).
-- Kubernetes will scale it up again automatically
+- OpenShift will scale it up again automatically
   - This is to be expected and allows to contain a potential compromise while not causing a production outage.
