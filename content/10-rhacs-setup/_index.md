@@ -42,7 +42,7 @@ Switch to the **Administrator** console view again. Now to check the installatio
   - Look up the **central-htpasswd** secret that was created to get the password
 
 {{% notice info %}}
-If you access the details of your **Central** instance you'll find the complete commandline using `oc` to retrieve the password from the secret under `Admin Credentials Info`. Just sayin... ;)
+If you access the details of your **Central** instance in the Operator page you'll find the complete commandline using `oc` to retrieve the password from the secret under `Admin Credentials Info`. Just sayin... ;)
 {{% /notice %}}
   
   - Look up  and access the route **central** which was also generated automatically.
