@@ -26,7 +26,7 @@ You must install the ACS Central instance in its own project and not in the **rh
   - Select **Project: rhacs-operator → Create project**
   - Create a new project **stackrox** (Red Hat recommends using **stackrox** as the project name.)
 - Select **Provided APIs → Central → Create Central**
-- Accept the name to **stackrox-central-services** and adjust the memory limits from the central to 6Gi.
+- Accept the name **stackrox-central-services** and adjust the memory limit of the central instances to 6Gi (**Central Component Settings->Resources->Memory**).
 - Click **Create**
 
 After deployment has finished ("**Status** Conditions: Deployed, Initialized") it can take some time until the application is completely up and running. One easy way to check the state is to switch to the **Developer** console view at the upper left. Then make sure you are in the **stackrox** project and open the **Topology** map. You'll see the three deployments of an **Central** instance:
