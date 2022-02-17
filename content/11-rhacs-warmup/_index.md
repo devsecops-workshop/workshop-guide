@@ -55,17 +55,8 @@ Now start to explore the Security Use Cases ACS targets as provided in the left 
   - The Risk view goes beyond the basics of vulnerabilities. It helps to understand how deployment configuration and runtime activity impact the likelihood of an exploit occurring and how successful those exploits will be.
   - This list view shows all deployments, in all clusters and namespaces, ordered by Risk priority.
 
-## System Policies
-
-As the foundation of ACS are the **system policies**, have a good look around:
-- Navigate to the **System Policies** section from **Platform Configuration** in the left side menu.
-- You will get an overview of the Built-in Policies
-- All of the policies that ship with the product are designed with the goal of providing targeted remediation that improves security hardening.
-- You’ll see this list contains many **Build** and **Deploy** time policies to catch misconfigurations early in the pipeline, but also **Runtime** policies.
-- These policies come from us at Red Hat - our expertise, our interpretation of industry best practice, and our interpretation of common compliance standards, but you can modify them or create your own.
-
 ## Filters
-Most UI pages have a filters section at the top that allows you to narrow the reporting view to matching or non-matching criteria. Almost all of the attributes that ACS gathers are filterable, try it out:
+Most UI pages have a filters section at the top that allows you to narrow the view to matching or non-matching criteria. Almost all of the attributes that ACS gathers are filterable, try it out:
 - Go to the **Risk** view
 - Click in the **Filters** Bar
 - Start typing `Process Name` and select the `Process Name` key
@@ -73,3 +64,17 @@ Most UI pages have a filters section at the top that allows you to narrow the re
 - You should see your deployment that has been “seen” running Java since it started
 - Try another one: limit the filter to your Project namespace only
 - Note the **Create Policy** button. It can be used to create a policy from the search filter to automatically identify this criteria.
+
+## System Policies
+As the foundation of ACS are the **system policies**, have a good look around:
+- Navigate to the **System Policies** section from **Platform Configuration** in the left side menu.
+- You will get an overview of the Built-in Policies
+- All of the policies that ship with the product are designed with the goal of providing targeted remediation that improves security hardening.
+- You’ll see this list contains many **Build** and **Deploy** time policies to catch misconfigurations early in the pipeline, but also **Runtime** policies.
+- These policies come from us at Red Hat - our expertise, our interpretation of industry best practice, and our interpretation of common compliance standards, but you can modify them or create your own.
+
+{{% notice tip %}}
+Here is a great tip for you: By default only some policies are enabled. If you want to get an overview which ones, you can use the filter view introduced above. But there is one catch: the filter value needed is not as straight forward as it could be... until this has been fixed, use this:
+
+Use `Enforcement` as filter key and `FAIL_BUILD_ENFORCEMENT` as the magic ingredient, eh, value. ;-)
+{{% /notice %}}
