@@ -4,7 +4,7 @@ weight = 25
 +++
 
 ## Objective
-You should by now have one or more pipelines to build your application, now we want to secure the build and deployment of it. For the sake of this workshop we'll take a somewhat simplified use case:
+You should have one or more pipelines to build your application from the first workshop part, now we want to secure the build and deployment of it. For the sake of this workshop we'll take a somewhat simplified use case:
 
 **We want to scan our application image for the Red Hat Security Advisory RHSA-2020:5566 concerning openssl-lib.**
 
@@ -14,8 +14,8 @@ These are the steps you will go through:
 
 - Create a custom **Security Policy** to check for the advisory
 - Test if the policy is triggered in non-enforcing mode
-  - with an older image version that contains the advisory
-  - and then with a newer versiowhere the issue has been fixed.
+  - with an older image version that contains the issue
+  - and then with a newer version with the issue fixed.
 - The final goal is to integrate the policy into the build pipeline
 
 ## Create a Custom System Policy
@@ -49,17 +49,21 @@ We have to add the Log4Shell policy to the `workshop` categorie.
 ## Test the Policy
 
 Start the pipeline with the affected image version:
-- Go to the Pipeline, Start it and set **Version** to `java-old-image`
+- Go to the Pipeline in your `workshop-int` project, start it and set **Version** to `java-old-image`
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments (`Quarkus-Build-Options-Git-Gsklhg-Build-...`) come and go when they are finished.
   - When the final build is deployed you'll see a violation in **ACS Portal** for policy `Workshop RHSA-2020:5566` (Check the Time of the violation)
 
+{{% notice tip %}}
+There will be other policy violations listed, triggered by default policies, have a look around. Note none of the policies is enforced (as in stop the pipeline build) yet!
+{{% /notice %}}
+
 Now start the pipeline with the fixed image version that doesn't contain the CVE anymore:
-- Start the pipeline again but this time leave the Java **Version** as is.
+- Start the pipeline again but this time leave the Java **Version** as is (`openjdk-11-el7`).
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments come up and go
-  - When the final build is deployed you'll see the policy violation in **ACS Portal** from before is gone because the image no longer contains it.
+  - When the final build is deployed you'll see the policy violation for `Workshop RHSA-2020:5566` for your deployment is gone because the image no longer contains it.
 
-This shows how ACS is automatically scanning images when they become active against all enabled policies. But we don't want to just see a violation after the image has been deployed, we want to disable the deployment during build time! So the next step is to integrate the check into the build pipeline and enforce it (don't deploy the application).
+This shows how ACS is automatically scanning images when they become active against all enabled policies. But we don't want to just admire a violation after the image has been deployed, we want to disable the deployment during build time! So the next step is to integrate the check into the build pipeline and enforce it (don't deploy the application).
