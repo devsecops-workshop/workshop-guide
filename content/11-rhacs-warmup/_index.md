@@ -74,6 +74,5 @@ As the foundation of ACS are the **system policies**, have a good look around:
 - These policies come from us at Red Hat - our expertise, our interpretation of industry best practice, and our interpretation of common compliance standards, but you can modify them or create your own.
 
 {{% notice tip %}}
-Here is a great tip for you: By default only some policies are enabled. If you want to get an overview which ones, you can use the filter view introduced above. But there is one catch: the filter value needed is not as straight forward as it could be... until this has been fixed, use this:
-Use `Enforcement` as filter key and `FAIL_BUILD_ENFORCEMENT` as the magic ingredient, eh, value. ;-)
+By default only some policies are enforced. If you want to get an overview which ones, you can use the filter view introduced above. Use `Enforcement` as filter key and `FAIL_BUILD_ENFORCEMENT` as value.
 {{% /notice %}}
