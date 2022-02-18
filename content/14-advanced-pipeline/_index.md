@@ -249,7 +249,15 @@ As you can see in the Pipeline visualization the flow is now a bit different. Le
 
 ### Test the advanced Pipeline
 
-Go ahead and start your newly created advanced Pipeline. See what happens and play a little bit around with it. Have fun! 
+Go ahead and start your newly created advanced Pipeline. 
+Navigate to: 
+- Pipelines -> Pipelines
+- Click on **workshop-advanced**
+- in the top right corner click **Start** -> **Start**
+- in the dialogue on the bottom select a **workspace**
+- choose a **PersistentVolumeClaim** 
+- start the Pipeline
+See what happens and play a little bit around with it. Have fun! 
 
 #### Fix the Vulnerability
 If by the now the developer that introduced the log4jShell vulnerability has not realized by now that he/she "broke the build" you can tell him/her to update their dependency to a safe version.
