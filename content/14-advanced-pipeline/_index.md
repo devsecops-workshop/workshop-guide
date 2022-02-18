@@ -268,8 +268,6 @@ Navigate to:
 
 See what happens and maybe play around with it and start again. Have fun! 
 
-- The pipeline should be stopped 
-
 ### Fix the Vulnerability
 If by now the developer that introduced the log4jShell vulnerability has not realized that he/she "broke the build" you can tell him/her to update their dependency to a safe version.
 
