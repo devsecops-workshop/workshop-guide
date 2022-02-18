@@ -38,14 +38,6 @@ First create the system policy. In the **ACS Portal** do the following:
 - On the next page you could enable enforcement of the policy for the **Build** and/or **Deploy** stages. **Don't enable enforcement yet!**
 - Click **Save**
 
-## Modify Log4Shell Policy
-
-We have to add the Log4Shell policy to the `workshop` category.
-
-- search for `Log4Shell` and click on it.
-- remove the current categorie and add `Workshop`
-- save the policy
-
 ## Test the Policy
 
 Start the pipeline with the affected image version:

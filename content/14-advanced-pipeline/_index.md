@@ -11,7 +11,6 @@ So lets modify our pipeline to an advanced one, which deletes an image, if it do
 ### Adding a Package Level Vulnerability
 Before we adjust our pipeline let's add another vulnerability to our Deployment. So far we had a system library security issue but let's image a developer tried to add (hopefully by mistake) a vulnerable Java library to his/her application. How about we pick one of the most infamous current ones such as the **Log4Shell** vulnerability?  But don't worry ACS already ships with a policy for that and has your back.
 
-
 {{% notice tip %}}
 Quarkus doesn't use the log4J library for logging so is not affected by it. Although it is a bit contrived we will still force it to include the library just to trigger our policy.  If you want to find out more about this particular vulnerability have look [here](https://www.wired.com/story/log4j-log4shell/) 
 {{% /notice %}}
@@ -64,23 +63,32 @@ There you go. That developer has just introduced a ticking timebomb into the app
 
 
 ### ACS Prerequisites
-There is a major security vulnerability in our code, but ACS is not able to detect it at the moment. So first of all navigate to ACS and follow these steps: 
-- navigate to **Platform Configuration > System Policies**
-- search for `Log4Shell` and click on it.
-- go next until you are at the enforcement card and enable both `build` and `deploy` 
-- save the policy
+So there is a major security vulnerability in our code. ACS would detect the deployment because the System Policy `Log4Shell: log4j Remote Code Execution vulnerability` is enabled but won't stop it, because the Policy is not set to enforce.
+## Modify Log4Shell Policy
 
-ACS is now able to detect the vulnerability. It is time now to implement your advanced Pipeline. 
+So first of all in the **RHACS Portal** follow these steps: 
+- Navigate to **Platform Configuration > System Policies**
+- Search for `Log4Shell` and click on the Policy.
+- Click **Edit** at the upper right
 
+Remember setting up image scanning with `roxctl` in our first pipeline? We use `roxctl` in a way that it only scans against Policies from a certain category, `Workshop` in our case. To have the task scan for the Log4Shell Policy, first add the Policy to the category `Workshop`:
+
+- Remove the current categorie and add `Workshop`
+- Now hit next until you are at the enforcement tab
+- Enable both `Build` and `Deploy` enforcement by setting them to **On** 
+- Save the policy
+
+ACS is now able to detect and enforce the vulnerability. It is time now to implement your advanced Pipeline. 
 
 ### Let's go: Create our advanced Pipeline
 
-In OpenShift administration view: 
+In the OpenShift Web Console: 
 
-- navigate to **Pipelines > Pipelines**
-- on the right click **Create > Pipeline**
-- switch to **YAML view**
-- Replace the YAML with this making sure to update your `Gitea` Repo URLS (Specifically replace the {YOUR_CLUSTER_HOSTNAME}): 
+- Make sure you are in the `workshop-int` Project
+- Navigate to **Pipelines > Pipelines**
+- On the right click **Create > Pipeline**
+- Switch to **YAML view**
+- Replace the YAML with this making sure to update your two `Gitea` Repo URL's (Specifically replace the {YOUR_CLUSTER_HOSTNAME}): 
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -240,27 +248,30 @@ spec:
 
 As you can see in the Pipeline visualization the flow is now a bit different. Lets see what has changed:
 
-- the image which was built through the **build task** will be pushed in a new **ImageStreamTag** called `dev`
-- if the image passes the ACS checks, the image will be pushed to the **ImageStreamTag** called `latest` and the `dev` tag will be removed
-- if the image doesn't pass the ACS checks, the **ImageStreamTag** called `dev` will be removed. This is handled by a function called `finally` and a `when expression`
-  - have a look at your Pipeline YAML and try to understand how it works
-- the last three steps stays the same as before
+- The image which was built through the **build task** will be pushed in a new **ImageStreamTag** called `dev`
+- If the image passes the ACS checks, the image will be pushed to the **ImageStreamTag** called `latest` and the `dev` tag will be removed
+- If the image doesn't pass the ACS checks, the **ImageStreamTag** called `dev` will be removed. This is handled by a function called `finally` and a `when expression`
+  - Have a look at your Pipeline YAML and try to understand how it works
+- The last three steps stays the same as before
 
 
 ### Test the advanced Pipeline
 
 Go ahead and start your newly created advanced Pipeline. 
 Navigate to: 
-- Pipelines -> Pipelines
+- **Pipelines -> Pipelines**
 - Click on **workshop-advanced**
-- in the top right corner click **Start** -> **Start**
-- in the dialogue on the bottom select a **workspace**
-- choose a **PersistentVolumeClaim** 
-- start the Pipeline
-See what happens and play a little bit around with it. Have fun! 
+- In the top right corner click **Actions** -> **Start**
+- In the **Start Pipeline** window at the bottom set **workspace** to **PersistentVolumeClaim**
+- Set the **Select a PVC** drop-down to a PVC
+- Start the Pipeline
 
-#### Fix the Vulnerability
-If by the now the developer that introduced the log4jShell vulnerability has not realized by now that he/she "broke the build" you can tell him/her to update their dependency to a safe version.
+See what happens and maybe play around with it and start again. Have fun! 
+
+- The pipeline should be stopped 
+
+### Fix the Vulnerability
+If by now the developer that introduced the log4jShell vulnerability has not realized that he/she "broke the build" you can tell him/her to update their dependency to a safe version.
 
 Go to your `quarkus-build-options` repo in `Gitea` again
 - Edit the `pom.xml` file update dependency to a safe version like this

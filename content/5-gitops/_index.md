@@ -10,10 +10,10 @@ Now that our CI/CD build and integration stage is ready we could promote the app
 So let's start be installing the OpenShift GitOps Operator based on project ArgoCD. 
 
 - Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with default settings
-- Then in the project ẁorkshop-prod`click on **Installed Operators**
 - Create a new OpenShift Project `workshop-prod`
-- Click on **Create Instance (Argo CD)** to create an ArgoCD instance just in the `workshop-prod` project
-- Keep the settings default and click **Create**  
+- Then in the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
+- In the **Details** view on the **Argo CD** "tile" click on **Create instance**to create an ArgoCD instance in the `workshop-prod` project
+- Keep the settings as they are and click **Create**  
 
 ## Prepare the GitOps Config Repository 
 

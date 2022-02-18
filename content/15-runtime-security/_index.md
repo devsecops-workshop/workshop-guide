@@ -6,7 +6,7 @@ weight = 35
 So far you've seen how ACS can handle security issues concerning **Build** and **Deploy** stages. But ACS is also able to detect and secure container runtime behaviour. Let's have a look...
 
 ## Handling Security Issues at Runtime
-As a scenario let's assume you won't to protect container workloads against attackers who are trying to install software. ACS comes with pre-configured policies for Ubuntu and Red Hat-based containers to detect if a package management tool is installed, this can be used in the **Build** and **Deploy** stages:
+As a scenario let's assume you want to protect container workloads against attackers who are trying to install software. ACS comes with pre-configured policies for Ubuntu and Red Hat-based containers to detect if a package management tool is installed, this can be used in the **Build** and **Deploy** stages:
 
 - **Red Hat Package Manager in Image**
 
