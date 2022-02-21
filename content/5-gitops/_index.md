@@ -215,7 +215,7 @@ spec:
 
 ## Add Tekton Task to Your Pipeline
 
-- Go to **Builds > Pipelines > workshop** and then YAML
+- Go to **Pipeline > Pipelines > workshop** and then YAML
 
 {{% notice tip %}}
 You can edit pipelines either directly in YAML or in the visual **Pipeline Builder**. We will see how to use the Builder later on so let's edit the YAML for now. 
