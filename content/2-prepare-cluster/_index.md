@@ -60,7 +60,7 @@ We could create a workspace from one of the templates that come with CodeReady W
 {{% /notice %}}
 
 - At the top click on **Custom Workspace**
-- Copy the raw URL of the `devfile.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button.
+- Copy the **raw**(!) URL of the `devfile.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
 - Paste the full URL into the **Enter devfile URL** field and click **Load Devfile**
 - Once the content of the devfile is loaded click on **Create & Open** at the button
 - You'll get into the **Starting workspace ...** view, give the workspace containers some time to spin up.  
