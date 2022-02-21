@@ -222,7 +222,7 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
 {{% /notice %}}
  
 - Add this Task to your Pipeline by adding it to the YAML like this
-- You need to insert it at the `steps` level after the `deploy`step 
+- You need to insert it at the steps level after the `deploy`step 
 - For the `param` `GIT_REPOSITORY` set your git config repo url (eg. replace {YOUR DOMAIN})
 - Make sure to fix indentation after pasting into the YAML
 ```yaml
