@@ -64,7 +64,7 @@ To test the app:
 - Your app should show up as a simple web page. In the `RESTEasy JAX-RS` section click the `@Path` endpoint `/hello` to see the result.
 
 Now for the fun part: Using `odo` you can just dynamically change your code and push it out again without doing a new image build! No dev magic involved:
-- In your CRW Workspace on the left, expand the file tree to open file `src/main/java/org/acmeGreetingRessource.java` and change the string "Hello RESTEasy" to "Hello Workshop" (CRW saves every edit directly)
+- In your CRW Workspace on the left, expand the file tree to open file `src/main/java/org/acme/GreetingRessource.java` and change the string "Hello RESTEasy" to "Hello Workshop" (CRW saves every edit directly)
 - Push the code to OpenShift again
 ```
 ./odo push
