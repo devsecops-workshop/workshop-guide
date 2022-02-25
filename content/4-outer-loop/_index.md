@@ -9,7 +9,10 @@ Now that you have seen how a developer can quickly start to code using modern cl
 
 To create and run the build pipeline you'll use OpenShift Pipelines based on project Tekton. The first step is to install it:
 
-- Install `OpenShift Pipelines` from OperatorHub with default settings and give it a few minutes to set up all resources
+- Install `OpenShift Pipelines` from OperatorHub with default settings
+{{% notice warning %}}
+Since the Piplines assets are all installed asynchronously it is possible that the `Pipline Templates` are not yet setup when proceeding immedately to the next step.  So now is good time to grab a coffee. If you don't have the checkbox **Add pipeline** and get the message `There are no pipeline templates available for Java and Deployment combination` in the next step then just give it few more minutes and reload the page. 
+{{% /notice %}}
 
 ## Create App Deployment and Build Pipeline
 
@@ -25,9 +28,7 @@ After installing the Operator create a new deployment of your game-changing appl
 - As **Name** enter **workshop** 
 - Check **Add pipeline**
 
-{{% notice tip %}}
-If you don't have the checkbox **Add pipeline** and get the message `There are no pipeline templates available for Java and Deployment combination` it's because the OpenShift Pipelines Operator has not finished deploying all resources. Have a quick coffee and then re-create the deployment. 
-{{% /notice %}}
+
 
 - Click **Create**
 - In the main menu left, click on **Pipelines** and observe how the Tekton Pipeline is created and run.

@@ -5,16 +5,19 @@ weight = 5
 
 ## Cluster Preparation
 
-Before you start you have to install a number of components you'll use during the workshop. The first two are `Gitea` for providing Git services in your cluster and **CodeReady Workspaces** as development environment. But fear not, both are managed by an [operator](https://cloud.redhat.com/learn/topics/operators).
+Before you start you have to install a number of components you'll use during the workshop. The first two are `Gitea` for providing Git services in your cluster and `CodeReady Workspaces` as development environment. But fear not, both are managed by Kubernetes [operators](https://cloud.redhat.com/learn/topics/operators) on OpenShift.
 
 ## Install and Prepare Gitea
 We'll need Git repository services to keep our app and infrastructure source code, so let's just install trusted `Gitea` using an operator:
 
 {{% notice tip %}}
-This is a good example of how you can integrate an operator into your catalog that is not part of the default [OperatorHub](https://operatorhub.io/) already.
+[Gitea](https://gitea.io/en-us/) is an OpenSource Git Server similar to GitHub.  A team at Red Hat was so nice to create an Operator for it. This is a good example of how you can integrate an operator into your catalog that is not part of the default [OperatorHub](https://operatorhub.io/) already.
 {{% /notice %}}
 
-- Log in with the `oc` command to your OpenShift cluster (the easiest way is to use the **Copy login command** link when clicking on your username in the top right of the OCP Web Console).
+- If you don't already have the oc client installed, you can download the matching version for your operating system [here](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/)
+- Log into your OpenShift Webconsole with you cluster admin credentials 
+- On the top right click on your username and then **Copy login command** to copy your login token
+- On you local machine open a terminal log in with the `oc` command you copied
 - Now using `oc` add the Gitea Operator to your OpenShift OperatorHub catalog
 ```
 oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea-operator/master/catalog_source.yaml
@@ -23,6 +26,7 @@ oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea
 - Install the `Gitea Operator` with default settings
 - Create a new OpenShift project called `git`
 - Go to **Installed Operators > Gitea Operator** and click on the **Create Instance** tile in the `git` project
+![Gitea](../images/gitea.png)
 - On the **Create Gitea** page switch to the YAML view and make sure the following `spec` values are set:
 
 ```
@@ -62,6 +66,7 @@ We could create a workspace from one of the templates that come with CodeReady W
 - At the top click on **Custom Workspace**
 - Copy the **raw**(!) URL of the `devfile.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
 - Paste the full URL into the **Enter devfile URL** field and click **Load Devfile**
+![Gitea](../images/crw.png)
 - Once the content of the devfile is loaded click on **Create & Open** at the button
 - You'll get into the **Starting workspace ...** view, give the workspace containers some time to spin up.  
 

@@ -3,26 +3,38 @@ title = "Configure GitOps"
 weight = 10
 +++
 
-Now that our CI/CD build and integration stage is ready we could promote the app version directly to a production stage.  But with the help of the GitOps approach we can leverage our Git System to handle promotion that is tracked through commits and can deploy and configure the whole production environment.  This stage is just too critical to configure manually and without audit.
+Now that our CI/CD build and integration stage is ready we could promote the app version directly to a production stage.  But with the help of the GitOps approach, we can leverage our Git System to handle promotion that is tracked through commits and can deploy and configure the whole production environment.  This stage is just too critical to configure manually and without audit.
 
 ## Install OpenShift GitOps 
 
 So let's start be installing the OpenShift GitOps Operator based on project ArgoCD. 
 
 - Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with default settings
+{{% notice tip %}}
+The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.    
+{{% /notice %}}
 - Create a new OpenShift Project `workshop-prod`
 - Then in the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
 - In the **Details** view on the **Argo CD** "tile" click on **Create instance**to create an ArgoCD instance in the `workshop-prod` project
+![ArgoCD](../images/argo.png)
 - Keep the settings as they are and click **Create**  
 
 ## Prepare the GitOps Config Repository 
 
-- In `Gitea` create a **new Migration** and clone the Config GitOps which will be the repository that contains our GitOps infrastructure components and state
+- In `Gitea` create a **New Migration** and clone the Config GitOps Repo which will be the repository that contains our GitOps infrastructure components and state
 - The URL is https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
+- Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with default settings
+
+Have quick look at the structure of this project :
+
+**app** - contains yamls for the deployment, service and route resources needed by our application. These will be applied to the cluster. There is also a `kustomization.yaml` defining that kustoize layers will be applied to all yamls
+
+**environments/dev** - contains the `kustomization.yaml` which will be modified by our builds with new Image versions. ArgoCD will pick up these changes an trigger new deployments.
+
 
 ## Setup GitOps Project
 
-Lets setup the project that tells Argo CD to watch our config repo and updated resources in the `workshop-prod` project accordingly. 
+Lets setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly. 
 
 - Give namespace `workshop-prod` permissions to pull images from `workshop-int`
 ```
@@ -30,16 +42,17 @@ oc policy add-role-to-user \
     system:image-puller system:serviceaccount:workshop-prod:default \
     --namespace=workshop-int
 ```
-- Find the **ArgoCD URL** by going to **Networking > Routes**
-- Open the website ignoring the certificate warning
+- Find the local **ArgoCD URL** by going to **Networking > Routes** in namespace `workshop-prod`
+- Open the ArgoCD website ignoring the certificate warning
+- Don't login with OpenShift but with username and password
 - User is `admin` and password will be in Secret `argocd-cluster`
 - Create App
-  - Click the `manage your applications` icon on the left
+  - Click the **manage your applications** icon on the left
   - Click **Create Application**
   - Application name : workshop
   - Project : default
   - SYNC POLICY : Automatic
-  - Repository URL: Copy the URL of your config repo from Gitea (It should resemble `https://repository-gitea.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
+  - Repository URL: Copy the URL of your config repo from Gitea (It should resemble `https://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
   - Path: environments/dev
   - Cluster URL : https://kubernetes.default.svc
   - Namespace: workshop-prod
@@ -48,7 +61,7 @@ oc policy add-role-to-user \
 
 Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice we have also scaled our app to 2 pods in the prod stage as we want some HA. 
 
-Our complete prod stage is now configured and controlled though GitOps. But how do we now tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo. 
+Our complete prod stage is now configured and controlled though GitOps. But how do we tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo. 
 
 As we do not want to modify our original repo file we will use a tool called [Kustomize](https://kustomize.io/) that can add incremental change layers to YAML files. Since ArgoCD permanently watches this repo it will pick up these Kustomize changes.  
 
@@ -60,7 +73,7 @@ It is also possible to update the repo with a Pull request. Then you have an app
 
 Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build an then push the change to out git config repo.
 
-- In the namespace `workshop-int` switch to the Administrator Perspective and go to **Pipelines > Tasks > Create Task**
+- In the namespace `workshop-int` switch to the **Administrator** Perspective and go to **Pipelines > Tasks > Create Task**
 - Replace the YAML definition with the following and click **Create**:
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -255,6 +268,8 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
          workspace: workspace
 
 ```
+The `Pipeline` should now look like this
+![workshop Pipeline](../images/tekton.png)
 - Create a secret with credentials for your `Gitea` repository, so the `task` can authenticate and push to `Gitea`. Replace {YOUR DOMAIN} here to match your `Gitea`URL
 - You can add this by clicking on the **+** on the top right ob the Web Console
 ```yaml
