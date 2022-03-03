@@ -26,7 +26,10 @@ oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea
 - Install the `Gitea Operator` with default settings
 - Create a new OpenShift project called `git`
 - Go to **Installed Operators > Gitea Operator** and click on the **Create Instance** tile in the `git` project
-![Gitea](../images/gitea.png)
+
+<!-- ![Gitea](../images/gitea.png) -->
+{{< figure src="../images/gitea.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 - On the **Create Gitea** page switch to the YAML view and make sure the following `spec` values are set:
 
 ```

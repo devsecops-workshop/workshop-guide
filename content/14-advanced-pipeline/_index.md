@@ -66,7 +66,7 @@ There you go. That developer has just introduced a ticking timebomb into the app
 So there is a major security vulnerability in our code. ACS would detect the deployment because the System Policy `Log4Shell: log4j Remote Code Execution vulnerability` is enabled but won't stop it, because the Policy is not set to enforce.
 ## Modify Log4Shell Policy
 
-So first of all in the **RHACS Portal** follow these steps: 
+So first of all in the **ACS Portal** follow these steps: 
 - Navigate to **Platform Configuration > System Policies**
 - Search for `Log4Shell` and click on the Policy.
 - Click **Edit** at the upper right
@@ -82,7 +82,7 @@ ACS is now able to detect and enforce the vulnerability. It is time now to imple
 
 ### Let's go: Create our advanced Pipeline
 
-In the OpenShift Web Console: 
+In the **OpenShift Web Console**: 
 
 - Make sure you are in the `workshop-int` Project
 - Navigate to **Pipelines > Pipelines**
@@ -254,7 +254,7 @@ As you can see in the Pipeline visualization the flow is now a bit different. Le
   - Have a look at your Pipeline YAML and try to understand how it works
 - The last three steps stays the same as before
 
-
+{{< figure src="../images/pipeline-adv.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 ### Test the advanced Pipeline
 
 Go ahead and start your newly created advanced Pipeline. 

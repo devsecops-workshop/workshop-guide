@@ -17,6 +17,9 @@ ACS delivers on these security use cases:
 - **Compliance**: Making sure that industry and regulatory standards are being met in your OpenShift environments.
 
 ## UI Overview
+
+{{< figure src="../images/acs-dashboard.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 - **Dashboard**:
 The dashboard serves as the security overview - helping the security team understand what the sources of risk are, categories of violations, and gaps in compliance. All of the elements are clickable for more information and categories are customizable.
 

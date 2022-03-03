@@ -16,7 +16,10 @@ The installation of the GitOps Operator will give you a clusterwide ArgoCD insta
 - Create a new OpenShift Project `workshop-prod`
 - Then in the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
 - In the **Details** view on the **Argo CD** "tile" click on **Create instance**to create an ArgoCD instance in the `workshop-prod` project
-![ArgoCD](../images/argo.png)
+
+<!-- ![ArgoCD](../images/argo.png) -->
+{{< figure src="../images/argo.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 - Keep the settings as they are and click **Create**  
 
 ## Prepare the GitOps Config Repository 

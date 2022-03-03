@@ -36,3 +36,16 @@ Text here
 </p>
 <hr/>
 </details>
+
+### Images
+```
+![Install odo](../images/crw2.png?width=75pc)
+```
+
+Or using Hugo shortcut "figure" to easily add a caption, here with border and shadow, too:
+
+```
+{{< figure src="../images/crw2.png?width=75pc&classes=border,shadow" title="Click image to enlarge" >}}
+```
+
+Will automatically open larger in extra window when clicked.

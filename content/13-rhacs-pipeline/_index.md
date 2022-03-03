@@ -21,7 +21,7 @@ Build-time policies require the use of the `roxctl` command-line tool which is a
 
 ### Create the `roxctl` token
 
-On the ACS portal:
+In the **ACS portal**:
 - Navigate to **Platform Configure > Integrations**.
 - Scroll down to the **Authentication Tokens** category, and select **API Token**.
 - Click **Generate Token**. Enter the name `pipeline` for the token and select the role **Admin**.
@@ -29,7 +29,7 @@ On the ACS portal:
 - Save the contents of the token somewhere!
 
 ### Create OCP secret with token
-In your OCP cluster, create a secret with the API token in the project your pipeline lives in:
+Change to the **OpenShift Web Console** and create a secret with the API token in the project your pipeline lives in:
 - In the UI switch to your Project
 - Create a new key/value `Secret` named **roxsecrets**
 - Introduce these key/values into the secret:
@@ -116,6 +116,8 @@ After you added it you have to fill in values for the parameters the task define
   - **image_digest**: $(tasks.build.results.IMAGE_DIGEST)
     - This variable takes the result of the **build** task and uses it in the scan task.
   - Click **Save**
+
+{{< figure src="../images/pipeline.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Test the Scan Task
 With our custom **System Policy** still not set to `enforce` we first are going to test the pipeline integration. Start the pipeline with Java **Version** `java-old-image`

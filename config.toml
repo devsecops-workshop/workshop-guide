@@ -2,7 +2,7 @@ baseurl = "https://devsecops-workshop.github.io/"
 contentdir    = "content"
 layoutdir     = "layouts"
 publishdir    = "public"
-title = "DevSecOps Workshop 2021"
+title = "DevSecOps Workshop"
 canonifyurls = true
 paginate = 10
 

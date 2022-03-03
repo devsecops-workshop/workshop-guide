@@ -26,7 +26,10 @@ You should be greeted by the `README.md` file.
 To install the `odo` cli into your workspace, run the following steps:
 
 - From the CRW shortcuts menu to the right (the "cube icon") run `install odo`
-![Install odo](../images/crw2.png)
+<!-- ![Install odo](../images/crw2.png?width=75pc) -->
+
+{{< figure src="../images/crw2.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 - `odo` cli will be downloaded and unpacked in your project folder, you can safely ignore the warning about file or directory not found
 - Close the `install odo` terminal tab the installation opened
 
