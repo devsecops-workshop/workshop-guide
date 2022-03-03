@@ -272,7 +272,10 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
 
 ```
 The `Pipeline` should now look like this
-![workshop Pipeline](../images/tekton.png)
+
+<!-- ![workshop Pipeline](../images/tekton.png) -->
+{{< figure src="../images/tekton.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 - Create a secret with credentials for your `Gitea` repository, so the `task` can authenticate and push to `Gitea`. Replace {YOUR DOMAIN} here to match your `Gitea`URL
 - You can add this by clicking on the **+** on the top right ob the Web Console
 ```yaml
