@@ -13,4 +13,4 @@ And all in a fun way.
 
 ## Collaboration
 This workshop was created by Daniel Brintzinger, Goetz Rieger and Sebastian Dehn. 
-Feel free to create a pull request or an issue. 
+Feel free to create a pull request or an issue in [GitHub](https://github.com/devsecops-workshop)
