@@ -26,9 +26,18 @@ This workshop is for intermediate OpenShift users. A good understanding of how O
 
 We try to balance guided workshop steps and challenging you to use your knowledge to learn new skills. This means you'll get detailed step-by-step instructions for every new chapter/task, later on the guide will become less verbose and we'll weave in some challenges.
 ## Workshop Environment
+### As Part of a Red Hat Workshop
 As part of the workshop you will be provided with freshly installed OpenShift 4.9 clusters. Depending on attendee numbers we might ask you to gather in teams. Some workshop tasks must be done only once for the cluster (e.g. installing Operators), others like deploying and securing the application can be done by every team member separately in their own Project. This will be mentioned in the guide.
 
-As there is not special setup for the OpenShift cluster you should be able to run the workshop with any 4.9 cluster of you own. Just make sure you have cluster admin privileges. 
+### On Your Own
+As there is not special setup for the OpenShift cluster you should be able to run the workshop with any 4.9 cluster of you own. Just make sure you have cluster admin privileges.
+
+This workshop was tested with these versions :
+- OpenShift : 4.9
+- ACS : 3.68.1 
+- CRW : 2.15.2
+- Pipelines : 1.6.2
+- GitOps : 1.4.3
 
 ## Workshop Flow
 We'll tackle the topics at hand step by step with an introduction covering the things worked on before every section.
