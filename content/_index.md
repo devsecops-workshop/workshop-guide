@@ -12,7 +12,5 @@ And all in a fun way.
 {{< figure src="../images/workshop_architecure.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Collaboration
-{{% notice tip %}}
 This workshop was created by Daniel Brintzinger, Goetz Rieger and Sebastian Dehn. 
-If you like this workshop and would like to collaborate, create an issue or a pull request. 
-{{% /notice %}}
+Feel free to create a pull request or an issue. 
