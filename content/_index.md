@@ -13,6 +13,6 @@ And all in a fun way.
 
 ## Collaboration
 {{% notice tip %}}
-This workshop was created by Daniel Brintzinger, Goetz Rieger or Sebastian Dehn. 
+This workshop was created by Daniel Brintzinger, Goetz Rieger and Sebastian Dehn. 
 If you like this workshop and would like to collaborate, create an issue or a pull request. 
 {{% /notice %}}
