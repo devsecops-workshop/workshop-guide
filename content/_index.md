@@ -8,7 +8,7 @@ You will get a brief introduction in several OpenShift features like **[OpenShif
 
 ## Architecture overview
 
-![Architecture Overview](../images/workshop_architecure.png)
+{{< figure src="../images/workshop_architecure.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Collaboration
 {{% notice tip %}}
