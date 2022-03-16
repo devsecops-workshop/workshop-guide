@@ -4,7 +4,6 @@ weight = 1
 +++
 
 ## Intro
-This workshop is meant to introduce you to the application development cycle leveraging [OpenShift's](https://www.redhat.com/en/technologies/cloud-computing/openshift) tooling & features with a special focus on securing your environment using [Advanced Cluster Security for Kubernetes (ACS)](https://www.redhat.com/en/technologies/cloud-computing/openshift/advanced-cluster-security-kubernetes). And all in a fun way.
 
 This is the storyline you'll follow:
 

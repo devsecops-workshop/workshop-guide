@@ -1,11 +1,17 @@
 # DevSecOps Workshop
 
+## What is it about
+This workshop will introduce you to the application development cycle leveraging [OpenShift's](https://www.redhat.com/en/technologies/cloud-computing/openshift) tooling & features with a special focus on securing your environment using [Advanced Cluster Security for Kubernetes (ACS)](https://www.redhat.com/en/technologies/cloud-computing/openshift/advanced-cluster-security-kubernetes). And all in a fun way.
+You will get a brief introduction in several OpenShift features like **[OpenShift Pipelines](https://docs.openshift.com/container-platform/4.10/cicd/pipelines/op-release-notes.html)**, **[OpenShift GitOps](https://docs.openshift.com/container-platform/4.10/cicd/gitops/gitops-release-notes.html)**, **[OpenShift GitOps](https://docs.openshift.com/container-platform/4.10/cicd/gitops/gitops-release-notes.html)**, **[OpenShift CodeReadyWorkspaces](https://developers.redhat.com/products/codeready-workspaces/overview)**
+
+
+
 ## Architecture overview
 
 ![Architecture Overview](../images/workshop_architecure.png)
 
-## Improvements
+## Collaboration
 {{% notice tip %}}
-If you like this workshop and would like to add or improve chapters, contact us via Github or create a pull request. 
-For questions around the workshop reach out to Daniel Brintzinger, Goetz Rieger or Sebastian Dehn. 
+This workshop was created by Daniel Brintzinger, Goetz Rieger or Sebastian Dehn. 
+If you like this workshop and would like to collaborate, create an issue or a pull request. 
 {{% /notice %}}
