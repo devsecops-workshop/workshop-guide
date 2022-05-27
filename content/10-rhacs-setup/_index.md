@@ -11,8 +11,6 @@ Now it's time to add another extremely important piece to the setup; enhancing a
 - Install the "Advanced Cluster Security for Kubernetes" operator from OperatorHub with the default values.
 
 ### Install the main component **Central**
-- Navigate to **Operators → Installed Operators**
-- Select the ACS operator
 - You are probably in the **openshift-operator** project, create a new project **stackrox** (use the **Project** drop-down)
 - Select **Provided APIs → Central → Create Central**
 - Change the name if you like and accept the default values

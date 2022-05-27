@@ -22,6 +22,8 @@ This is the storyline you'll follow today:
 ## What to Expect
 We try to balance guided workshop steps and challenging you to use your knowledge to learn new skills. This means you'll get detailed step-by-step instructions for every new chapter/task, later on the guide will become less verbose and we'll weave in some challenges.
 
+This is a relevant fix
+
 {{% notice warning %}}
 A good understanding of how OpenShift works together with hands-on experience is expected. For example we will not tell you how to log in `oc` to your cluster or tell you what it is... ;)
 {{% /notice %}}
