@@ -15,7 +15,7 @@ The installation of the GitOps Operator will give you a clusterwide ArgoCD insta
 {{% /notice %}}
 - Create a new OpenShift Project `workshop-prod`
 - Then in the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
-- In the **Details** view on the **Argo CD** "tile" click on **Create instance**to create an ArgoCD instance in the `workshop-prod` project
+- On the **ArgoCD** "tile" click on **Create instance** to create an ArgoCD instance in the `workshop-prod` project.
 
 <!-- ![ArgoCD](../images/argo.png) -->
 {{< figure src="../images/argo.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
@@ -26,18 +26,17 @@ The installation of the GitOps Operator will give you a clusterwide ArgoCD insta
 
 - In `Gitea` create a **New Migration** and clone the Config GitOps Repo which will be the repository that contains our GitOps infrastructure components and state
 - The URL is https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
-- Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with default settings
 
 Have quick look at the structure of this project :
 
-**app** - contains yamls for the deployment, service and route resources needed by our application. These will be applied to the cluster. There is also a `kustomization.yaml` defining that kustoize layers will be applied to all yamls
+**app** - contains yamls for the deployment, service and route resources needed by our application. These will be applied to the cluster. There is also a `kustomization.yaml` defining that kustomize layers will be applied to all yamls
 
-**environments/dev** - contains the `kustomization.yaml` which will be modified by our builds with new Image versions. ArgoCD will pick up these changes an trigger new deployments.
+**environments/dev** - contains the `kustomization.yaml` which will be modified by our builds with new Image versions. ArgoCD will pick up these changes and trigger new deployments.
 
 
 ## Setup GitOps Project
 
-Lets setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly. 
+Let's setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly. 
 
 - Give namespace `workshop-prod` permissions to pull images from `workshop-int`
 ```
@@ -50,15 +49,15 @@ oc policy add-role-to-user \
 - Don't login with OpenShift but with username and password
 - User is `admin` and password will be in Secret `argocd-cluster`
 - Create App
-  - Click the **manage your applications** icon on the left
+  - Click the **Manage your applications** icon on the left
   - Click **Create Application**
-  - Application name : workshop
-  - Project : default
-  - SYNC POLICY : Automatic
-  - Repository URL: Copy the URL of your config repo from Gitea (It should resemble `https://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
-  - Path: environments/dev
-  - Cluster URL : https://kubernetes.default.svc
-  - Namespace: workshop-prod
+  - **Application Name**: workshop
+  - **Project**: default
+  - **SYNC POLICY**: Automatic
+  - **Repository URL**: Copy the URL of your config repo from Gitea (It should resemble `https://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
+  - **Path**: environments/dev
+  - **Cluster URL**: https://kubernetes.default.svc
+  - **Namespace**: workshop-prod
   - Click **Create**
   - Click on **Sync** and then  **Synchronize** to manually trigger the first sync
 
@@ -237,10 +236,15 @@ spec:
 You can edit pipelines either directly in YAML or in the visual **Pipeline Builder**. We will see how to use the Builder later on so let's edit the YAML for now. 
 {{% /notice %}}
  
-- Add this Task to your Pipeline by adding it to the YAML like this
-- You need to insert it at the steps level after the `deploy`step 
-- For the `param` `GIT_REPOSITORY` set your git config repo url (eg. replace {YOUR DOMAIN})
-- Make sure to fix indentation after pasting into the YAML
+Add the new Task to your Pipeline by adding it to the YAML like this:
+- In the YAML view insert it at the **tasks** level after the `deploy` task 
+- For the `param` `GIT_REPOSITORY` use your git config repo url (eg. replace {YOUR DOMAIN})
+- Make sure to fix indentation after pasting into the YAML!
+
+{{% notice tip %}}
+In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** to indent this lines for one step.
+{{% /notice %}}
+
 ```yaml
 - name: git-update-deployment
      params:
@@ -291,10 +295,10 @@ data:
   username: Z2l0ZWE=
 type: kubernetes.io/basic-auth
 ```
-Now we need to add the secret to the `serviceaccount` that runs our pipelines so the `task` can push to our config repo 
+Now we need to add the secret to the `serviceaccount` that runs our pipelines so the `task` can push to our config repo. 
 
-- Edit the **User Management  > ServiceAccounts > pipeline** and add the secret to it, so it will be available during the pipeline run
-- Open the YAML and in the `secrets` section add
+- Go to **User Management > ServiceAccounts > pipeline**
+- To make the secret available during a pipeline run: Open the YAML and in the `secrets` section add:
 
 ```yaml
   - name: gitea

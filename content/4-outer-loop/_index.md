@@ -9,9 +9,9 @@ Now that you have seen how a developer can quickly start to code using modern cl
 
 To create and run the build pipeline you'll use OpenShift Pipelines based on project Tekton. The first step is to install it:
 
-- Install `OpenShift Pipelines` from OperatorHub with default settings
+- Install the `Red hat OpenShift Pipelines` Operator from OperatorHub with default settings
 {{% notice warning %}}
-Since the Piplines assets are all installed asynchronously it is possible that the `Pipline Templates` are not yet setup when proceeding immedately to the next step.  So now is good time to grab a coffee. If you don't have the checkbox **Add pipeline** and get the message `There are no pipeline templates available for Java and Deployment combination` in the next step then just give it few more minutes and reload the page. 
+Since the Piplines assets are installed asynchronously it is possible that the `Pipline Templates` are not yet setup when proceeding immedately to the next step. So now is good time to grab a coffee.
 {{% /notice %}}
 
 ## Create App Deployment and Build Pipeline
@@ -21,21 +21,23 @@ After installing the Operator create a new deployment of your game-changing appl
 - Create a new OpenShift project `workshop-int`
 - Switch to the **OpenShift Developer Console**
 - Click the **+Add** menu entry to the left and choose **Import from Git**
-- As **Git Repo URL** enter your `Gitea` clone URL (There might be a warning about the repo url that you can ignore)
+- As **Git Repo URL** enter the clone URL for the `quarkus-build-options` repo in your your `Gitea` instance (There might be a warning about the repo url that you can ignore)
 - As **Import Strategy** select **Builder Image**
-- As **Builder Image** select **Java** and **Red Hat OpenJDK 11 (RHEL 7)**
+- As **Builder Image** select **Java** and **openjdk-11-el7** /  **Red Hat OpenJDK 11 (RHEL 7)** 
 - As **Application Name** enter **workshop-app**
 - As **Name** enter **workshop** 
 - Check **Add pipeline**
 
-
+{{% notice warning %}}
+If you don't have the checkbox **Add pipeline** and get the message `There are no pipeline templates available for Java and Deployment combination` in the next step then just give it few more minutes and reload the page. 
+{{% /notice %}}
 
 - Click **Create**
 - In the main menu left, click on **Pipelines** and observe how the Tekton Pipeline is created and run.
 
 ## Create an ImageStream Tag with an Old Image Version 
 
-Now your build pipeline has been set up and is ready. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it. For that we will add another ImageStream `Tag` in the default `Java` ImageStream that points to an older version.
+Now your build pipeline has been set up and is ready. There is one more step in preparation of the security part of this workshop. We need a way to build and deploy from an older image with some security issues in it. For this we will add another ImageStream `Tag` in the default `Java` ImageStream that points to an older version with a known issue in it.
 
 - Using the **Administrator** view, switch to the project `openshift` and under **Builds** click on the **ImageStreams**
 - Search and open the **ImageStream** `java`
