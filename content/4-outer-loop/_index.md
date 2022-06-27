@@ -57,7 +57,7 @@ Now your build pipeline has been set up and is ready. There is one more step in 
         version: '8'
       from:
         kind: DockerImage
-        name: 'registry.redhat.io/openjdk/openjdk-11-rhel7:1.1-9'
+        name: 'registry.redhat.io/openjdk/openjdk-11-rhel7:1.10-1'
       generation: 4
       importPolicy: {}
       referencePolicy:
@@ -65,7 +65,7 @@ Now your build pipeline has been set up and is ready. There is one more step in 
 ```
 
 This will add a tag `java-old-image` that points to an older version of the RHEL Java image. The image and security vulnerabilities can be inspected in the Red Hat Software Catalog here:
-https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185dd19c775cddc4ce5?tag=1.10-1.1630314161&push_date=1630540002000&container-tabs=security
-- Have a look at version `1.1-9`
+https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185dd19c775cddc4ce5?tag=1.10-1&push_date=1629294893000&container-tabs=security
+- Have a look at version `1.10-1`
 
 We will use this tag to test our security setup in a later chapter.

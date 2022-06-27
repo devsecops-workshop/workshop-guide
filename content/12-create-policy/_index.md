@@ -22,21 +22,27 @@ These are the steps you will go through:
 
 First create the system policy. In the **ACS Portal** do the following:
 
-- **System Policies->New Policy**
-- **Name:** Workshop RHSA-2020:5566
-- **Severity:** Critical
-- **Lifecycle Stages:** Build, Deploy
-- **Categories:** Workshop
-  - This will create a new Category if it doesn't exist
-- **->Next**
-- Click **Add a new condition**
-- Find the policy field **CVE** in **Image Contents** and drag-and-drop it into the **Drop A Policy Field Inside** area.
-- Put `RHSA-2020:5566` into the **CVE** field
-- Click **->Next**
-- The next page will show **Deployments** that would generate violations
-- Click **->Next**
-- On the next page you could enable enforcement of the policy for the **Build** and/or **Deploy** stages. **Don't enable enforcement yet!**
-- Click **Save**
+- **Platform Configuration->Policies->Create policy**
+- **Policy Details**
+  - **Name:** Workshop RHSA-2021:4904
+  - **Severity:** Critical
+  - **Categories:** Workshop
+    - This will create a new Category if it doesn't exist
+  - Click **Next**
+- **Policy Behaviour**
+  - **Lifecycle Stages:** Build, Deploy
+  - **Response method**: Inform
+  - Click **Next**
+- **Policy Criteria**
+  - Find the **CVE** policy criterium under **Drag out policy fields** in **Image contents**
+  - Drag & drop it on the drop zone of Policy Section 1
+  - Put `RHSA-2021:4904` into the **CVE identifier** field
+  - Click **Next**
+- **Policy Scope**
+  - You could limit the scope the policy is applied in, do nothing for now.
+- **Review Policy**
+  - Have a quick look around, if the policy would create a violation you get a preview here.
+  - Click **Save** 
 
 {{< figure src="../images/custom-policy.png?width=25pc&classes=border,shadow" title="Click image to enlarge" >}}
 
@@ -47,7 +53,7 @@ Start the pipeline with the affected image version:
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments (`Quarkus-Build-Options-Git-Gsklhg-Build-...`) come and go when they are finished.
-  - When the final build is deployed you'll see a violation in **ACS Portal** for policy `Workshop RHSA-2020:5566` (Check the Time of the violation)
+  - When the final build is deployed you'll see a violation in **ACS Portal** for policy `Workshop RHSA-2021:4904` (Check the Time of the violation)
 
 {{% notice tip %}}
 There will be other policy violations listed, triggered by default policies, have a look around. Note that none of the policies is enforced (as in stop the pipeline build) yet!
@@ -58,6 +64,6 @@ Now start the pipeline with the fixed image version that doesn't contain the CVE
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments come up and go
-  - When the final build is deployed you'll see the policy violation for `Workshop RHSA-2020:5566` for your deployment is gone because the image no longer contains it.
+  - When the final build is deployed you'll see the policy violation for `Workshop RHSA-2021:4904` for your deployment is gone because the image no longer contains it.
 
-This shows how ACS is automatically scanning images when they become active against all enabled policies. But we don't want to just admire a violation after the image has been deployed, we want to disable the deployment during build time! So the next step is to integrate the check into the build pipeline and enforce it (don't deploy the application).
+This shows how ACS is automatically scanning images when they become active against all enabled policies. But we don't want to just **admire a violation** after the image has been deployed, we want to disable the deployment during build time! So the next step is to integrate the check into the build pipeline and enforce it (don't deploy the application).
