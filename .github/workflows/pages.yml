@@ -10,10 +10,10 @@ jobs:
   build-deploy:
     runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: true
-        tag_name: 1.0.0
+        ref: 1.0.0
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v2
       with:
