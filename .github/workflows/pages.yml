@@ -34,3 +34,30 @@ jobs:
         external_repository: devsecops-workshop/devsecops-workshop.github.io
         publish_branch: master
         publish_dir: ./public
+  build-deploy-dev:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+        ref: 1.0.0
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: '0.69.0'
+
+    - name: Build
+      run: hugo
+      # run: hugo -t hugo-theme-learn
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      #env:
+      #  ACTIONS_DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+      with:
+        emptyCommits: false
+        commitMessage: ${{ github.event.head_commit.message }}
+        deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        external_repository: devsecops-workshop/devsecops-workshop.github.io-dev
+        publish_branch: master
+        publish_dir: ./public     
