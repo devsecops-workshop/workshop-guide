@@ -14,7 +14,7 @@ And, more important for this section about runtime security, a policy to detect 
 
 - **Red Hat Package Manager Execution**
 
-In the **ACS Portal**, go to **Platform Configuration->System Policies**, search for the policies by e.g. typing `policy` and then `red hat` into the filter. Open the policy detail view by clicking it and have a look at what they do.
+In the **ACS Portal**, go to **Platform Configuration->Policies**, search for the policies by e.g. typing `policy` and then `red hat` into the filter. Open the policy detail view by clicking it and have a look at what they do.
 
 {{% notice tip %}}
 You can use the included policies as they are but you can always e.g. clone and adapt them to your needs or write completely new ones.
@@ -41,11 +41,12 @@ To see how the alert would look like, we have to trigger the condition:
 ## Enforce Runtime Protection
 But the real fun starts when you enforce the policy. Using the included policy, it's easy to just "switch it on":
 
-- In the **ACS Portal** bring up the **Red Hat Package Manager Execution** again.
-- Click the **Edit** button above the Details view to the right.
-- Click **->Next** until you arrive at the **Enforcement Behaviour** page.
-- Set **Runtime** to **ON**
-- Click **Save**
+- In the **ACS Portal** bring up the **Red Hat Package Manager Execution**  Policy again.
+- Click the **Edit Policy** button in the **Actions** drop-down to the upper right.
+- Click **Next** until you arrive at the **Policy behaviour** page.
+- Under **Response Method** select **Inform and enforce**
+- Set **Configure enforcement behaviour** for **Runtime** to **Enforce on Runtime**
+- Click **Next** until you arrive at the last page and click **Save**
 
 Now trigger the policy again by opening a terminal into the pod in the **OpenShift Web Console** and executing `yum`. See what happens:
 - Runtime enforcement will kill the pod immediately (via k8s).
