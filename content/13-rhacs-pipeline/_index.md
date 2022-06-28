@@ -22,7 +22,7 @@ Build-time policies require the use of the `roxctl` command-line tool which is a
 ### Create the `roxctl` token
 
 In the **ACS portal**:
-- Navigate to **Platform Configure > Integrations**.
+- Navigate to **Platform Configuration > Integrations**.
 - Scroll down to the **Authentication Tokens** category, and select **API Token**.
 - Click **Generate Token**. Enter the name `pipeline` for the token and select the role **Admin**.
 - Select **Generate**
@@ -36,6 +36,10 @@ Change to the **OpenShift Web Console** and create a secret with the API token i
   - **rox_central_endpoint**: \<the URL to your **ACS Portal**>
     - It should be something like central-stackrox.apps.cluster-psslb.psslb.sandbox555.opentlc.com:443
   - **rox_api_token**: \<the API token you generated>
+
+{{% notice tip %}}
+Even if the form says **Drag and drop file with your value here...** you can just paste the text.
+{{% /notice %}}
 
 ### Create a Scan Task
 You are now ready to create a new pipeline task that will use `roxctl` to scan the image build in your pipeline before the deploy step:
