@@ -127,7 +127,7 @@ Remember how we edited the pipeline directly in yaml before? OpenShift comes wit
 {{% /notice %}}
 
 - Hover your mouse over **build** task and click the **+** at the right side side of it, to add a task
-- This will open a task selector where you can choose to add your **rox-image-check**
+- This will open a task selector where you can choose to your **rox-image-check** and double-click to add it to the pipeline
 - To add the required parameters from the pipeline for the task, click the **rox-image-check** task.
 - A form with the parameters will open, fill it in:
 
@@ -159,7 +159,6 @@ The last step is to enforce the System Policy. If the policy is violated the pip
 
 - Edit your custom **System Policy** in **ACS Portal** and set **Response Method** to **Inform and enforce** and then switch on **Build** and **Deploy** below.
 - Run the pipeline again, first with **Version** `java-old-image` and then with **Version** `openjdk-17-ubi8` (default)
-- When running the Pipeline with new parameters you need to enter `master` as **GIT_REVISION** !
 - Expected results:
   - We are sure you know by now what to expect!
   - The pipeline should fail with the old image version and succeed with the latest image version!
