@@ -4,11 +4,12 @@ weight = 25
 +++
 
 ## Objective
+
 You should have one or more pipelines to build your application from the first workshop part, now we want to secure the build and deployment of it. For the sake of this workshop we'll take a somewhat simplified use case:
 
-**We want to scan our application image for the Red Hat Security Advisory RHSA-2020:5566 concerning openssl-lib.**
+**We want to scan our application image for the Red Hat Security Advisory RHSA-2021:4904 concerning openssl-lib.**
 
- If this RHSA is found in an image we don't want to deploy the application using it.
+If this RHSA is found in an image we don't want to deploy the application using it.
 
 These are the steps you will go through:
 
@@ -42,13 +43,14 @@ First create the system policy. In the **ACS Portal** do the following:
   - You could limit the scope the policy is applied in, do nothing for now.
 - **Review Policy**
   - Have a quick look around, if the policy would create a violation you get a preview here.
-  - Click **Save** 
+  - Click **Save**
 
 {{< figure src="../images/custom-policy.png?width=25pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Test the Policy
 
 Start the pipeline with the affected image version:
+
 - In the **OpenShift Web Console** go to the Pipeline in your `workshop-int` project, start it and set **Version** to `java-old-image` (Remember how we set up this `ImageStream` `tag` to point to an old and vulnerable version of the image?)
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
@@ -60,6 +62,7 @@ There will be other policy violations listed, triggered by default policies, hav
 {{% /notice %}}
 
 Now start the pipeline with the fixed image version that doesn't contain the CVE anymore:
+
 - Start the pipeline again but this time leave the Java **Version** as is (`openjdk-11-el7`).
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:

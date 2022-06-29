@@ -12,8 +12,8 @@ There are basically two ways to interface with ACS. The UI, which focuses on the
 ACS policies can act during the CI/CD pipeline to identify security risk in images before they are run as a container.
 
 ## Integrate Image Scan into the Pipeline
-You should have created and build a custom policy in ACS and tested it for triggering violations. Now you will integrate it into the build pipeline.
 
+You should have created and build a custom policy in ACS and tested it for triggering violations. Now you will integrate it into the build pipeline.
 
 ### Let's go: Prepare `roxctl`
 
@@ -22,6 +22,7 @@ Build-time policies require the use of the `roxctl` command-line tool which is a
 ### Create the `roxctl` token
 
 In the **ACS portal**:
+
 - Navigate to **Platform Configuration > Integrations**.
 - Scroll down to the **Authentication Tokens** category, and select **API Token**.
 - Click **Generate Token**. Enter the name `pipeline` for the token and select the role **Admin**.
@@ -29,7 +30,9 @@ In the **ACS portal**:
 - Save the contents of the token somewhere!
 
 ### Create OCP secret with token
+
 Change to the **OpenShift Web Console** and create a secret with the API token in the project your pipeline lives in:
+
 - In the UI switch to your Project
 - Create a new key/value `Secret` named **roxsecrets**
 - Introduce these key/values into the secret:
@@ -42,11 +45,14 @@ Even if the form says **Drag and drop file with your value here...** you can jus
 {{% /notice %}}
 
 ### Create a Scan Task
+
 You are now ready to create a new pipeline task that will use `roxctl` to scan the image build in your pipeline before the deploy step:
+
 - In the OCP UI, make sure you are still in the project with your pipeline and the secret `roxsecrets`
 - Go to **Pipelines->Tasks**
 - Click **Create-> ClusterTask**
 - Replace the YAML displayed with this:
+
 ```yaml
 apiVersion: tekton.dev/v1beta1
 kind: ClusterTask
@@ -62,7 +68,7 @@ spec:
     - description: Secret containing the StackRox API token with CI permissions
       name: rox_api_token
       type: string
-    - description: 'Full name of image to scan (example -- gcr.io/rox/sample:5.0-rc1)'
+    - description: "Full name of image to scan (example -- gcr.io/rox/sample:5.0-rc1)"
       name: image
       type: string
     - description: Use image digest result from s2i-java build task
@@ -100,7 +106,9 @@ spec:
         ./roxctl image check -c Workshop --insecure-skip-tls-verify -e $ROX_CENTRAL_ENDPOINT
         --image $(params.image)@$(params.image_digest)
 ```
+
 Take your time to **understand** the Tekton task definition:
+
 - First some parameters are defined, it's important to understand some of these are taken or depend on the build task that run before.
 - The script action pulls the `roxctl` binary into the pipeline workspace so you'll always have a version compatible with your ACS version.
 - The most important bit is the `roxctl` execution, of course.
@@ -110,32 +118,46 @@ Take your time to **understand** the Tekton task definition:
 
 ### Add the Task to the Pipeline
 
-- Now add the **rox-image-check** task to your pipeline between the **build** and **deploy** steps.
+Now add the **rox-image-check** task to your pipeline between the **build** and **deploy** steps.
 
-After you added it you have to fill in values for the parameters the task defines. Click the task, a form with the parameters will open, fill it in:
-  - **rox_central_endpoint**: `roxsecrets`
-  - **rox_api_token**: `roxsecrets`
-  - **image**: `image-registry.openshift-image-registry.svc:5000/workshop-int/workshop`
-    - Adapt the Project name if you changed it
-  - **image_digest**: $(tasks.build.results.IMAGE_DIGEST)
-    - This variable takes the result of the **build** task and uses it in the scan task.
-  - Click **Save**
+- In the **Pipelines** view of your project click the three dots to the right and the **Edit Pipeline**
+
+{{% notice tip %}}
+Remember how we edited the pipeline directly in yaml before? OpenShift comes with a graphical Pipeline editor that we will use this time.
+{{% /notice %}}
+
+- Hover your mouse over **build** task and click the **+** at the right side side of it, to add a task
+- This will open a task selector where you can choose to add your **rox-image-check**
+- To add the required parameters from the pipeline for the task, click the **rox-image-check** task.
+- A form with the parameters will open, fill it in:
+
+- **rox_central_endpoint**: `roxsecrets`
+- **rox_api_token**: `roxsecrets`
+- **image**: `image-registry.openshift-image-registry.svc:5000/workshop-int/workshop`
+  - Adapt the Project name if you changed it
+- **image_digest**: $(tasks.build.results.IMAGE_DIGEST)
+  - This variable takes the result of the **build** task and uses it in the scan task.
+- Click **Save**
 
 {{< figure src="../images/pipeline.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Test the Scan Task
+
 With our custom **System Policy** still not set to `enforce` we first are going to test the pipeline integration. Start the pipeline with Java **Version** `java-old-image`
+
 - Expected Result:
   - The `rox-image-check` task should succeed, but if you have a look at the output (click the task in the visual representation) you should see that the **build violated our policy**!
 
 To test the fixed image, just start the task with the default (latest) Java version again.
+
 - Expected Result:
   - The `rox-image-check` task should succeed, if you have a look at the output you should see **no policy violation**!
 
 ## Enforce the Policy
+
 The last step is to enforce the System Policy. If the policy is violated the pipeline should be stopped and the application should not be deployed.
 
-- Edit your custom **System Policy** in **ACS Portal** and set enforcement to **On** for the stages **Build** and **Deploy**
+- Edit your custom **System Policy** in **ACS Portal** and set **Response Method** to **Inform and enforce** and then switch on **Build** and **Deploy** below.
 - Run the pipeline again, first with Java **Version** `java-old-image` and then with the latest default version.
 - Expecte results:
   - We are sure you know by now what to expect!
