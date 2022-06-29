@@ -158,9 +158,9 @@ To test the fixed image, just start the task with the default (latest) Java vers
 The last step is to enforce the System Policy. If the policy is violated the pipeline should be stopped and the application should not be deployed.
 
 - Edit your custom **System Policy** in **ACS Portal** and set **Response Method** to **Inform and enforce** and then switch on **Build** and **Deploy** below.
-- Run the pipeline again, first with Java **Version** `java-old-image` and then with the latest default version.
-- Expecte results:
+- Run the pipeline again, first with **Version** `java-old-image` and then with **Version** default (latest version).
+- Expected results:
   - We are sure you know by now what to expect!
-  - The pipeline should fail with the old Java image version and succeed with the latest image version!
+  - The pipeline should fail with the old image version and succeed with the latest image version!
 
 {{< figure src="../images/acs-enforce-policy.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
