@@ -83,7 +83,7 @@ So there is a major security vulnerability in our code. ACS would detect the dep
 
 So first of all in the **ACS Portal** follow these steps:
 
-- Navigate to **Platform Configuration > System Policies**
+- Navigate to **Platform Configuration > Policies**
 - Search for `Log4Shell` and click on the Policy.
 - Click **Edit** at the upper right
 
@@ -91,7 +91,7 @@ Remember setting up image scanning with `roxctl` in our first pipeline? We use `
 
 - Remove the current categorie and add `Workshop`
 - Now hit next until you are at the enforcement tab
-- Enable both `Build` and `Deploy` enforcement by setting them to **On**
+- Enable both `Build` and `Deploy` enforcement by switching to **Inform and enforce** and setting them to **On**
 - Save the policy
 
 ACS is now able to detect and enforce the vulnerability. It is time now to implement your advanced Pipeline.
