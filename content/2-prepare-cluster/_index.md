@@ -60,6 +60,8 @@ In the cloned repository you'll find a `devfile.yml`. We will need the URL to th
 
 ## Install and Prepare CodeReady Workspaces (CRW)
 
+**Codeready Workspaces** is a browser-based IDE for Cloud Native Development. All the heavy lifting is done though a container running your workpsace on OpenShift. All you really need is a laptop. You can easily switch and setup customized environment, plugin, build tools and runtimes. So switching from one project context to another is as easy a switching a website. No more endless installation and configuration marathons on your dev laptop. It is already part your OpenShift subscription. If you want to find out more have a look [here]{https://www.redhat.com/en/technologies/jboss-middleware/codeready-workspaces}
+
 - Install the **Red Hat CodeReady Workspaces for Devfile v1 and v2** Operator from OperatorHub (not the Tech Preview one!) with default settings
 - Go to **Installed Operators -> CodeReady Workspaces** and create a new instance (**CodeReady Workspaces instance Specification**) using the default settings in the project `openshift-workspaces`
 - Wait until deployment has finished. This may take a couple of minutes as several components will be deployed.
@@ -73,7 +75,7 @@ We could create a workspace from one of the templates that come with CodeReady W
 {{% /notice %}}
 
 - At the top click on **Custom Workspace**
-- Copy the **raw**(!) URL of the `devfile.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
+- Copy the **raw**(Klick in the **Raw** Button) URL of the `devfile.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
 - Paste the full URL into the **Enter devfile URL** field and click **Load Devfile**
   ![Gitea](../images/crw.png)
 - Once the content of the devfile is loaded click on **Create & Open** at the button
