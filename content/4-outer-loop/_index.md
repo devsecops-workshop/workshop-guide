@@ -11,7 +11,7 @@ To create and run the build pipeline you'll use OpenShift Pipelines based on pro
 
 - Install the `Red hat OpenShift Pipelines` Operator from OperatorHub with default settings
   {{% notice warning %}}
-  Since the Piplines assets are installed asynchronously it is possible that the `Pipline Templates` are not yet setup when proceeding immedately to the next step. So now is good time to grab a coffee.
+  Since the Piplines assets are installed asynchronously it is possible that the `Pipeline Templates` are not yet setup when proceeding immedately to the next step. So now is good time to grab a coffee.
   {{% /notice %}}
 
 ## Create App Deployment and Build Pipeline

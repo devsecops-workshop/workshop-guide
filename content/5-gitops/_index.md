@@ -51,7 +51,7 @@ oc policy add-role-to-user \
 - Don't login with OpenShift but with username and password
 - User is `admin` and password will be in Secret `argocd-cluster`
 
-ArgoCD works with the concept of **Apps**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here]{https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html} :
+ArgoCD works with the concept of **Apps**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html) :
 
 - Create App
   - Click the **Manage your applications** icon on the left
@@ -59,7 +59,7 @@ ArgoCD works with the concept of **Apps**. We will create an App and point it to
   - **Application Name**: workshop
   - **Project**: default
   - **SYNC POLICY**: Automatic
-  - **Repository URL**: Copy the URL of your config repo from Gitea (It should resemble `https://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
+  - **Repository URL**: Copy the URL of your config repo from Gitea (It should resemble `http://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
   - **Path**: environments/dev
   - **Cluster URL**: https://kubernetes.default.svc
   - **Namespace**: workshop-prod
@@ -253,33 +253,33 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
 {{% /notice %}}
 
 ```yaml
-    - name: git-update-deployment
-      params:
-        - name: GIT_REPOSITORY
-          value: >-
-            https://repository-git.apps.{YOUR DOMAIN}/gitea/openshift-gitops-getting-started.git
-        - name: GIT_USERNAME
-          value: gitea
-        - name: GIT_PASSWORD
-          value: gitea
-        - name: CURRENT_IMAGE
-          value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
-        - name: NEW_IMAGE
-          value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
-        - name: NEW_DIGEST
-          value: $(tasks.build.results.IMAGE_DIGEST)
-        - name: KUSTOMIZATION_PATH
-          value: environments/dev
-      runAfter:
-        - build
-      taskRef:
-        kind: Task
-        name: git-update-deployment
-      workspaces:
-        - name: workspace
-          workspace: workspace
+- name: git-update-deployment
+  params:
+    - name: GIT_REPOSITORY
+      value: >-
+        https://repository-git.apps.{YOUR DOMAIN}/gitea/openshift-gitops-getting-started.git
+    - name: GIT_USERNAME
+      value: gitea
+    - name: GIT_PASSWORD
+      value: gitea
+    - name: CURRENT_IMAGE
+      value: >-
+        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
+    - name: NEW_IMAGE
+      value: >-
+        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+    - name: NEW_DIGEST
+      value: $(tasks.build.results.IMAGE_DIGEST)
+    - name: KUSTOMIZATION_PATH
+      value: environments/dev
+  runAfter:
+    - build
+  taskRef:
+    kind: Task
+    name: git-update-deployment
+  workspaces:
+    - name: workspace
+      workspace: workspace
 ```
 
 The `Pipeline` should now look like this
@@ -298,7 +298,7 @@ metadata:
   name: gitea
   namespace: workshop-int
   annotations:
-    tekton.dev/git-0: "https://repository-git.apps.{YOUR DOMAIN}"
+    tekton.dev/git-0: "http://repository-git.apps.{YOUR DOMAIN}"
 data:
   password: Z2l0ZWE=
   username: Z2l0ZWE=
