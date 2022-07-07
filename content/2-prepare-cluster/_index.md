@@ -45,6 +45,12 @@ After creation has finished:
 - Access the route URL (you'll find it e.g. in **Networking > Routes > repository > Location**) 
 - This will take you to the Gitea web UI
 - Sign-In to `Gitea` with user `gitea` and password `gitea`
+- If your Gitea UI appears in a language other then English (depending on your locale settings), switch it to English. Change the language in your Gitea UI, the example below shows a German example:
+
+|     |     |
+| --- | --- |
+|{{< figure src="../images/gitea-lang1.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}}|{{< figure src="../images/gitea-lang2.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}}|
+
 - Clone the example repo:
   - Click the **+** dropdown and choose **New Migration**
   - As type choose **Git**
