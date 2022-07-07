@@ -253,33 +253,33 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
 {{% /notice %}}
 
 ```yaml
-    - name: git-update-deployment
-      params:
-        - name: GIT_REPOSITORY
-          value: >-
-            https://repository-git.apps.{YOUR DOMAIN}/gitea/openshift-gitops-getting-started.git
-        - name: GIT_USERNAME
-          value: gitea
-        - name: GIT_PASSWORD
-          value: gitea
-        - name: CURRENT_IMAGE
-          value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
-        - name: NEW_IMAGE
-          value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
-        - name: NEW_DIGEST
-          value: $(tasks.build.results.IMAGE_DIGEST)
-        - name: KUSTOMIZATION_PATH
-          value: environments/dev
-      runAfter:
-        - build
-      taskRef:
-        kind: Task
-        name: git-update-deployment
-      workspaces:
-        - name: workspace
-          workspace: workspace
+- name: git-update-deployment
+  params:
+    - name: GIT_REPOSITORY
+      value: >-
+        https://repository-git.apps.{YOUR DOMAIN}/gitea/openshift-gitops-getting-started.git
+    - name: GIT_USERNAME
+      value: gitea
+    - name: GIT_PASSWORD
+      value: gitea
+    - name: CURRENT_IMAGE
+      value: >-
+        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
+    - name: NEW_IMAGE
+      value: >-
+        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+    - name: NEW_DIGEST
+      value: $(tasks.build.results.IMAGE_DIGEST)
+    - name: KUSTOMIZATION_PATH
+      value: environments/dev
+  runAfter:
+    - build
+  taskRef:
+    kind: Task
+    name: git-update-deployment
+  workspaces:
+    - name: workspace
+      workspace: workspace
 ```
 
 The `Pipeline` should now look like this
@@ -298,7 +298,7 @@ metadata:
   name: gitea
   namespace: workshop-int
   annotations:
-    tekton.dev/git-0: "https://repository-git.apps.{YOUR DOMAIN}"
+    tekton.dev/git-0: "http://repository-git.apps.{YOUR DOMAIN}"
 data:
   password: Z2l0ZWE=
   username: Z2l0ZWE=
