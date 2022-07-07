@@ -143,7 +143,7 @@ Remember how we edited the pipeline directly in yaml before? OpenShift comes wit
 
 ## Test the Scan Task
 
-With our custom **System Policy** still not set to `enforce` we first are going to test the pipeline integration. Start the pipeline with Java **Version** `java-old-image`
+With our custom **System Policy** still not set to `enforce` we first are going to test the pipeline integration. Go to _Pipelines_ and next to your pipeline click on the three dots and then _Start_. Now in the pipeline startform enter `java-old-image` in the _Version_ field.
 
 - Expected Result:
   - The `rox-image-check` task should succeed, but if you have a look at the output (click the task in the visual representation) you should see that the **build violated our policy**!
