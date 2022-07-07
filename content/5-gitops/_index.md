@@ -59,7 +59,7 @@ ArgoCD works with the concept of **Apps**. We will create an App and point it to
   - **Application Name**: workshop
   - **Project**: default
   - **SYNC POLICY**: Automatic
-  - **Repository URL**: Copy the URL of your config repo from Gitea (It should resemble `https://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
+  - **Repository URL**: Copy the URL of your config repo from Gitea (It should resemble `http://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
   - **Path**: environments/dev
   - **Cluster URL**: https://kubernetes.default.svc
   - **Namespace**: workshop-prod
