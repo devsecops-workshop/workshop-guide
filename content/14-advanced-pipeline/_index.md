@@ -98,6 +98,10 @@ ACS is now able to detect and enforce the vulnerability. It is time now to imple
 
 ### Let's go: Create our advanced Pipeline
 
+Our current pipeline is quite simple. In production you will have more complex flows with conditionals and parallel execution. To learn more abou these have a look a the [Tekton Documentation]{https://tekton.dev/docs/}.
+
+To make it bit easier we have prepared a pipeline for you. But do take the time to look at the genera flow and tasks.
+
 In the **OpenShift Web Console**:
 
 - Make sure you are in the `workshop-int` Project
