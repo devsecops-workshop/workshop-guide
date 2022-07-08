@@ -63,7 +63,7 @@ There will be other policy violations listed, triggered by default policies, hav
 
 Now start the pipeline with the fixed image version that doesn't contain the CVE anymore:
 
-- Start the pipeline again but this time leave the Java **Version** as is (`openjdk-11-el7`).
+- Start the pipeline again but this time leave the Java **Version** as is (`openjdk-17-ubi8`).
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments come up and go
