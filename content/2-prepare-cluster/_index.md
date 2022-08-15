@@ -52,9 +52,9 @@ After creation has finished:
 - Sign-In to `Gitea` with user `gitea` and password `gitea`
 - If your Gitea UI appears in a language other then English (depending on your locale settings), switch it to English. Change the language in your Gitea UI, the example below shows a German example:
 
-|     |     |
-| --- | --- |
-|{{< figure src="../images/gitea-lang1.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}}|{{< figure src="../images/gitea-lang2.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}}|
+|                                                                                                                |                                                                                                                |
+| -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| {{< figure src="../images/gitea-lang1.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}} | {{< figure src="../images/gitea-lang2.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}} |
 
 - Clone the example repo:
   - Click the **+** dropdown and choose **New Migration**
@@ -64,33 +64,31 @@ After creation has finished:
 
 In the cloned repository you'll find a `devfile.yml`. We will need the URL to the file soon, so keep the tab open.
 
-## Install and Prepare CodeReady Workspaces (CRW)
+## Install and Prepare Red Hat OpenShift Dev Spaces
 
-**Codeready Workspaces** is a browser-based IDE for Cloud Native Development. All the heavy lifting is done though a container running your workpsace on OpenShift. All you really need is a laptop. You can easily switch and setup customized environment, plugin, build tools and runtimes. So switching from one project context to another is as easy a switching a website. No more endless installation and configuration marathons on your dev laptop. It is already part your OpenShift subscription. If you want to find out more have a look [here]{https://www.redhat.com/en/technologies/jboss-middleware/codeready-workspaces}
+**OpenShift Dev Spaces** is a browser-based IDE for Cloud Native Development. All the heavy lifting is done though a container running your workpsace on OpenShift. All you really need is a laptop. You can easily switch and setup customized environment, plugin, build tools and runtimes. So switching from one project context to another is as easy a switching a website. No more endless installation and configuration marathons on your dev laptop. It is already part your OpenShift subscription. If you want to find out more have a look [here]{https://developers.redhat.com/products/openshift-dev-spaces/overview}
 
-- Install the **Red Hat CodeReady Workspaces for Devfile v1 and v2** Operator from OperatorHub (not the Tech Preview one!) with default settings
-- Go to **Installed Operators -> CodeReady Workspaces** and create a new instance (**CodeReady Workspaces instance Specification**) using the default settings in the project `openshift-workspaces`
+- Install the **Red Hat OpenShift Dev Spaces** Operator from OperatorHub (not the previous Codeready Workspaces versions!) with default settings
+- Go to **Installed Operators -> Red Hat OpenShift Dev Spaces** and create a new instance (**Red Hat OpenShift Dev Spaces instance Specification**) using the default settings in the project `openshift-workspaces`
 - Wait until deployment has finished. This may take a couple of minutes as several components will be deployed.
-- Once the instance status is ready (You can check the YAML of the instance: `status > cheClusterRunning: Available`), look up the `codeready` Route in the `openshift-workspaces` namespace (You may need to toggle the **Show default project** button).
-- Open the link in a new browser tab, choose `htpasswd_provider` and log in with your OCP credentials
-- Allow selected permissions
-- Enter an email address, First Name and Last Name to set up your account (you can make these up).
+- Once the instance status is ready (You can check the YAML of the instance: `status > cheClusterRunning: Available`), look up the `devspaces` Route in the `openshift-workspaces` namespace (You may need to toggle the **Show default project** button).
+- Open the link in a new browser tab, click on **Log in with OpenShift** and then choose `local` and log in with your OCP credentials
+- If required allow selected permissions
 
 {{% notice tip %}}
-We could create a workspace from one of the templates that come with CodeReady Workspaces, but we want to use a customized workspace with some additionally defined plugins in a [v1 devfile](https://redhat-developer.github.io/devfile/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.  
+We could create a workspace from one of the templates that come with CodeReady Workspaces, but we want to use a customized workspace with some additionally defined plugins in a [v2 devfile](https://devfile.io/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.  
 {{% /notice %}}
 
-- At the top click on **Custom Workspace**
-- Copy the **raw**(Klick in the **Raw** Button) URL of the `devfile.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
-- Paste the full URL into the **Enter devfile URL** field and click **Load Devfile**
+- In the left click menu on **Create Workspace**
+- Copy the **raw URL**of the `devfile_v2.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
+- Paste the full URL into the **Git Repo URL** field and click **Create & Open**
   ![Gitea](../images/crw.png)
-- Once the content of the devfile is loaded click on **Create & Open** at the button
 - You'll get into the **Starting workspace ...** view, give the workspace containers some time to spin up.
 
 When your workspace has finally started, have a good look around in the UI. It should look familiar if you have ever worked with VSCode or similar IDEs.
 
 {{% notice tip %}}
-When working with CRW make sure you have AdBlockers disabled, you are not on a VPN and a have good internet connection to ensure a stable setup. If you are facing any issues try to releod the Browser window. If that doesn't help restart the workspace in the controls on **yellow arrow** at the top left side  
+When working with Dev Spaces make sure you have AdBlockers disabled, you are not on a VPN and a have good internet connection to ensure a stable setup. If you are facing any issues try to releod the Browser window. If that doesn't help restart the workspace in the main Dev Spaces site under **Workspaces** and then menu **Restart Workspace**  
 {{% /notice %}}
 
 Your cluster is now prepared for the next step, proceed to the **Inner Loop**.

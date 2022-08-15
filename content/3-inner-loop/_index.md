@@ -16,32 +16,20 @@ We will use a Java application based on the [Quarkus](https://quarkus.io/) stack
 
 Let's clone our project into our workspace :
 
-- Bring up your `CodeReady Workspaces` in your browser
+- Bring up your `OpenShift Dev Spaces` in your browser
 - In the bottom left click on **Clone Repository** and then enter the `Git URL` to your `Gitea` Repo (You can copy the URL by clicking on the clipboard icon)
-- Press enter and select the default location.
+- Press enter and then select **Select Repository Location**.
+- in the bottom right corner your will see a notice `Would you like to open the cloned repository?`. Click **Open**
+- The windows will briefly reload and then you will be in the cloned project folder
 
 You should be greeted by the `README.md` file.
-
-## Install odo
-
-**odo** or 'OpenShift do' is a cli that enables developers to get started quickly with cloud native app development without being a Kubernetes expert. It offers support for multiple runtimes and you can easily setup microservice components, push code changes into running containers and debug remotely with just a few simple commands. To find out more, have look [here](https://odo.dev/)
-
-To install the `odo` cli into your workspace, run the following steps:
-
-- From the CRW shortcuts menu to the right (the "cube icon") run `install odo`
-<!-- ![Install odo](../images/crw2.png?width=75pc) -->
-
-{{< figure src="../images/crw2.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-
-- `odo` cli will be downloaded and unpacked in your project folder, you can safely ignore the warning about file or directory not found
-- Close the `install odo` terminal tab the installation opened
 
 ## Login to OpenShift and Create the Development Stage Project
 
 Now we want to create a new OpenShift project for our app:
 
 - Open a `terminal`
-  - In **My Workspace** (cube icon) to the right click `New Terminal`
+  - In **My Workspace** (cube icon) to the right click `tools > New Terminal`
 - Copy the `oc login` command from your OpenShift cluster (At the top right **Username > Copy login command**) and execute in the `terminal` to log into the OpenShift cluster
 - Create a new project `workshop-dev`
 
@@ -50,6 +38,8 @@ oc new-project workshop-dev
 ```
 
 ## Use odo to Deploy and Update our Application
+
+**odo** or 'OpenShift do' is a cli that enables developers to get started quickly with cloud native app development without being a Kubernetes expert. It offers support for multiple runtimes and you can easily setup microservice components, push code changes into running containers and debug remotely with just a few simple commands. To find out more, have look [here](https://odo.dev/)
 
 First use `odo` ("OpenShift Do") to list the programming languages/frameworks it supports
 
