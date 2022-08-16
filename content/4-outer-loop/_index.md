@@ -23,10 +23,10 @@ After installing the Operator create a new deployment of your game-changing appl
 - Click the **+Add** menu entry to the left and choose **Import from Git**
 - As **Git Repo URL** enter the clone URL for the `quarkus-build-options` repo in your your `Gitea` instance (There might be a warning about the repo url that you can ignore)
 - Click **Show advanced Git options** and for **Git reference** enter `master`
-- As **Import Strategy** select **Builder Image**
-- As **Builder Image** select **Java** and **openjdk-11-el7** / **Red Hat OpenJDK 11 (RHEL 7)**
-- As **Application Name** enter **workshop-app**
-- As **Name** enter **workshop**
+- As **Import Strategy** select `Builder Image`
+- As **Builder Image** select `Java` and `openjdk-11-el7 / Red Hat OpenJDK 11 (RHEL 7)`
+- As **Application Name** enter `workshop-app`
+- As **Name** enter `workshop`
 - Check **Add pipeline**
 
 {{% notice warning %}}
@@ -46,23 +46,23 @@ Now your build pipeline has been set up and is ready. There is one more step in 
   - Be careful to keep the needed indentation!
 
 ```yaml
-    - name: java-old-image
-      annotations:
-        description: Build and run Java applications using Maven and OpenJDK 8.
-        iconClass: icon-rh-openjdk
-        openshift.io/display-name: Red Hat OpenJDK 8 (UBI 8)
-        sampleContextDir: undertow-servlet
-        sampleRepo: "https://github.com/jboss-openshift/openshift-quickstarts"
-        supports: "java:8,java"
-        tags: "builder,java,openjdk"
-        version: "8"
-      from:
-        kind: DockerImage
-        name: "registry.redhat.io/openjdk/openjdk-11-rhel7:1.10-1"
-      generation: 4
-      importPolicy: {}
-      referencePolicy:
-        type: Local
+- name: java-old-image
+  annotations:
+    description: Build and run Java applications using Maven and OpenJDK 8.
+    iconClass: icon-rh-openjdk
+    openshift.io/display-name: Red Hat OpenJDK 8 (UBI 8)
+    sampleContextDir: undertow-servlet
+    sampleRepo: "https://github.com/jboss-openshift/openshift-quickstarts"
+    supports: "java:8,java"
+    tags: "builder,java,openjdk"
+    version: "8"
+  from:
+    kind: DockerImage
+    name: "registry.redhat.io/openjdk/openjdk-11-rhel7:1.10-1"
+  generation: 4
+  importPolicy: {}
+  referencePolicy:
+    type: Local
 ```
 
 This will add a tag `java-old-image` that points to an older version of the RHEL Java image. The image and security vulnerabilities can be inspected in the Red Hat Software Catalog here:
