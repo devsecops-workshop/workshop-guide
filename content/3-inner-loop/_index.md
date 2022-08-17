@@ -44,19 +44,19 @@ oc new-project workshop-dev
 First use `odo` ("OpenShift Do") to list the programming languages/frameworks it supports
 
 ```
-./odo catalog list components
+odo catalog list components
 ```
 
 Now initialize a new Quarkus application
 
 ```
-./odo create java-quarkus
+odo create java-quarkus
 ```
 
 And finally push the app to OpenShift
 
 ```
-./odo push
+odo push
 ```
 
 To test the app:
@@ -71,7 +71,7 @@ Now for the fun part: Using `odo` you can just dynamically change your code and 
 - Push the code to OpenShift again
 
 ```
-./odo push
+odo push
 ```
 
 - And reload the app webpage.
