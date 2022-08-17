@@ -82,14 +82,14 @@ After creation has finished:
   - **URL**: https://github.com/devsecops-workshop/quarkus-build-options.git
   - Click **Migrate Repository**
 
-In the cloned repository you'll find a `devfile.yml`. We will need the URL to the file soon, so keep the tab open.
+In the cloned repository you'll find a `devfile_v2.yml`. We will need the URL to the file soon, so keep the tab open.
 
 ## Install and Prepare Red Hat OpenShift Dev Spaces
 
 **OpenShift Dev Spaces** is a browser-based IDE for Cloud Native Development. All the heavy lifting is done though a container running your workpsace on OpenShift. All you really need is a laptop. You can easily switch and setup customized environment, plugin, build tools and runtimes. So switching from one project context to another is as easy a switching a website. No more endless installation and configuration marathons on your dev laptop. It is already part of your OpenShift subscription. If you want to find out more have a look [here]{https://developers.redhat.com/products/openshift-dev-spaces/overview}
 
 - Install the **Red Hat OpenShift Dev Spaces** Operator from OperatorHub (not the previous Codeready Workspaces versions!) with default settings
-- Go to **Installed Operators -> Red Hat OpenShift Dev Spaces** and create a new instance (**Red Hat OpenShift Dev Spaces instance Specification**) using the default settings in the project `openshift-workspaces`
+- Go to **Installed Operators -> Red Hat OpenShift Dev Spaces** and create a new instance (**Red Hat OpenShift Dev Spaces instance Specification**) using the default settings in the project `openshift-operators`
 - Wait until deployment has finished. This may take a couple of minutes as several components will be deployed.
 - Once the instance status is ready (You can check the YAML of the instance: `status > cheClusterRunning: Available`), look up the `devspaces` Route in the `openshift-workspaces` namespace (You may need to toggle the **Show default project** button).
 - Open the link in a new browser tab, click on **Log in with OpenShift** and then choose `local` and log in with your OCP credentials
