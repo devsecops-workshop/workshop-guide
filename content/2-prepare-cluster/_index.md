@@ -62,7 +62,7 @@ After creation has finished:
   - **URL**: https://github.com/devsecops-workshop/quarkus-build-options.git
   - Click **Migrate Repository**
 
-In the cloned repository you'll find a `devfile.yml`. We will need the URL to the file soon, so keep the tab open.
+In the cloned repository you'll find a `devfile_v2.yml`. We will need the URL to the file soon, so keep the tab open.
 
 ## Install and Prepare Red Hat OpenShift Dev Spaces
 
