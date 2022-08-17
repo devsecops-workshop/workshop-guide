@@ -5,7 +5,27 @@ weight = 5
 
 ## Cluster Preparation
 
-Before you start you have to install a number of components you'll use during the workshop. The first two are `Gitea` for providing Git services in your cluster and `CodeReady Workspaces` as development environment. But fear not, both are managed by Kubernetes [operators](https://cloud.redhat.com/learn/topics/operators) on OpenShift.
+Before you start you have to install a number of components you'll use during the workshop. The first one is `OpenShift Data Foundation`. We'll start with it because the install takes a fair amount of time. Number two and three are `Gitea` for providing Git services in your cluster and `CodeReady Workspaces` as development environment. But fear not, both are managed by Kubernetes [operators](https://cloud.redhat.com/learn/topics/operators) on OpenShift.
+
+## Install `OpenShift Data Foundation`
+
+Let's install `OpenShift Data Foundation` which you might know under the old name `OpenShift Container Storage`. It is engineered as the data and storage services platform for OpenShift and provides software-defined storage for containers.
+
+- Login to the OpenShift Webconsole with you cluster admin credentials
+- In the Web Console, go to **Operators > OperatorHub** and search for the `OpenShift Data Foundation` operator
+- Install the operator with default settings
+
+After the operator has been installed it will inform you to install a `StorageSystem`. From the operator overview page click `Create StorageSystem` with the following settings:
+- **Backing storage**: Leave `Deployment Type` `Full deployment` and for `Backing storage type` make sure `gp2` is selected.
+- Click **Next**
+- **Capacity and nodes**: Leave the `Requested capacity` as is (2 TiB) and select all nodes.
+- Click **Next**
+- **Security and network**: Leave set to `Default (SDN)`
+- Click **Next**
+
+ You'll see a review of your settings, hit `Create StorageSystem`
+
+ As mentioned already this takes some time so go ahead and install the other two prerequisites. We'll come back later.
 
 ## Install and Prepare Gitea
 
@@ -16,7 +36,7 @@ We'll need Git repository services to keep our app and infrastructure source cod
 {{% /notice %}}
 
 - If you don't already have the oc client installed, you can download the matching version for your operating system [here](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/)
-- Log into your OpenShift Webconsole with you cluster admin credentials
+- Login to the OpenShift Webconsole with you cluster admin credentials
 - On the top right click on your username and then **Copy login command** to copy your login token
 - On you local machine open a terminal log in with the `oc` command you copied
 - Now using `oc` add the Gitea Operator to your OpenShift OperatorHub catalog
@@ -66,7 +86,7 @@ In the cloned repository you'll find a `devfile.yml`. We will need the URL to th
 
 ## Install and Prepare Red Hat OpenShift Dev Spaces
 
-**OpenShift Dev Spaces** is a browser-based IDE for Cloud Native Development. All the heavy lifting is done though a container running your workpsace on OpenShift. All you really need is a laptop. You can easily switch and setup customized environment, plugin, build tools and runtimes. So switching from one project context to another is as easy a switching a website. No more endless installation and configuration marathons on your dev laptop. It is already part your OpenShift subscription. If you want to find out more have a look [here]{https://developers.redhat.com/products/openshift-dev-spaces/overview}
+**OpenShift Dev Spaces** is a browser-based IDE for Cloud Native Development. All the heavy lifting is done though a container running your workpsace on OpenShift. All you really need is a laptop. You can easily switch and setup customized environment, plugin, build tools and runtimes. So switching from one project context to another is as easy a switching a website. No more endless installation and configuration marathons on your dev laptop. It is already part of your OpenShift subscription. If you want to find out more have a look [here]{https://developers.redhat.com/products/openshift-dev-spaces/overview}
 
 - Install the **Red Hat OpenShift Dev Spaces** Operator from OperatorHub (not the previous Codeready Workspaces versions!) with default settings
 - Go to **Installed Operators -> Red Hat OpenShift Dev Spaces** and create a new instance (**Red Hat OpenShift Dev Spaces instance Specification**) using the default settings in the project `openshift-workspaces`
@@ -76,7 +96,7 @@ In the cloned repository you'll find a `devfile.yml`. We will need the URL to th
 - If required allow selected permissions
 
 {{% notice tip %}}
-We could create a workspace from one of the templates that come with CodeReady Workspaces, but we want to use a customized workspace with some additionally defined plugins in a [v2 devfile](https://devfile.io/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.  
+We could create a workspace from one of the templates that come with CodeReady Workspaces, but we want to use a customized workspace with some additionally defined plugins in a [v2 devfile](https://devfile.io/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.
 {{% /notice %}}
 
 - In the left click menu on **Create Workspace**
@@ -88,7 +108,7 @@ We could create a workspace from one of the templates that come with CodeReady W
 When your workspace has finally started, have a good look around in the UI. It should look familiar if you have ever worked with VSCode or similar IDEs.
 
 {{% notice tip %}}
-When working with Dev Spaces make sure you have AdBlockers disabled, you are not on a VPN and a have good internet connection to ensure a stable setup. If you are facing any issues try to releod the Browser window. If that doesn't help restart the workspace in the main Dev Spaces site under **Workspaces** and then menu **Restart Workspace**  
+When working with Dev Spaces make sure you have AdBlockers disabled, you are not on a VPN and a have good internet connection to ensure a stable setup. If you are facing any issues try to releod the Browser window. If that doesn't help restart the workspace in the main Dev Spaces site under **Workspaces** and then menu **Restart Workspace**
 {{% /notice %}}
 
 Your cluster is now prepared for the next step, proceed to the **Inner Loop**.
