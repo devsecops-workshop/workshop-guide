@@ -106,7 +106,9 @@ We could create a workspace from one of the templates that come with CodeReady W
 - In the left click menu on **Create Workspace**
 - Copy the **raw URL** of the `devfile_v2.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
 - Paste the full URL into the **Git Repo URL** field and click **Create & Open**
-  ![Gitea](../images/crw.png)
+
+{{< figure src="../images/crw.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 - You'll get into the **Starting workspace ...** view, give the workspace containers some time to spin up.
 
 When your workspace has finally started, have a good look around in the UI. It should look familiar if you have ever worked with VSCode or similar IDEs.
@@ -123,6 +125,11 @@ Now it's time to check if the `StorageSystem` deployment from ODF completed succ
 - On the overview page go to the **Storage Systems** tab
 - Click **ocs-storagecluster-storagesystem**
 - On the next page make sure the status indicators on the **Block and File** and **Object** tabs are **green**!
+
+{{< figure src="../images/storage-system1.png?width=40pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+
+{{< figure src="../images/storage-system2.png?width=45pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 Your container storage is ready to go, explore the information on the overview pages if you'd like.
 
@@ -159,6 +166,8 @@ Now that the Registry is installed you have to configure a superuser:
 - click **Validate Configuration Changes** and after the validation click **Reconfigure Quay**
 
 Reconfiguring Quay takes some time. The easiest way to determine if it's been finished is to open the Quay portal (using the `quay-quay` Route). At the upper right you'll see the username (`quayadmin`), if you click the username the drop-down should show a link **Super User Admin Panel**. When it shows up you can proceed.
+
+{{< figure src="../images/quay-superuser.png?width=15pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Integrate Quay as Registry into OpenShift
 
