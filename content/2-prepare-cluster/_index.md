@@ -32,7 +32,7 @@ After the operator has been installed it will inform you to install a `StorageSy
 You'll see a review of your settings, hit `Create StorageSystem`
 
 {{% notice tip %}}
-Don't worry if you see a _404 Page_. The ODF Operator has just extended the OpenShift Console which may no be availabe in your current view. Just relead the browser page once and your will see the System Overview  
+Don't worry if you see a _404 Page_. The ODF Operator has just extended the OpenShift Console which may no be availabe in your current view. Just relead the browser page once and your will see the System Overview
 {{% /notice %}}
 
 {{< figure src="../images/odf-systems.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
