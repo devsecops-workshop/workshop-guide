@@ -144,15 +144,19 @@ Now we can configure and start the Pipeline again in the _Pipelines_ view by goi
 
 - Notice that the `IMAGE_NAME` now points to quay
 - Also the `GIT_REVISION` is now mandatory, so enter `master`
-- We need need to add a _Secret_ to enable the Pipeline Service Account to authenticate against Quay. Normaly you would use a restricted robo account here but we for brevity we will use the quayadmin account.
-  - At the buttom of the _Start Pipeline_ form, click on _Show credential options_ and then _Add secret_
+- We need need to add a _Secret_ with a Quay Robot Account to enable the Pipeline Service Account to authenticate against Quay.
+- Switch to Quay click on the `openshift_workshop-int / workshop` repository
+- On the left click on _Settings_
+- Click on the `openshift_workshop-int+builder` Robot account and copy the username and token
+- Back in the _Start Pipeline_ form
+  - At the buttom, click on _Show credential options_ and then _Add secret_
   - Set these values
     - _Secret name_ : `quay-token`
     - _Access to_ : `Image Registry`
     - _Authentication type_ : `Image registry credentials`
     - _Server URL_ : `quay-quay-quay.apps.{DOMAIN_NAME}` (replacing the {DOMAIN_NAME})
-    - _Username_ : `quayadmin`
-    - _Secret name_ : the Username you gave the quayadmin ...
+    - _Username_ : `openshift_workshop-int+default`
+    - _Secret name_ : the token you copied from the Quay robot account before ...
   - Then click on the checkmark below to add the secret
   - The secret has just been added and will be mounted automatically everytime the pipeline runs
 - Hit _Start_
