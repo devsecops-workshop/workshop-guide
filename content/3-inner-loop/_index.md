@@ -11,14 +11,14 @@ In this part of the workshop you'll experience how modern software development u
 As an example you'll create a new Java application. You don't need to have prior experience programming in Java as this will be kept really simple.
 
 {{% notice tip %}}
-We will use a Java application based on the [Quarkus](https://quarkus.io/) stack. Quarkus enables you to create much smaller and faster containerized Java applications than ever before. You can even transcompile these apps to native Linux binaries that start blazingly fast. The app that we will use is just a starter sample created with the [Quarkus Generator](https://code.quarkus.io/) with a simple RESTful API that answers to http Requests. But at the end of the day this setup will work with any Java application. **Fun fact:** Every OpenShift Subscription already comes with a Quarkus Subscription.  
+We will use a Java application based on the [Quarkus](https://quarkus.io/) stack. Quarkus enables you to create much smaller and faster containerized Java applications than ever before. You can even transcompile these apps to native Linux binaries that start blazingly fast. The app that we will use is just a starter sample created with the [Quarkus Generator](https://code.quarkus.io/) with a simple RESTful API that answers to http Requests. But at the end of the day this setup will work with any Java application. **Fun fact:** Every OpenShift Subscription already comes with a Quarkus Subscription.
 {{% /notice %}}
 
 Let's clone our project into our workspace :
 
 - Bring up your `OpenShift Dev Spaces` in your browser
 - In the bottom left click on **Clone Repository** and then enter the `Git URL` to your `Gitea` Repo (You can copy the URL by clicking on the clipboard icon)
-- Press enter and then select **Select Repository Location**.
+- Press enter and then click the **Select Repository Location** button.
 - in the bottom right corner your will see a notice `Would you like to open the cloned repository?`. Click **Open**
 - The windows will briefly reload and then you will be in the cloned project folder
 

@@ -32,7 +32,7 @@ After the operator has been installed it will inform you to install a `StorageSy
 You'll see a review of your settings, hit `Create StorageSystem`
 
 {{% notice tip %}}
-Don't worry if you see a _404 Page_. The ODF Operator has just extended the OpenShift Console which may no be availabe in your current view. Just relead the browser page once and your will see the System Overview  
+Don't worry if you see a _404 Page_. The ODF Operator has just extended the OpenShift Console which may no be availabe in your current view. Just relead the browser page once and your will see the System Overview
 {{% /notice %}}
 
 {{< figure src="../images/odf-systems.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
@@ -152,7 +152,7 @@ Quay installation is done through an operator, too:
 - In the namespace go to **Administration->LimitRanges** and delete the `quay-core-resource-limits`
   {{< figure src="../images/delete-limit-range.png?width=45pc&classes=border,shadow" title="Click image to enlarge" >}}
 - In the operator overview of the Quay Operator on the **Quay Registry** tile click **Create instance**
-- If the _YAML view_ is shown sitch to _Form view_
+- If the _YAML view_ is shown switch to _Form view_
 - Make sure you are in the `quay` project
 - Change the name to `quay`
 - Click **Create**
@@ -167,12 +167,12 @@ Now that the Registry is installed you have to configure a superuser:
   - As username put in `quayadmin`, a (fake) email address and a password.
 - Click **Create Account** again
 - In the OpenShift web console open **Workloads->Secrets**
-- Search for `quay-config-editor-credntials-...`, open the secret and copy the values, you'll need them in a second.
+- Search for `quay-config-editor-credentials-...`, open the secret and copy the values, you'll need them in a second.
 - Go back to the **Routes** and open the `quay-quay-config-editor` route
 - Login with the values of the secret from above
 - Click **Sign in**
 - Scroll down to **Access Settings**
-- As **Super User** but in `quayadmin`
+- As **Super User** put in `quayadmin`
 - click **Validate Configuration Changes** and after the validation click **Reconfigure Quay**
 
 Reconfiguring Quay takes some time. The easiest way to determine if it's been finished is to open the Quay portal (using the `quay-quay` Route). At the upper right you'll see the username (`quayadmin`), if you click the username the drop-down should show a link **Super User Admin Panel**. When it shows up you can proceed.
