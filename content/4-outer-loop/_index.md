@@ -63,7 +63,7 @@ Now that the Registry is installed you have to configure a superuser:
   - As username put in `quayadmin`, a (fake) email address and a password.
 - Click **Create Account** again
 - In the OpenShift web console open **Workloads->Secrets**
-- Search for `quay-config-editor-credntials-...`, open the secret and copy the values, you'll need them in a second.
+- Search for `quay-config-editor-credentials-...`, open the secret and copy the values, you'll need them in a second.
 - Go back to the **Routes** and open the `quay-quay-config-editor` route
 - Login with the values of the secret from above
 - Click **Sign in**
@@ -108,17 +108,18 @@ Now we finally create an Quay Bridge instance. In the OpenShift web console make
     - **Value**: paste the Access Token you generated in the Quay Portal before
     - Click **Create**
 
-- Go to the Red Hat Quay Bridge Operator overview (make sure you are in the `quay`namespace)
+- Go to the Red Hat Quay Bridge Operator overview (make sure you are in the `quay` namespace)
 - On the **Quay Integration** tile click **Create Instance**
   - Open **Credentials secret**
-    - **Namespace**: `quay`
+    - **Namespace containing the secret**: `quay`
     - **Key within the secret**: `token`
   - Copy the Quay Portal hostname (including `https://`) and paste it into the **Quay Hostname** field
   - Set **Insecure registry** to `true`
+  - Click **Create**
 
 And you are done with the installation and integration of Quay as your registry! Test if the integration works:
 
-- In the Quay Portal you should see your Openshift Projects are synced and represented as Quay Organizations, prefixed with `openshift_`.
+- In the Quay Portal you should see your Openshift Projects are synced and represented as Quay Organizations, prefixed with `openshift_` (you might have to reload the browser).
   - E.g. there should be a `openshift_git` Quay Organization.
 - In the OpenShift web console create a new test Project, make sure it's synced to Quay as an Organization and delete it again.
 
@@ -126,44 +127,45 @@ And you are done with the installation and integration of Quay as your registry!
 
 The current Pipeline deploys that was generated deploys to the internal Registry by default. To leverage our brand new Quay we need to modify the Pipeline Image deployment target.
 
-- Go to _Pipelines_ and click on the `workshop` pipeline
-- Then in the top right _Actions_ menu select _Edit Pipeline_
-- Make sure you are in the visual _Pipeline Builder_
-- In _Parameters_ > `IMAGE_NAME` replace the URL with the one for your Quay Instance, including the new synced org name
+- Make sure you are still in the `workshop-int` project.
+- Go to **Pipelines** and click on the `workshop` pipeline
+- Then in the top right **Actions** menu select **Edit Pipeline**
+- Make sure you are in the visual **Pipeline Builder**
+- In **Parameters** replace the URL for `IMAGE_NAME`  with the one for your Quay Instance, including the new synced org name
   - So `image-registry.openshift-image-registry.svc:5000/workshop-int/workshop` would become something like `quay-quay-quay.apps.{DOMAIN_NAME}/openshift_workshop-int/workshop` (replacing the {DOMAIN_NAME})
+- Click **Save**
 
-Next we need to replace our _ImageStream_ `workshop`, as this is currently still pointing to the Image in the internal Registry.
+Next we need to replace our **ImageStream** `workshop`, as this is currently still pointing to the Image in the internal Registry.
 
-Make sure you are logged into OpenShift with the cli and are in the `workshop-int` project. Then execute this command to replace the current _ImageStream_ with a version that points to the Quay Image. Make sure to replace your {DOMAIN_NAME}
+Make sure you are logged into OpenShift with the cli and are in the `workshop-int` project. Then execute this command to replace the current **ImageStream** with a version that points to the Quay Image. Make sure to replace your {DOMAIN_NAME}
 
 ```
 oc import-image workshop --from=quay-quay-quay.apps.{DOMAIN_NAME}/openshift_workshop-int/workshop
 ```
 
-Now we can configure and start the Pipeline again in the _Pipelines_ view by going to the top right menu _Actions_ > _Start_.
+Now we can configure and start the Pipeline again in the **Pipelines** view by going to the top right menu **Actions -> Start**.
 
 - Notice that the `IMAGE_NAME` now points to quay
-- Also the `GIT_REVISION` is now mandatory, so enter `master`
-- We need need to add a _Secret_ with a Quay Robot Account to enable the Pipeline Service Account to authenticate against Quay.
-- Switch to Quay click on the `openshift_workshop-int / workshop` repository
+- We need to add a **Secret** with a Quay Robot Account to enable the Pipeline Service Account to authenticate against Quay.
+- Switch to the Quay Portal and click on the `openshift_workshop-int / workshop` repository
 - On the left click on _Settings_
 - Click on the `openshift_workshop-int+builder` Robot account and copy the username and token
 - Back in the _Start Pipeline_ form
   - At the buttom, click on _Show credential options_ and then _Add secret_
   - Set these values
-    - _Secret name_ : `quay-token`
-    - _Access to_ : `Image Registry`
-    - _Authentication type_ : `Image registry credentials`
-    - _Server URL_ : `quay-quay-quay.apps.{DOMAIN_NAME}` (replacing the {DOMAIN_NAME})
-    - _Username_ : `openshift_workshop-int+default`
-    - _Secret name_ : the token you copied from the Quay robot account before ...
+    - **Secret name** : `quay-token`
+    - **Access to** : `Image Registry`
+    - **Authentication type** : `Basic Authentication`
+    - **Server URL** : `quay-quay-quay.apps.{DOMAIN_NAME}` (replacing the {DOMAIN_NAME})
+    - **Username** : `openshift_workshop-int+builder`
+    - **Secret name** : the token you copied from the Quay robot account before ...
   - Then click on the checkmark below to add the secret
   - The secret has just been added and will be mounted automatically everytime the pipeline runs
-- Hit _Start_
+- Hit **Start**
 
-Once the Pipeline has run, go the Quay. Click the _Repository_ `openshift_workshop-int/workshop` and then on the _Tags_ to the left. You should see a new `workshop` Image version that was just pushed by the pipeline. This the same Image that is now running in the Pod in your `workshop-int` namespace.
+Once the Pipeline has run, go the Quay. Click the **Repository** `openshift_workshop-int/workshop` and then on the **Tags** to the left. You should see a new `workshop` Image version that was just pushed by the pipeline. This the same Image that is now running in the Pod in your `workshop-int` namespace.
 
-Congratulaitions : Quay is now a first level citizen of your pipeline build strategy.
+Congratulations : Quay is now a first level citizen of your pipeline build strategy.
 
 ## Create an ImageStream Tag with an Old Image Version
 
@@ -194,8 +196,7 @@ Now there your build pipeline has been set up and is ready. There is one more st
     type: Local
 ```
 
-This will add a tag `java-old-image` that points to an older version of the RHEL Java image. The image and security vulnerabilities can be inspected in the Red Hat Software Catalog here:
-https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185dd19c775cddc4ce5?tag=1.10-1&push_date=1629294893000&container-tabs=security
+This will add a tag `java-old-image` that points to an older version of the RHEL Java image. The image and security vulnerabilities can be inspected in the Red Hat Software Catalog [here](https://catalog.redhat.com/software/containers/openjdk/openjdk-11-rhel7/5bf57185dd19c775cddc4ce5?tag=1.10-1&push_date=1629294893000&container-tabs=security)
 
 - Have a look at version `1.10-1`
 
