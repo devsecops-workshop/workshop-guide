@@ -135,14 +135,6 @@ The current Pipeline deploys that was generated deploys to the internal Registry
   - So `image-registry.openshift-image-registry.svc:5000/workshop-int/workshop` would become something like `quay-quay-quay.apps.{DOMAIN_NAME}/openshift_workshop-int/workshop` (replacing the {DOMAIN_NAME})
 - Click **Save**
 
-Next we need to replace our **ImageStream** `workshop`, as this is currently still pointing to the Image in the internal Registry.
-
-Make sure you are logged into OpenShift with the cli and are in the `workshop-int` project. Then execute this command to replace the current **ImageStream** with a version that points to the Quay Image. Make sure to replace your {DOMAIN_NAME}
-
-```
-oc import-image workshop --from=quay-quay-quay.apps.{DOMAIN_NAME}/openshift_workshop-int/workshop
-```
-
 Now we can configure and start the Pipeline again in the **Pipelines** view by going to the top right menu **Actions -> Start**.
 
 - Notice that the `IMAGE_NAME` now points to quay
@@ -163,7 +155,15 @@ Now we can configure and start the Pipeline again in the **Pipelines** view by g
   - The secret has just been added and will be mounted automatically everytime the pipeline runs
 - Hit **Start**
 
-Once the Pipeline has run, go the Quay. Click the **Repository** `openshift_workshop-int/workshop` and then on the **Tags** to the left. You should see a new `workshop` Image version that was just pushed by the pipeline. This the same Image that is now running in the Pod in your `workshop-int` namespace.
+Once the Pipeline has run, go the Quay. Click the **Repository** `openshift_workshop-int/workshop` and then on the **Tags** to the left. You should see a new `workshop` Image version that was just pushed by the pipeline.
+
+The last pipeline `deploy` task is still deploying the version from the internal Registry, we need to adjust this by changing the **ImageStream** to point to Quay.
+
+Make sure you are logged into OpenShift with the cli and are in the `workshop-int` project. Then execute this command to replace the current **ImageStream** with a version that points to the Quay Image. Make sure to replace your {DOMAIN_NAME}
+
+```
+oc import-image workshop --from=quay-quay-quay.apps.{DOMAIN_NAME}/openshift_workshop-int/workshop
+```
 
 Congratulations : Quay is now a first level citizen of your pipeline build strategy.
 
