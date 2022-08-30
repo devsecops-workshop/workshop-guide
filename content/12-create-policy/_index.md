@@ -23,7 +23,7 @@ These are the steps you will go through:
 
 First create the system policy. In the **ACS Portal** do the following:
 
-- **Platform Configuration->Policies->Create policy**
+- **Platform Configuration->Policy Management->Create policy**
 - **Policy Details**
   - **Name:** Workshop RHSA-2021:4904
   - **Severity:** Critical

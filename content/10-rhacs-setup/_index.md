@@ -114,6 +114,7 @@ You are ready to install the **SecuredClusters** instance, this will deploy the 
 - Under **Admission Control Settings** make sure
   - **listenOnCreates**, **listenOnUpdates** and **ListenOnEvents** is enabled
   - Set **Contact Image Scanners** to **ScanIfMissing**
+- Under **Per Node Settings** -> **Collector Settings** change the value for **Collection** form `EBPF` to `KernelModule`. This is a workaround for a known issue.
 - Click **Create**
 
 Now go to your **ACS Portal** again, after a couple of minutes you should see you secured cluster under **Platform Configuration->Clusters**. Wait until all **Cluster Status** indicators become green.

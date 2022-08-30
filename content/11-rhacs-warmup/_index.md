@@ -18,14 +18,13 @@ ACS delivers on these security use cases:
 
 ## UI Overview
 
-{{< figure src="../images/acs-dashboard.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/acs-dashboard.png?width=60pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 - **Dashboard**:
 The dashboard serves as the security overview - helping the security team understand what the sources of risk are, categories of violations, and gaps in compliance. All of the elements are clickable for more information and categories are customizable.
 
 - **Top bar**:
-Near the top, we see an overview of our OpenShift clusters. It provides insight into the usage of images and secrets.
-The top bar provides links to Search, Command-line tools, Cluster Health, Documentation, API Reference, and logged-in
+Near the top, we see a condensed overview of the status. It provides insight into the status of clusters, nodes, violations and so on. The top bar provides links to Search, Command-line tools, Cluster Health, Documentation, API Reference, and logged-in
 user account
 
 - **Left menus**:

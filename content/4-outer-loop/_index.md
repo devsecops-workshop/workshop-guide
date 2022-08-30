@@ -125,45 +125,130 @@ And you are done with the installation and integration of Quay as your registry!
 
 ## Adjust the Pipeline to Deploy to Quay
 
-The current Pipeline deploys that was generated deploys to the internal Registry by default. To leverage our brand new Quay we need to modify the Pipeline Image deployment target.
+The current Pipeline deploys to the internal Registry by default so the image that was created by the first (automatic) run was pushed there.
 
-- Make sure you are still in the `workshop-int` project.
-- Go to **Pipelines** and click on the `workshop` pipeline
-- Then in the top right **Actions** menu select **Edit Pipeline**
-- Make sure you are in the visual **Pipeline Builder**
-- In **Parameters** replace the URL for `IMAGE_NAME`  with the one for your Quay Instance, including the new synced org name
-  - So `image-registry.openshift-image-registry.svc:5000/workshop-int/workshop` would become something like `quay-quay-quay.apps.{DOMAIN_NAME}/openshift_workshop-int/workshop` (replacing the {DOMAIN_NAME})
-- Click **Save**
+To leverage our brand new Quay registry we need to modify the Pipeline so it pushes images to the Quay registry. In addition the ImageStream must be modified to point to the Quay registry, too.
 
-Now we can configure and start the Pipeline again in the **Pipelines** view by going to the top right menu **Actions -> Start**.
+### Create a new `s2i-java` ClusterTask
 
-- Notice that the `IMAGE_NAME` now points to quay
-- We need to add a **Secret** with a Quay Robot Account to enable the Pipeline Service Account to authenticate against Quay.
-- Switch to the Quay Portal and click on the `openshift_workshop-int / workshop` repository
-- On the left click on _Settings_
-- Click on the `openshift_workshop-int+builder` Robot account and copy the username and token
-- Back in the _Start Pipeline_ form
-  - At the buttom, click on _Show credential options_ and then _Add secret_
-  - Set these values
+The first thing is to create a new source-to-image Task by copying and modifying the default `s2i-java` task to automatically update the **ImageStream** to point to Quay:
+
+* Switch to the **Administrator** console
+* Still int the `workshop-int` Project go to **Pipelines**->**Tasks**->**ClusterTasks**
+* Search for the `s2i-java` ClusterTask and open it
+* Switch to the YAML view and copy the content
+* Go back to the **Tasks** view, click the **Create** drop-down and choose **ClusterTask**
+* Replace the YAML content with the content you just copied
+* Change the `name:` to `s2i-java-workshop`
+
+Now we have to extend the Task:
+
+* In the `params` section add two new parameters (take care of the indentation):
+
+```yaml
+- default: ''
+      description: The name of the ImageStream which should be updated
+      name: IMAGESTREAM
+      type: string
+    - default: ''
+      description: The Tag of the ImageStream which should be updated
+      name: IMAGESTREAMTAG
+      type: string
+```
+
+* At the end of the `steps` section before `volumes` starts, add the following, this will actually do the magic of tagging the image:
+
+```yaml
+- env:
+        - name: HOME
+          value: /tekton/home
+      image: 'image-registry.openshift-image-registry.svc:5000/openshift/cli:latest'
+      name: update-image-stream
+      resources: {}
+      script: >
+        #!/usr/bin/env bash
+
+        oc tag --source=docker $(params.IMAGE)
+        $(params.IMAGESTREAM):$(params.IMAGESTREAMTAG) --insecure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+```
+* Click **Save**
+### Modify the Pipeline
+
+The last step is to introduce the new parameters we are using in the new ClusterTask into the Pipeline configuration:
+
+* In the menu go to **Pipelines->Pipelines**
+* Click the `workshop` Pipeline and switch to YAML
+* Add the following to the `params` section:
+
+```yaml
+    - default: workshop
+      name: IMAGESTREAM
+      type: string
+    - default: latest
+      name: IMAGESTREAMTAG
+      type: string
+```
+
+* Modify the existing parameter **IMAGE_NAME** that points to your local registry. **Replace** `<DOMAIN_NAME>` with the value of your Quay repository URL:
+
+```yaml
+   - default: >-
+        quay-quay-quay.apps.<DOMAIN>.opentlc.com/openshift_workshop-int/workshop
+      name: IMAGE_NAME
+      type: string
+```
+
+And finally modify the `build` task:
+
+* Add the parameters below to the `params` section of the `build` task (discard the first four lines, they are only shown to make positioning easier):
+
+```yaml
+tasks:
+    - name: build
+      params:
+        [...]
+        - name: IMAGESTREAM
+          value: $(params.IMAGESTREAM)
+        - name: IMAGESTREAMTAG
+          value: $(params.IMAGESTREAMTAG)
+```
+* Still in the `build` task change the name of the `taskRef` to `s2i-java-workshop`:
+
+```yaml
+     taskRef:
+        kind: ClusterTask
+        name: s2i-java-workshop
+```
+* Click **Save**
+
+You are done with adapting the Pipeline to use the Quay registry! Give it a try:
+
+* First go to the Quay portal to the `openshift_workshop-int` organization.
+* In the `openshift_workshop-int / workshop` repository access **Tags** in the menu to the left. There should be no image (yet).
+
+Now it's time to configure and start the Pipeline. In the **Pipelines** view go to the top right menu and choose **Actions -> Start**. In the **Start Pipeline** window that opens add the secret for accessing the Quay repo:
+
+* Add a **Secret** with the repo's Quay Robot Account to enable the Pipeline Service Account to authenticate against Quay.
+* Switch to the Quay Portal and click on the `openshift_workshop-int / workshop` repository
+  * On the left click on **Settings**
+  * Click on the `openshift_workshop-int+builder` Robot account and copy the username and token
+* Back in the **Start Pipeline** form
+  * At the buttom, click on **Show credential options** and then **Add secret**
+  * Set these values
     - **Secret name** : `quay-token`
     - **Access to** : `Image Registry`
     - **Authentication type** : `Basic Authentication`
-    - **Server URL** : `quay-quay-quay.apps.{DOMAIN_NAME}` (replacing the {DOMAIN_NAME})
+    - **Server URL** : `quay-quay-quay.apps.<DOMAIN_NAME>` (replacing the {DOMAIN_NAME})
     - **Username** : `openshift_workshop-int+builder`
     - **Secret name** : the token you copied from the Quay robot account before ...
-  - Then click on the checkmark below to add the secret
-  - The secret has just been added and will be mounted automatically everytime the pipeline runs
-- Hit **Start**
+  * Then click on the checkmark below to add the secret
+  * The secret has just been added and will be mounted automatically everytime the pipeline runs
+* Hit **Start**
 
-Once the Pipeline has run, go the Quay. Click the **Repository** `openshift_workshop-int/workshop` and then on the **Tags** to the left. You should see a new `workshop` Image version that was just pushed by the pipeline.
-
-The last pipeline `deploy` task is still deploying the version from the internal Registry, we need to adjust this by changing the **ImageStream** to point to Quay.
-
-Make sure you are logged into OpenShift with the cli and are in the `workshop-int` project. Then execute this command to replace the current **ImageStream** with a version that points to the Quay Image. Make sure to replace your {DOMAIN_NAME}
-
-```
-oc import-image workshop --from=quay-quay-quay.apps.{DOMAIN_NAME}/openshift_workshop-int/workshop
-```
+Once the Pipeline run has finished, go to the Quayportal again and check the **Repository** `openshift_workshop-int/workshop` again. Under **Tags** you should now see a new `workshop` Image version that was just pushed by the pipeline.
 
 Congratulations : Quay is now a first level citizen of your pipeline build strategy.
 
