@@ -33,7 +33,7 @@ In the **ACS portal**:
 
 Change to the **OpenShift Web Console** and create a secret with the API token in the project your pipeline lives in:
 
-- In the UI switch to your Project
+- In the UI switch to your `workshop-int` Project
 - Create a new key/value `Secret` named **roxsecrets**
 - Introduce these key/values into the secret:
   - **rox_central_endpoint**: \<the URL to your **ACS Portal**>
@@ -43,6 +43,28 @@ Change to the **OpenShift Web Console** and create a secret with the API token i
 {{% notice tip %}}
 Even if the form says **Drag and drop file with your value here...** you can just paste the text.
 {{% /notice %}}
+
+### Remove ImageStream Change Trigger
+
+There is one more thing you have to do before integrating the image scanning into your build pipeline: When you created your deployment, a `trigger` was automatically added that will deploy a new version when the image referenced by the `ImageStream` changes.
+
+This is not what we want! Because this way a newly build image would be deployed into a running container even if the `roxctl` scan finds a policy violation and terminates the pipeline.
+
+Have a look for yourself:
+
+* In the OCP console go to **Workloads->Deployments** and open the `workshop` deployment
+* Switch to the YAML view
+* Near the top under **annotations** (around lines 11-12) you'll find an annotation `image.openshift.io/triggers`.
+
+Remove exactly these two lines and click **Save**:
+
+```yaml
+    image.openshift.io/triggers: >-
+      [{"from":{"kind":"ImageStreamTag","name":"workshop2:latest","namespace":"workshop-int"},"fieldPath":"spec.template.spec.containers[?(@.name==\"workshop2\")].image","pause":"false"
+```
+
+This way we made sure that a new image won't be deployed automatically "outside" of a pipeline run.
+
 
 ### Create a Scan Task
 
@@ -131,9 +153,9 @@ Remember how we edited the pipeline directly in yaml before? OpenShift comes wit
 - To add the required parameters from the pipeline for the task, click the **rox-image-check** task.
 - A form with the parameters will open, fill it in:
 
-- **rox_central_endpoint**: `roxsecrets`
-- **rox_api_token**: `roxsecrets`
-- **image**: `image-registry.openshift-image-registry.svc:5000/workshop-int/workshop`
+  - **rox_central_endpoint**: `roxsecrets`
+  - **rox_api_token**: `roxsecrets`
+  - **image**: `quay-quay-quay.apps.cluster-c8xnn.c8xnn.sandbox1811.opentlc.com/repository/openshift_workshop-int/workshop`
   - Adapt the Project name if you changed it
 - **image_digest**: $(tasks.build.results.IMAGE_DIGEST)
   - This variable takes the result of the **build** task and uses it in the scan task.
@@ -158,7 +180,7 @@ To test the fixed image, just start the task with the default (latest) Java vers
 The last step is to enforce the System Policy. If the policy is violated the pipeline should be stopped and the application should not be deployed.
 
 - Edit your custom **System Policy** in **ACS Portal** and set **Response Method** to **Inform and enforce** and then switch on **Build** and **Deploy** below.
-- Run the pipeline again, first with **Version** `java-old-image` and then with **Version** `openjdk-17-ubi8` (default)
+- Run the pipeline again, first with **Version** `java-old-image` and then with **Version** `openjdk-11-el7` (default)
 - Expected results:
   - We are sure you know by now what to expect!
   - The pipeline should fail with the old image version and succeed with the latest image version!
