@@ -45,20 +45,25 @@ First create the system policy. In the **ACS Portal** do the following:
   - Have a quick look around, if the policy would create a violation you get a preview here.
   - Click **Save**
 
-{{< figure src="../images/custom-policy.png?width=25pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/custom-policy.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Test the Policy
 
 Start the pipeline with the affected image version:
 
 - In the **OpenShift Web Console** go to the Pipeline in your `workshop-int` project, start it and set **Version** to `java-old-image` (Remember how we set up this `ImageStream` `tag` to point to an old and vulnerable version of the image?)
-- Follow the **Violations** in the **ACS Portal**
+- In the **ACS Portal** follow the **Violations** view
+
+{{% notice tip %}}
+To make it easier spotting the violations for this deployment you can filter the list by entering `namespace` and then `workshop-int` in the filter bar.
+{{% /notice %}}
+
 - Expected result:
   - You'll see the build deployments (`Quarkus-Build-Options-Git-Gsklhg-Build-...`) come and go when they are finished.
   - When the final build is deployed you'll see a violation in **ACS Portal** for policy `Workshop RHSA-2021:4904` (Check the Time of the violation)
 
 {{% notice tip %}}
-There will be other policy violations listed, triggered by default policies, have a look around. Note that none of the policies is enforced (as in stop the pipeline build) yet!
+There will be other policy violations listed, triggered by default policies, have a look around. Note that none of the policies is enforced (so that the pipeline build would be stopped) yet!
 {{% /notice %}}
 
 Now start the pipeline with the fixed image version that doesn't contain the CVE anymore:
