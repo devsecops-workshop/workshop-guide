@@ -155,14 +155,14 @@ spec:
       name: APP_NAME
       type: string
     - default: >-
-        https://repository-git.apps.cluster-c8xnn.c8xnn.sandbox1811.opentlc.com/gitea/quarkus-build-options.git
+        https://repository-git.apps.{YOUR_CLUSTER_HOSTNAME}/gitea/quarkus-build-options.git
       name: GIT_REPO
       type: string
     - default: master
       name: GIT_REVISION
       type: string
     - default: >-
-        quay-quay-quay.apps.cluster-c8xnn.c8xnn.sandbox1811.opentlc.com/openshift_workshop-int/workshop:dev
+        quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop:dev
       name: IMAGE_NAME
       type: string
     - default: .
@@ -221,7 +221,7 @@ spec:
           value: roxsecrets
         - name: image
           value: >-
-            quay-quay-quay.apps.cluster-c8xnn.c8xnn.sandbox1811.opentlc.com/openshift_workshop-int/workshop
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop
         - name: image_digest
           value: $(tasks.build.results.IMAGE_DIGEST)
       runAfter:
