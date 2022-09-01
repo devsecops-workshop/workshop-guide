@@ -114,32 +114,15 @@ In the **OpenShift Web Console**:
 apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  creationTimestamp: '2022-08-31T16:00:10Z'
-  generation: 2
-  managedFields:
-    - apiVersion: tekton.dev/v1beta1
-      fieldsType: FieldsV1
-      fieldsV1:
-        'f:spec':
-          .: {}
-          'f:finally': {}
-          'f:params': {}
-          'f:resources': {}
-          'f:tasks': {}
-          'f:workspaces': {}
-      manager: Mozilla
-      operation: Update
-      time: '2022-08-31T16:02:01Z'
+  labels:
   name: workshop-advanced
   namespace: workshop-int
-  resourceVersion: '6596919'
-  uid: 9042ab28-54b1-4eb6-9b5f-24e6d3435ea2
 spec:
   finally:
     - name: delete-image
       params:
         - name: SCRIPT
-          value: 'oc tag -d workshop-int/workshop:dev -n workshop-int'
+          value: "oc tag -d workshop-int/workshop:dev -n workshop-int"
         - name: VERSION
           value: latest
       taskRef:
@@ -162,7 +145,7 @@ spec:
       name: GIT_REVISION
       type: string
     - default: >-
-        quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop:dev
+        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:dev
       name: IMAGE_NAME
       type: string
     - default: .
@@ -172,6 +155,33 @@ spec:
       name: VERSION
       type: string
   tasks:
+    - name: git-update-deployment
+      params:
+        - name: GIT_REPOSITORY
+          value: >-
+            https://repository-git.apps.{YOUR_CLUSTER_HOSTNAME}/gitea/openshift-gitops-getting-started.git
+        - name: GIT_USERNAME
+          value: gitea
+        - name: GIT_PASSWORD
+          value: gitea
+        - name: CURRENT_IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
+        - name: NEW_IMAGE
+          value: >-
+            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+        - name: NEW_DIGEST
+          value: $(tasks.build.results.IMAGE_DIGEST)
+        - name: KUSTOMIZATION_PATH
+          value: environments/dev
+      runAfter:
+        - remove-dev-tag
+      taskRef:
+        kind: Task
+        name: git-update-deployment
+      workspaces:
+        - name: workspace
+          workspace: workspace
     - name: fetch-repository
       params:
         - name: url
@@ -179,7 +189,7 @@ spec:
         - name: revision
           value: $(params.GIT_REVISION)
         - name: deleteExisting
-          value: 'true'
+          value: "true"
       taskRef:
         kind: ClusterTask
         name: git-clone
@@ -191,7 +201,7 @@ spec:
         - name: IMAGE
           value: $(params.IMAGE_NAME)
         - name: TLSVERIFY
-          value: 'false'
+          value: "false"
         - name: PATH_CONTEXT
           value: $(params.PATH_CONTEXT)
         - name: VERSION
@@ -221,7 +231,7 @@ spec:
           value: roxsecrets
         - name: image
           value: >-
-            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop
+            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
         - name: image_digest
           value: $(tasks.build.results.IMAGE_DIGEST)
       runAfter:
@@ -232,7 +242,7 @@ spec:
     - name: tag-checked-image
       params:
         - name: SCRIPT
-          value: 'oc tag workshop:dev workshop:latest'
+          value: "oc tag workshop:dev workshop:latest"
         - name: VERSION
           value: latest
       runAfter:
@@ -243,7 +253,7 @@ spec:
     - name: remove-dev-tag
       params:
         - name: SCRIPT
-          value: 'oc tag -d workshop:dev'
+          value: "oc tag -d workshop:dev"
         - name: VERSION
           value: latest
       runAfter:
