@@ -33,11 +33,12 @@ As part of the workshop you will be provided with freshly installed OpenShift 4.
 As there is not special setup for the OpenShift cluster you should be able to run the workshop with any 4.9 cluster of you own. Just make sure you have cluster admin privileges.
 
 This workshop was tested with these versions :
-- OpenShift : 4.9
-- ACS : 3.68.1 
-- CRW : 2.15.2
-- Pipelines : 1.6.2
-- GitOps : 1.4.3
-
+- OpenShift : 4.10
+- Advanced Cluster Security for Kubernetes: 3.71.0
+- Red Hat OpenShift Dev Spaces : 3.1.0
+- Red Hat OpenShift Pipelines: 1.8.0
+- Red Hat OpenShift GitOps: 1.6.0
+- Red Hat Quay: 3.7.7
+- Red Hat Quay Bridge Operator: 3.7.7
 ## Workshop Flow
 We'll tackle the topics at hand step by step with an introduction covering the things worked on before every section.
