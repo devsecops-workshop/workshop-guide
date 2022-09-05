@@ -78,3 +78,8 @@ As the foundation of ACS are the **system policies**, have a good look around:
 {{% notice tip %}}
 By default only some policies are enforced. If you want to get an overview which ones, you can use the filter view introduced above. Use `Enforcement` as filter key and `FAIL_BUILD_ENFORCEMENT` as value.
 {{% /notice %}}
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+

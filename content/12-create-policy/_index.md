@@ -75,3 +75,9 @@ Now start the pipeline with the fixed image version that doesn't contain the CVE
   - When the final build is deployed you'll see the policy violation for `Workshop RHSA-2021:4904` for your deployment is gone because the image no longer contains it.
 
 This shows how ACS is automatically scanning images when they become active against all enabled policies. But we don't want to just **admire a violation** after the image has been deployed, we want to disable the deployment during build time! So the next step is to integrate the check into the build pipeline and enforce it (don't deploy the application).
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+

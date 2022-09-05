@@ -76,3 +76,8 @@ odo push
 
 - And reload the app webpage.
 - Bam! The change should be there in a matter of seconds
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_inner_loop.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+

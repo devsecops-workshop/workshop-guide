@@ -119,4 +119,9 @@ You are ready to install the **SecuredClusters** instance, this will deploy the 
 
 Now go to your **ACS Portal** again, after a couple of minutes you should see you secured cluster under **Platform Configuration->Clusters**. Wait until all **Cluster Status** indicators become green.
 
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+
 
