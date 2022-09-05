@@ -28,8 +28,9 @@ You should be greeted by the `README.md` file.
 
 Now we want to create a new OpenShift project for our app:
 
-- Open a `terminal`
-  - In **My Workspace** (cube icon) to the right click `tools > New Terminal`
+- Open a `terminal` on your DevSpaces IDE
+  - On the top click menu clik on the cube icon (**Workspace**)
+  - Then in the tree look for the `tools` and below clickon `> New Terminal` to open a new Terminal in the tools Pod
 - Copy the `oc login` command from your OpenShift cluster (At the top right **Username > Copy login command**) and execute in the `terminal` to log into the OpenShift cluster
 - Create a new project `workshop-dev`
 
