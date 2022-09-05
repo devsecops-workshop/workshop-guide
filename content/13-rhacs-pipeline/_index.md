@@ -190,5 +190,5 @@ The last step is to enforce the System Policy. If the policy is violated the pip
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 

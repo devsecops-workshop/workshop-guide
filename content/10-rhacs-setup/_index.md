@@ -121,7 +121,7 @@ Now go to your **ACS Portal** again, after a couple of minutes you should see yo
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 
 

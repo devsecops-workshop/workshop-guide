@@ -78,6 +78,6 @@ This shows how ACS is automatically scanning images when they become active agai
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 

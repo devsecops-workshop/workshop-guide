@@ -315,4 +315,4 @@ Go to your `quarkus-build-options` repo in `Gitea` again
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}

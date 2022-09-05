@@ -289,5 +289,5 @@ We will use this tag to test our security setup in a later chapter.
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_outer_loop.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_outer_loop.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 

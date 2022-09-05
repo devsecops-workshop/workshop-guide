@@ -9,7 +9,7 @@ And all in a fun way.
 
 ## Architecture overview
 
-{{< figure src="../images/workshop_architecure_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Collaboration
 This workshop was created by Daniel Brintzinger, Goetz Rieger and Sebastian Dehn. 

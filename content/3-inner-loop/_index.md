@@ -79,5 +79,5 @@ odo push
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_inner_loop.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_inner_loop.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 

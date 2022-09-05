@@ -144,4 +144,4 @@ Your cluster is now prepared for the next step, proceed to the **Inner Loop**.
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_prepare.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_prepare.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}

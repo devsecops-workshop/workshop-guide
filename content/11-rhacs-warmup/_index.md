@@ -81,5 +81,5 @@ By default only some policies are enforced. If you want to get an overview which
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 

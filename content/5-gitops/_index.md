@@ -329,5 +329,5 @@ Now we need to add the secret to the `serviceaccount` that runs our pipelines so
 
 ## Architecture recap
 
-{{< figure src="../images/workshop_architecure_gitops.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/workshop_architecture_gitops.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
