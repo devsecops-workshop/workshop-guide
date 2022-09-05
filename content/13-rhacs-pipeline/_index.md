@@ -52,19 +52,18 @@ This is not what we want! Because this way a newly build image would be deployed
 
 Have a look for yourself:
 
-* In the OCP console go to **Workloads->Deployments** and open the `workshop` deployment
-* Switch to the YAML view
-* Near the top under **annotations** (around lines 11-12) you'll find an annotation `image.openshift.io/triggers`.
+- In the OCP console go to **Workloads->Deployments** and open the `workshop` deployment
+- Switch to the YAML view
+- Near the top under **annotations** (around lines 11-12) you'll find an annotation `image.openshift.io/triggers`.
 
 Remove exactly these two lines and click **Save**:
 
 ```yaml
-    image.openshift.io/triggers: >-
-      [{"from":{"kind":"ImageStreamTag","name":"workshop2:latest","namespace":"workshop-int"},"fieldPath":"spec.template.spec.containers[?(@.name==\"workshop2\")].image","pause":"false"
+image.openshift.io/triggers: >-
+  [{"from":{"kind":"ImageStreamTag","name":"workshop2:latest","namespace":"workshop-int"},"fieldPath":"spec.template.spec.containers[?(@.name==\"workshop2\")].image","pause":"false"
 ```
 
 This way we made sure that a new image won't be deployed automatically "outside" of a pipeline run.
-
 
 ### Create a Scan Task
 
@@ -155,8 +154,9 @@ Remember how we edited the pipeline directly in yaml before? OpenShift comes wit
 
   - **rox_central_endpoint**: `roxsecrets`
   - **rox_api_token**: `roxsecrets`
-  - **image**: `quay-quay-quay.apps.cluster-c8xnn.c8xnn.sandbox1811.opentlc.com/repository/openshift_workshop-int/workshop`
+  - **image**: `quay-quay-quay.apps.{YOUR DOMAIN NAME}/openshift_workshop-int/workshop` (replacing {YOUR DOMAIN NAME})
   - Adapt the Project name if you changed it
+
 - **image_digest**: $(tasks.build.results.IMAGE_DIGEST)
   - This variable takes the result of the **build** task and uses it in the scan task.
 - Click **Save**
@@ -170,16 +170,11 @@ With our custom **System Policy** still not set to `enforce` we first are going 
 - Expected Result:
   - The `rox-image-check` task should succeed, but if you have a look at the output (click the task in the visual representation) you should see that the **build violated our policy**!
 
-To test the fixed image, just start the task with the default (latest) Java version again.
-
-- Expected Result:
-  - The `rox-image-check` task should succeed, if you have a look at the output you should see **no policy violation**!
-
 ## Enforce the Policy
 
 The last step is to enforce the System Policy. If the policy is violated the pipeline should be stopped and the application should not be deployed.
 
-- Edit your custom **System Policy** in **ACS Portal** and set **Response Method** to **Inform and enforce** and then switch on **Build** and **Deploy** below.
+- Edit your custom **System Policy** `Workshop RHSA-2021:4904` in **ACS Portal** and set **Response Method** to **Inform and enforce** and then switch on **Build** and **Deploy** below.
 - Run the pipeline again, first with **Version** `java-old-image` and then with **Version** `openjdk-11-el7` (default)
 - Expected results:
   - We are sure you know by now what to expect!
@@ -187,8 +182,6 @@ The last step is to enforce the System Policy. If the policy is violated the pip
 
 {{< figure src="../images/acs-enforce-policy.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-
 ## Architecture recap
 
 {{< figure src="../images/workshop_architecture_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-
