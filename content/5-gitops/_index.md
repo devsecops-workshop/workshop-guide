@@ -326,3 +326,8 @@ Now we need to add the secret to the `serviceaccount` that runs our pipelines so
 
 - This will tell ArgoCD to update the `Deployment` with this new image version
 - Check that the new image is rolled out (you may need to sync manually in ArgoCD to speed things up)
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_gitops.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+

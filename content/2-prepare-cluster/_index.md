@@ -141,3 +141,7 @@ Now it's time to check if the `StorageSystem` deployment from ODF completed succ
 Your container storage is ready to go, explore the information on the overview pages if you'd like.
 
 Your cluster is now prepared for the next step, proceed to the **Inner Loop**.
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_prepare.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}

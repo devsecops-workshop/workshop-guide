@@ -186,3 +186,9 @@ The last step is to enforce the System Policy. If the policy is violated the pip
   - The pipeline should fail with the old image version and succeed with the latest image version!
 
 {{< figure src="../images/acs-enforce-policy.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+

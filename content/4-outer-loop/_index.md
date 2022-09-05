@@ -291,3 +291,8 @@ This will add a tag `java-old-image` that points to an older version of the RHEL
 - Have a look at version `1.10-1`
 
 We will use this tag to test our security setup in a later chapter.
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_outer_loop.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+

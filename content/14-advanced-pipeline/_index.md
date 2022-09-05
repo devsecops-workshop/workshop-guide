@@ -145,7 +145,7 @@ spec:
       name: GIT_REVISION
       type: string
     - default: >-
-        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:dev
+        quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/repository/openshift_workshop-int/workshop:dev:dev
       name: IMAGE_NAME
       type: string
     - default: .
@@ -166,10 +166,10 @@ spec:
           value: gitea
         - name: CURRENT_IMAGE
           value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/repository/openshift_workshop-int/workshop:latest
         - name: NEW_IMAGE
           value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/repository/openshift_workshop-int/workshop
         - name: NEW_DIGEST
           value: $(tasks.build.results.IMAGE_DIGEST)
         - name: KUSTOMIZATION_PATH
@@ -231,7 +231,7 @@ spec:
           value: roxsecrets
         - name: image
           value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/repository/openshift_workshop-int/workshop
         - name: image_digest
           value: $(tasks.build.results.IMAGE_DIGEST)
       runAfter:
@@ -312,3 +312,7 @@ Go to your `quarkus-build-options` repo in `Gitea` again
       <version>2.17.1</version>
     </dependency>
 ```
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecure_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
