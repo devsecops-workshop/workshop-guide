@@ -103,7 +103,7 @@ In the cloned repository you'll find a `devfile_v2.yml`. We will need the URL to
 - Install the **Red Hat OpenShift Dev Spaces** Operator from OperatorHub (not the previous Codeready Workspaces versions!) with default settings
 - Go to **Installed Operators -> Red Hat OpenShift Dev Spaces** and create a new instance (**Red Hat OpenShift Dev Spaces instance Specification**) using the default settings in the project `openshift-operators`
 - Wait until deployment has finished. This may take a couple of minutes as several components will be deployed.
-- Once the instance status is ready (You can check the YAML of the instance: `status > cheClusterRunning: Available`), look up the `devspaces` Route in the `openshift-workspaces` namespace (You may need to toggle the **Show default project** button).
+- Once the instance status is ready (You can check the YAML of the instance: `status > chePhase: Active`), look up the `devspaces` Route in the `openshift-workspaces` namespace (You may need to toggle the **Show default project** button).
 - Open the link in a new browser tab, click on **Log in with OpenShift** and log in with your OCP credentials
 - Allow selected permissions
 
