@@ -69,7 +69,7 @@ Most UI pages have a filters section at the top that allows you to narrow the vi
 
 ## System Policies
 As the foundation of ACS are the **system policies**, have a good look around:
-- Navigate to the **Policies** section from **Platform Configuration** in the left side menu.
+- Navigate to the **Policiy Management** section from **Platform Configuration** in the left side menu.
 - You will get an overview of the Built-in Policies
 - All of the policies that ship with the product are designed with the goal of providing targeted remediation that improves security hardening.
 - You’ll see this list contains many **Build** and **Deploy** time policies to catch misconfigurations early in the pipeline, but also **Runtime** policies.
