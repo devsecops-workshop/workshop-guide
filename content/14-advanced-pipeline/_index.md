@@ -145,7 +145,7 @@ spec:
       name: GIT_REVISION
       type: string
     - default: >-
-        quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/repository/openshift_workshop-int/workshop:dev:dev
+        quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop:dev:dev
       name: IMAGE_NAME
       type: string
     - default: .
@@ -166,10 +166,10 @@ spec:
           value: gitea
         - name: CURRENT_IMAGE
           value: >-
-            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/repository/openshift_workshop-int/workshop:latest
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop:latest
         - name: NEW_IMAGE
           value: >-
-            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/repository/openshift_workshop-int/workshop
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop
         - name: NEW_DIGEST
           value: $(tasks.build.results.IMAGE_DIGEST)
         - name: KUSTOMIZATION_PATH
@@ -231,7 +231,7 @@ spec:
           value: roxsecrets
         - name: image
           value: >-
-            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/repository/openshift_workshop-int/workshop
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop
         - name: image_digest
           value: $(tasks.build.results.IMAGE_DIGEST)
       runAfter:
