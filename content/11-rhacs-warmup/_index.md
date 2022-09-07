@@ -18,14 +18,13 @@ ACS delivers on these security use cases:
 
 ## UI Overview
 
-{{< figure src="../images/acs-dashboard.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/acs-dashboard.png?width=60pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 - **Dashboard**:
 The dashboard serves as the security overview - helping the security team understand what the sources of risk are, categories of violations, and gaps in compliance. All of the elements are clickable for more information and categories are customizable.
 
 - **Top bar**:
-Near the top, we see an overview of our OpenShift clusters. It provides insight into the usage of images and secrets.
-The top bar provides links to Search, Command-line tools, Cluster Health, Documentation, API Reference, and logged-in
+Near the top, we see a condensed overview of the status. It provides insight into the status of clusters, nodes, violations and so on. The top bar provides links to Search, Command-line tools, Cluster Health, Documentation, API Reference, and logged-in
 user account
 
 - **Left menus**:
@@ -70,7 +69,7 @@ Most UI pages have a filters section at the top that allows you to narrow the vi
 
 ## System Policies
 As the foundation of ACS are the **system policies**, have a good look around:
-- Navigate to the **Policies** section from **Platform Configuration** in the left side menu.
+- Navigate to the **Policiy Management** section from **Platform Configuration** in the left side menu.
 - You will get an overview of the Built-in Policies
 - All of the policies that ship with the product are designed with the goal of providing targeted remediation that improves security hardening.
 - You’ll see this list contains many **Build** and **Deploy** time policies to catch misconfigurations early in the pipeline, but also **Runtime** policies.
@@ -79,3 +78,8 @@ As the foundation of ACS are the **system policies**, have a good look around:
 {{% notice tip %}}
 By default only some policies are enforced. If you want to get an overview which ones, you can use the filter view introduced above. Use `Enforcement` as filter key and `FAIL_BUILD_ENFORCEMENT` as value.
 {{% /notice %}}
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecture_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+

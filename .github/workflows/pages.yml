@@ -5,6 +5,7 @@ on:
   push:
     branches:
     - master
+    - release
 
 jobs:
   build-deploy:
@@ -13,7 +14,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: true
-        ref: 1.1.1
+        ref: latest-release
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v2
       with:
@@ -40,12 +41,18 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: true
-    - name: Edit Toml
+    - name: Edit Toml baseurl
       uses: ciiiii/toml-editor@1.0.0
       with:
         file: "config.toml"
         key: "baseurl"
-        value: "https://devsecops-workshop.github.io/devsecops-workshop.github.io-dev/"            
+        value: "https://devsecops-workshop.github.io/devsecops-workshop.github.io-dev/"
+    - name: Edit Toml title
+      uses: ciiiii/toml-editor@1.0.0
+      with:
+        file: "config.toml"
+        key: "title"
+        value: "DRAFT : DevSecOps Workshop"                   
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v2
       with:

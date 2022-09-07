@@ -101,10 +101,6 @@ spec:
   params:
     - name: GIT_REPOSITORY
       type: string
-    - name: GIT_USERNAME
-      type: string
-    - name: GIT_PASSWORD
-      type: string
     - name: CURRENT_IMAGE
       type: string
     - name: NEW_IMAGE
@@ -244,8 +240,18 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
 
 Add the new Task to your Pipeline by adding it to the YAML like this:
 
-- In the YAML view insert it at the **tasks** level after the `deploy` task
-- For the `param` `GIT_REPOSITORY` use your git config repo url (eg. replace {YOUR DOMAIN})
+- First we will add a new Pipeline Parameter 'GIT_CONFIG_REPO' at the beginning of the Pipeline and set it by default to our GitOps Config Repository (This will be updated by the Pipeline and then trigger ArgoCD to deploy to Prod)
+- So in the YAML view at the end of the `spec > params` section add and replace {YOUR_DOMAIN_NAME}
+
+```yaml
+- default: >-
+      https://repository-git.apps.{YOUR_DOMAIN_NAME}/gitea/openshift-gitops-getting-started.git
+    name: GIT_CONFIG_REPO
+    type: string
+```
+
+- Next insert the new **tasks** at the `tasks` level right after the `deploy` task
+- We will map the Pipeline parameter `GIT_CONFIG_REPO` to the Task parameter `GIT_REPOSITORY`
 - Make sure to fix indentation after pasting into the YAML!
 
 {{% notice tip %}}
@@ -256,12 +262,7 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
 - name: git-update-deployment
   params:
     - name: GIT_REPOSITORY
-      value: >-
-        https://repository-git.apps.{YOUR DOMAIN}/gitea/openshift-gitops-getting-started.git
-    - name: GIT_USERNAME
-      value: gitea
-    - name: GIT_PASSWORD
-      value: gitea
+      value: $(params.GIT_CONFIG_REPO)
     - name: CURRENT_IMAGE
       value: >-
         image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
@@ -282,13 +283,13 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
       workspace: workspace
 ```
 
-The `Pipeline` should now look like this
+The `Pipeline` should now look like this. Notice that the new `task` runs in parallel to the `deploy` task
 
 <!-- ![workshop Pipeline](../images/tekton.png) -->
 
 {{< figure src="../images/pipeline1.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-- Create a secret with credentials for your `Gitea` repository, so the `task` can authenticate and push to `Gitea`. Replace {YOUR DOMAIN} here to match your `Gitea`URL
+- Create a **Secret** with credentials for your **Gitea** repository, so the **task** can authenticate and push to `Gitea`. Replace {YOUR_DOMAIN_NAME} here to match your `Gitea`URL
 - You can add this by clicking on the **+** on the top right ob the Web Console
 
 ```yaml
@@ -298,7 +299,7 @@ metadata:
   name: gitea
   namespace: workshop-int
   annotations:
-    tekton.dev/git-0: "http://repository-git.apps.{YOUR DOMAIN}"
+    tekton.dev/git-0: "https://repository-git.apps.{YOUR_DOMAIN_NAME}/gitea/openshift-gitops-getting-started.git"
 data:
   password: Z2l0ZWE=
   username: Z2l0ZWE=
@@ -325,3 +326,8 @@ Now we need to add the secret to the `serviceaccount` that runs our pipelines so
 
 - This will tell ArgoCD to update the `Deployment` with this new image version
 - Check that the new image is rolled out (you may need to sync manually in ArgoCD to speed things up)
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecture_gitops.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+

@@ -83,7 +83,7 @@ So there is a major security vulnerability in our code. ACS would detect the dep
 
 So first of all in the **ACS Portal** follow these steps:
 
-- Navigate to **Platform Configuration > Policies**
+- Navigate to **Platform Configuration > Policy Management**
 - Search for `Log4Shell` and click on the Policy.
 - Click **Edit** at the upper right
 
@@ -145,7 +145,7 @@ spec:
       name: GIT_REVISION
       type: string
     - default: >-
-        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:dev
+        quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop:dev
       name: IMAGE_NAME
       type: string
     - default: .
@@ -160,16 +160,12 @@ spec:
         - name: GIT_REPOSITORY
           value: >-
             https://repository-git.apps.{YOUR_CLUSTER_HOSTNAME}/gitea/openshift-gitops-getting-started.git
-        - name: GIT_USERNAME
-          value: gitea
-        - name: GIT_PASSWORD
-          value: gitea
         - name: CURRENT_IMAGE
           value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop:latest
         - name: NEW_IMAGE
           value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop
         - name: NEW_DIGEST
           value: $(tasks.build.results.IMAGE_DIGEST)
         - name: KUSTOMIZATION_PATH
@@ -231,7 +227,7 @@ spec:
           value: roxsecrets
         - name: image
           value: >-
-            image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop
         - name: image_digest
           value: $(tasks.build.results.IMAGE_DIGEST)
       runAfter:
@@ -312,3 +308,7 @@ Go to your `quarkus-build-options` repo in `Gitea` again
       <version>2.17.1</version>
     </dependency>
 ```
+
+## Architecture recap
+
+{{< figure src="../images/workshop_architecture_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
