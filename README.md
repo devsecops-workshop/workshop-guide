@@ -21,4 +21,4 @@ You can add query parameters to customize the for each partcipant content
 
 #### Example :
 
-http://devsecops-workshop.github.io/4-outer-loop/?hostname=cluster-7812.53m24.sandbox9346.opentlc.com&hidechapters=0:2:3:7
+http://devsecops-workshop.github.io/4-outer-loop/?domain=cluster-7812.53m24.sandbox9346.opentlc.com&hidechapters=0:2:3:7
