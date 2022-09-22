@@ -195,7 +195,7 @@ The last step is to introduce the new parameters we are using in the new Cluster
   type: string
 ```
 
-- Modify the existing parameter **IMAGE_NAME** that points to your local registry. **Replace** `<DOMAIN_NAME>` with the value of your Quay repository URL:
+- Modify the existing parameter **IMAGE_NAME** to point to your local registry:
 
 ```yaml
    - default: >-
@@ -246,7 +246,7 @@ Now it's time to configure and start the Pipeline. In the **Pipelines** view go 
     - **Secret name** : `quay-token`
     - **Access to** : `Image Registry`
     - **Authentication type** : `Basic Authentication`
-    - **Server URL** : `quay-quay-quay.apps.<DOMAIN_NAME>` (replacing the {DOMAIN_NAME})
+    - **Server URL** : `quay-quay-quay.apps.<DOMAIN>` (make sure to point to your cluster URL)
     - **Username** : `openshift_workshop-int+builder`
     - **Password or token** : the token you copied from the Quay robot account before ...
   - Then click on the checkmark below to add the secret

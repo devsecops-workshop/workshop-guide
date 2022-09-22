@@ -108,7 +108,7 @@ In the **OpenShift Web Console**:
 - Navigate to **Pipelines > Pipelines**
 - On the right click **Create > Pipeline**
 - Switch to **YAML view**
-- Replace the YAML with this making sure to update your two `Gitea` Repo URL's (Specifically replace the {YOUR_CLUSTER_HOSTNAME}):
+- Replace the YAML with this making sure the URL's are correct for your cluster (if the `DOMAIN` placeholder hasn't been replaced automatically, do it manually):
 
 ```yaml
 apiVersion: tekton.dev/v1beta1
@@ -138,14 +138,14 @@ spec:
       name: APP_NAME
       type: string
     - default: >-
-        https://repository-git.apps.{YOUR_CLUSTER_HOSTNAME}/gitea/quarkus-build-options.git
+        https://repository-git.apps.<DOMAIN>/gitea/quarkus-build-options.git
       name: GIT_REPO
       type: string
     - default: master
       name: GIT_REVISION
       type: string
     - default: >-
-        quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop:dev
+        quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int/workshop:dev
       name: IMAGE_NAME
       type: string
     - default: .
@@ -159,13 +159,13 @@ spec:
       params:
         - name: GIT_REPOSITORY
           value: >-
-            https://repository-git.apps.{YOUR_CLUSTER_HOSTNAME}/gitea/openshift-gitops-getting-started.git
+            https://repository-git.apps.<DOMAIN>/gitea/openshift-gitops-getting-started.git
         - name: CURRENT_IMAGE
           value: >-
-            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop:latest
+            quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int/workshop:latest
         - name: NEW_IMAGE
           value: >-
-            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop
+            quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int/workshop
         - name: NEW_DIGEST
           value: $(tasks.build.results.IMAGE_DIGEST)
         - name: KUSTOMIZATION_PATH
@@ -227,7 +227,7 @@ spec:
           value: roxsecrets
         - name: image
           value: >-
-            quay-quay-quay.apps.{YOUR_CLUSTER_HOSTNAME}/openshift_workshop-int/workshop
+            quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int/workshop
         - name: image_digest
           value: $(tasks.build.results.IMAGE_DIGEST)
       runAfter:

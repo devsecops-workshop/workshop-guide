@@ -148,13 +148,13 @@ Remember how we edited the pipeline directly in yaml before? OpenShift comes wit
 {{% /notice %}}
 
 - Hover your mouse over **build** task and click the **+** at the right side side of it, to add a task
-- This will open a task selector where you can choose to your **rox-image-check** and double-click to add it to the pipeline
+- This will open a task selector where you can choose your **rox-image-check** task and double-click it to add to the pipeline
 - To add the required parameters from the pipeline for the task, click the **rox-image-check** task.
 - A form with the parameters will open, fill it in:
 
   - **rox_central_endpoint**: `roxsecrets`
   - **rox_api_token**: `roxsecrets`
-  - **image**: `quay-quay-quay.apps.{YOUR DOMAIN NAME}/openshift_workshop-int/workshop` (replacing {YOUR DOMAIN NAME})
+  - **image**: `quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int/workshop` (if the `DOMAIN` placeholder hasn't been replaced automatically, do it manually)
   - Adapt the Project name if you changed it
 
 - **image_digest**: $(tasks.build.results.IMAGE_DIGEST)

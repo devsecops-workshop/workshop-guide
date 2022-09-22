@@ -10,14 +10,14 @@ window.onload = function () {
   });
 
   // Replace Domain Placeholder with dynamic parameter 'domain'
-  const domain = params.hostname;
+  const domain = params.domain;
   if (domain != null) {
     console.log("Replacing domain domain -> " + domain);
     var html = document.querySelector("html");
     var walker = document.createTreeWalker(html, NodeFilter.SHOW_TEXT);
     var node;
     while ((node = walker.nextNode())) {
-      node.nodeValue = node.nodeValue.replace(/<DOMAIN_NAME>/, domain);
+      node.nodeValue = node.nodeValue.replace(/<DOMAIN>/, domain);
     }
   }
 
