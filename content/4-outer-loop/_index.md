@@ -176,7 +176,7 @@ Now we have to extend the Task:
       runAsUser: 65532
 ```
 
-- Click **Save**
+- Click **Create**
 
 ### Modify the Pipeline
 
@@ -237,7 +237,7 @@ You are done with adapting the Pipeline to use the Quay registry! Give it a try:
 Now it's time to configure and start the Pipeline. In the **Pipelines** view go to the top right menu and choose **Actions -> Start**. In the **Start Pipeline** window that opens add the secret for accessing the Quay repo:
 
 - Add a **Secret** with the repo's Quay Robot Account to enable the Pipeline Service Account to authenticate against Quay.
-- Switch to the Quay Portal and click on the `openshift_workshop-int / workshop` repository
+  - Switch to the Quay Portal and click on the `openshift_workshop-int / workshop` repository
   - On the left click on **Settings**
   - Click on the `openshift_workshop-int+builder` Robot account and copy the username and token
 - Back in the **Start Pipeline** form
@@ -248,7 +248,7 @@ Now it's time to configure and start the Pipeline. In the **Pipelines** view go 
     - **Authentication type** : `Basic Authentication`
     - **Server URL** : `quay-quay-quay.apps.<DOMAIN_NAME>` (replacing the {DOMAIN_NAME})
     - **Username** : `openshift_workshop-int+builder`
-    - **Secret name** : the token you copied from the Quay robot account before ...
+    - **Password or token** : the token you copied from the Quay robot account before ...
   - Then click on the checkmark below to add the secret
   - The secret has just been added and will be mounted automatically everytime the pipeline runs
 - Hit **Start**
