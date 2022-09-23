@@ -1,0 +1,129 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  labels:
+    app.kubernetes.io/instance: workshop
+    app.kubernetes.io/name: workshop
+    operator.tekton.dev/operand-name: openshift-pipelines-addons
+    pipeline.openshift.io/runtime: java
+    pipeline.openshift.io/runtime-version: openjdk-17-ubi8
+    pipeline.openshift.io/type: kubernetes
+  name: workshop
+  namespace: workshop-int
+spec:
+  params:
+  - default: workshop
+    name: APP_NAME
+    type: string
+  - default: https://github.com/devsecops-workshop/quarkus-build-options.git
+    name: GIT_REPO
+    type: string
+  - name: GIT_REVISION
+    type: string
+  - default: quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int/workshop
+    name: IMAGE_NAME
+    type: string
+  - default: .
+    name: PATH_CONTEXT
+    type: string
+  - default: openjdk-17-ubi8
+    name: VERSION
+    type: string
+  - default: workshop
+    name: IMAGESTREAM
+    type: string
+  - default: latest
+    name: IMAGESTREAMTAG
+    type: string
+  - default: quay-quay-quay.apps.cluster-2mb4j.2mb4j.sandbox411.opentlc.com
+    name: QUAY_URL
+    type: string
+  - default: https://repository-git.apps.cluster-2mb4j.2mb4j.sandbox411.opentlc.com/gitea/openshift-gitops-getting-started.git
+    name: GIT_CONFIG_REPO
+    type: string
+  tasks:
+  - name: fetch-repository
+    params:
+    - name: url
+      value: $(params.GIT_REPO)
+    - name: revision
+      value: $(params.GIT_REVISION)
+    - name: deleteExisting
+      value: "true"
+    taskRef:
+      kind: ClusterTask
+      name: git-clone
+    workspaces:
+    - name: output
+      workspace: workspace
+  - name: build
+    params:
+    - name: IMAGE
+      value: $(params.IMAGE_NAME)
+    - name: TLSVERIFY
+      value: "false"
+    - name: PATH_CONTEXT
+      value: $(params.PATH_CONTEXT)
+    - name: VERSION
+      value: $(params.VERSION)
+    - name: IMAGESTREAM
+      value: $(params.IMAGESTREAM)
+    - name: IMAGESTREAMTAG
+      value: $(params.IMAGESTREAMTAG)
+    runAfter:
+    - fetch-repository
+    taskRef:
+      kind: ClusterTask
+      name: s2i-java-workshop
+    workspaces:
+    - name: source
+      workspace: workspace
+  - name: deploy
+    params:
+    - name: SCRIPT
+      value: oc rollout status deploy/$(params.APP_NAME)
+    runAfter:
+    - build
+    taskRef:
+      kind: ClusterTask
+      name: openshift-client
+  - name: skopeo-copy
+    params:
+    - name: srcImageURL
+      value: docker://$(params.QUAY_URL)/openshift_workshop-int/workshop:latest
+    - name: destImageURL
+      value: docker://$(params.QUAY_URL)/openshift_workshop-prod/workshop:latest
+    - name: srcTLSverify
+      value: "false"
+    - name: destTLSverify
+      value: "false"
+    runAfter:
+    - build
+    taskRef:
+      kind: ClusterTask
+      name: skopeo-copy
+    workspaces:
+    - name: images-url
+      workspace: workspace
+  - name: git-update-deployment
+    params:
+    - name: GIT_REPOSITORY
+      value: $(params.GIT_CONFIG_REPO)
+    - name: CURRENT_IMAGE
+      value: image-registry.openshift-image-registry.svc:5000/workshop-prod/workshop:latest
+    - name: NEW_IMAGE
+      value: image-registry.openshift-image-registry.svc:5000/workshop-prod/workshop
+    - name: NEW_DIGEST
+      value: $(tasks.build.results.IMAGE_DIGEST)
+    - name: KUSTOMIZATION_PATH
+      value: environments/dev
+    runAfter:
+    - skopeo-copy
+    taskRef:
+      kind: Task
+      name: git-update-deployment
+    workspaces:
+    - name: workspace
+      workspace: workspace
+  workspaces:
+  - name: workspace
