@@ -11,10 +11,10 @@ So let's start be installing the OpenShift GitOps Operator based on project Argo
 
 - Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with default settings
   {{% notice tip %}}
-  The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.  
+  The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.
   {{% /notice %}}
-- Create a new OpenShift Project `workshop-prod`
-- Then in the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
+- You should already have created an OpenShift **Project** `workshop-prod`
+- In the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
 - On the **ArgoCD** "tile" click on **Create instance** to create an ArgoCD instance in the `workshop-prod` project.
 
 <!-- ![ArgoCD](../images/argo.png) -->
@@ -59,7 +59,7 @@ ArgoCD works with the concept of **Apps**. We will create an App and point it to
   - **Application Name**: workshop
   - **Project**: default
   - **SYNC POLICY**: Automatic
-  - **Repository URL**: Copy the URL of your config repo from Gitea (It should resemble `http://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
+  - **Repository URL**: Copy the URL of your config repo from Gitea
   - **Path**: environments/dev
   - **Cluster URL**: https://kubernetes.default.svc
   - **Namespace**: workshop-prod
@@ -241,11 +241,11 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
 Add the new Task to your Pipeline by adding it to the YAML like this:
 
 - First we will add a new Pipeline Parameter 'GIT_CONFIG_REPO' at the beginning of the Pipeline and set it by default to our GitOps Config Repository (This will be updated by the Pipeline and then trigger ArgoCD to deploy to Prod)
-- So in the YAML view at the end of the `spec > params` section add and replace {YOUR_DOMAIN_NAME}
+- So in the YAML view at the end of the `spec > params` section add the following (if the `DOMAIN` placeholder hasn't been replaced automatically, do it manually):
 
 ```yaml
 - default: >-
-      https://repository-git.apps.{YOUR_DOMAIN_NAME}/gitea/openshift-gitops-getting-started.git
+      https://repository-git.apps.<DOMAIN>/gitea/openshift-gitops-getting-started.git
     name: GIT_CONFIG_REPO
     type: string
 ```
@@ -289,7 +289,7 @@ The `Pipeline` should now look like this. Notice that the new `task` runs in par
 
 {{< figure src="../images/pipeline1.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-- Create a **Secret** with credentials for your **Gitea** repository, so the **task** can authenticate and push to `Gitea`. Replace {YOUR_DOMAIN_NAME} here to match your `Gitea`URL
+- Create a **Secret** with credentials for your **Gitea** repository, so the **task** can authenticate and push to `Gitea`. If the `DOMAIN` placeholder hasn't been replaced automatically, do it manually to match your `Gitea` URL
 - You can add this by clicking on the **+** on the top right ob the Web Console
 
 ```yaml
@@ -299,7 +299,7 @@ metadata:
   name: gitea
   namespace: workshop-int
   annotations:
-    tekton.dev/git-0: "https://repository-git.apps.{YOUR_DOMAIN_NAME}/gitea/openshift-gitops-getting-started.git"
+    tekton.dev/git-0: "https://repository-git.apps.<DOMAIN>/gitea/openshift-gitops-getting-started.git"
 data:
   password: Z2l0ZWE=
   username: Z2l0ZWE=
@@ -321,7 +321,7 @@ Now we need to add the secret to the `serviceaccount` that runs our pipelines so
 
 - Run the pipeline and see that in your Gitea repo `/environment/dev/kustomize.yaml` is updated with the new image version
   {{% notice tip %}}
-  Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the powers of Tekton. It can scale natively with pods on OpenShift.  
+  Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the powers of Tekton. It can scale natively with pods on OpenShift.
   {{% /notice %}}
 
 - This will tell ArgoCD to update the `Deployment` with this new image version
