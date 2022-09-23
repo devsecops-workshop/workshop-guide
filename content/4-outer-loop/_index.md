@@ -292,6 +292,11 @@ This will add a tag `java-old-image` that points to an older version of the RHEL
 
 We will use this tag to test our security setup in a later chapter.
 
+## Create a new Project
+
+For the subsequent exercises we need a new project:
+
+- Create a new OpenShift Project `workshop-prod`
 ## Architecture recap
 
 {{< figure src="../images/workshop_architecture_outer_loop.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}

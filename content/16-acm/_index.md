@@ -98,8 +98,9 @@ You'll get the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` needed to deploy 
   * Click **Next** again for proxy settings
   * Now you need to enter an OpenShift Pull Secret, copy it from your OCP cluster:
     * Switch to the project `openshift-config` and copy the content of the secret `pull-secret`
-  * To connect to the managed SNO you need to enter a SSH private key (`$HOME/.ssh/${GUID}key.pem`) and public key (`$HOME/.ssh/${GUID}key.pub`).
+  * To connect to the managed SNO you need to enter a SSH private key (`$HOME/.ssh/<LABID>key.pem`) and public key (`$HOME/.ssh/<LABID>key.pub`).
     * Use the respective keys from your lab environments bastion host, the access details will be provided.
+    * The `<LABID>` can be found in the URL, e.g. multicloud-console.apps.cluster-**z48z9**.z48z9.sandbox910.opentlc.com
   * Click **Next**
   * Click **Add**
 
@@ -146,4 +147,58 @@ After installation has finished, access the **Clusters** section in the ACM port
 
 {{< figure src="../images/acm-clusters.png?width=70pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-Explore the information ACM is providing,including the Console URL and the access credentials of your shiny new SNO instance. Use them to login to the SNO console.
+Explore the information ACM is providing, including the Console URL and the access credentials of your shiny new SNO instance. Use them to login to the SNO console.
+
+## Application Lifecycle Management
+
+In the previous lab, you explored the Cluster Lifecycle functionality of RHACM by deploying a new OpenShift single-node instance to AWS. Now let's have a look at another capability, Application Lifecycle management.
+
+Application Lifecycle management is used to manage applications on your clusters. This allows you to define a single or multi-cluster application using Kubernetes specifications, but with additional automation of the deployment and lifecycle management of resources to individual clusters. An application designed to run on a single cluster is straightforward and something you ought to be familiar with from working with OpenShift fundamentals. A multi-cluster application allows you to orchestrate the deployment of these same resources to multiple clusters, based on a set of rules you define for which clusters run the application components.
+
+The naming of the different components of the Application Lifecycle model in RHACM is as follows:
+
+* **Channel**: Defines a place where deployable resources are stored, such as an object store, Kubernetes namespace, Helm repository, or GitHub repository.
+* **Subscription**: Definitions that identify deployable resources available in a Channel resource that are to be deployed to a target cluster.
+* **PlacementRule**: Defines the target clusters where subscriptions deploy and maintain the application. It is composed of Kubernetes resources identified by the Subscription resource and pulled from the location defined in the Channel resource.
+* **Application**: A way to group the components here into a more easily viewable single resource. An Application resource typically references a Subscription resource.
+
+## Creating a Simple Application with ACM
+
+Start with adding labels to your two OpenShift clusters in your ACM console:
+
+* On the local cluster add a label: `environment=prod`
+* On the new SNO deployment add label: `environment=dev`
+
+{{< figure src="../images/acm-application1.png?width=60pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+Now it's time to actually deploy the application. But first have a look at the manifest definitions ACM will use as deployables at https://github.com/devsecops-workshop/book-import/tree/master/book-import.
+
+Then in the ACM console navigate to **Applications**:
+
+* Click **Create application**, select  **Subscription**
+* Make sure the view is set to YAML
+* **Name**: book-import
+* **Namespace**: book-import
+* Under **Repository location for resources** -> **Repository types**, select `GIT`
+* **URL**:  https://github.com/devsecops-workshop/book-import.git
+* **Branch**:  master
+* **Path**:  book-import
+* Select **Deploy application resources only on clusters matching specified labels**
+* **Label**: environment
+* **Value**: dev
+
+{{< figure src="../images/acm-application2.png?width=20pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+Click **Create**, after a few minutes you will see the application available in ACM. Click the application and have a look at the topology view:
+
+{{< figure src="../images/acm-application3.png?width=20pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+* Select **Cluster**, the application should have been deployed to the SNO cluster because of the label `environment=dev`
+* Select the **Route** and click on the URL, this should take you to the Book Import application
+* Explore the other objects
+
+Now edit the application in the ACM console and change the label to `environment=prod`. What happens?
+
+In this simple example you have seen how to deploy an application to an OpenShift cluster using ACM. All manifests defining the application where kept in a Git repo, ACM then used the manifests to deploy the required objects into the target cluster.
+
+

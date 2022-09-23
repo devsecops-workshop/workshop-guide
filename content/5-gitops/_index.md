@@ -13,8 +13,8 @@ So let's start be installing the OpenShift GitOps Operator based on project Argo
   {{% notice tip %}}
   The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.
   {{% /notice %}}
-- Create a new OpenShift Project `workshop-prod`
-- Then in the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
+- You should already have created an OpenShift **Project** `workshop-prod`
+- In the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
 - On the **ArgoCD** "tile" click on **Create instance** to create an ArgoCD instance in the `workshop-prod` project.
 
 <!-- ![ArgoCD](../images/argo.png) -->
