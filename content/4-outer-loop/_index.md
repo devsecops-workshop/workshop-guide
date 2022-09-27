@@ -131,20 +131,28 @@ To leverage our brand new Quay registry we need to modify the Pipeline so it pus
 
 ### Create a new `s2i-java` ClusterTask
 
-The first thing is to create a new source-to-image Task by copying and modifying the default `s2i-java` task to automatically update the **ImageStream** to point to Quay:
+The first thing is to create a new source-to-image Task to automatically update the **ImageStream** to point to Quay. You could of course copy and modify the default `s2i-java` task using the build-in YAML editor of the web console. But to make this as painless as possible we have prepared the needed YAML object definition for you already.
+
+- Login to your bastion host via SSH, from here you can run `oc` commands
+- Clone the Git repo with the YAML files you'll need: `git clone https://github.com/devsecops-workshop/yaml.git`
+- Change into the `yaml` directory
+- Apply the first YAML: `oc create -f s2i-java-workshop.yml`
+
+{{% notice tip %}}
+You can do the above steps from any Linux system where you set up the `oc` command.
+{{% /notice %}}
+
+You should now have a new **ClusterTask** named `s2i-java-workshop`, go to the web console and check:
 
 - Switch to the **Administrator** console
 - Switch to the `workshop-int` Project
 - Go to **Pipelines**->**Tasks**->**ClusterTasks**
-- Search for the `s2i-java` ClusterTask and open it
-- Switch to the YAML view and copy the content
-- Go back to the **Tasks** view, click the **Create** drop-down and choose **Task**
-- Replace the YAML content with the content you just copied
-- Change the `name:` to `s2i-java-workshop`
+- Search for the `s2i-java-workshop` ClusterTask and open it
+- Switch to the YAML view
 
-Now we have to extend the Task:
+Please take the time to review the additions to the default `s2i-java` task:
 
-- In the `params` section add two new parameters (take care of the indentation):
+- In the `params` section are two new parameters:
 
 ```yaml
 - default: ''
@@ -157,7 +165,7 @@ Now we have to extend the Task:
     type: string
 ```
 
-- At the end of the `steps` section before `volumes` starts, add the following, this will actually do the magic of tagging the image:
+- At the end of the `steps` section is a new step:
 
 ```yaml
 - env:
@@ -176,15 +184,29 @@ Now we have to extend the Task:
       runAsUser: 65532
 ```
 
-- Click **Create**
-
 ### Modify the Pipeline
 
-The last step is to introduce the new parameters we are using in the new ClusterTask into the Pipeline configuration:
+After adding the new task we need to modify the pipeline to:
+
+- Introduce the new parameters into the Pipeline configuration
+- Use the new `s2i-java-workshop` task
+
+To make this easier we again provide you with a full YAML definition of the Pipeline. Do the following:
+
+- Bring up the terminal and make sure you are in the `yaml` directory.
+
+{{% notice tip %}}
+If you use this lab guide with your domain as query parameter, you are good to go with the command, if not, you have to replace \<DOMAIN> manually in the following command.
+{{% /notice %}}
+
+- To replace the `DOMAIN` placeholder with your lab domain, run: `sed -i 's/DOMAIN/<DOMAIN>/g' workshop-pipeline-without-git-update.yml`
+- Apply the new definition: `oc replace -f workshop-pipeline-without-git-update.yml`
+
+Again take the time to review the changes in the web console:
 
 - In the menu go to **Pipelines->Pipelines**
 - Click the `workshop` Pipeline and switch to YAML
-- Add the following to the `params` section:
+- These are the new parameters in the pipeline:
 
 ```yaml
 - default: workshop
@@ -195,7 +217,7 @@ The last step is to introduce the new parameters we are using in the new Cluster
   type: string
 ```
 
-- Modify the existing parameter **IMAGE_NAME** to point to your local registry:
+- The preexisting parameter **IMAGE_NAME** now points to your local Quay registry:
 
 ```yaml
    - default: >-
@@ -204,9 +226,9 @@ The last step is to introduce the new parameters we are using in the new Cluster
       type: string
 ```
 
-And finally modify the `build` task:
+And finally the `build` task was modified:
 
-- Add the parameters below to the `params` section of the `build` task (discard the first four lines, they are only shown to make positioning easier):
+- The new parameters in the `params` section of the `build`:
 
 ```yaml
 tasks:
@@ -219,15 +241,13 @@ tasks:
           value: $(params.IMAGESTREAMTAG)
 ```
 
-- Still in the `build` task change the name of the `taskRef` to `s2i-java-workshop`:
+- The name of the `taskRef` was changed to `s2i-java-workshop`:
 
 ```yaml
 taskRef:
   kind: ClusterTask
   name: s2i-java-workshop
 ```
-
-- Click **Save**
 
 You are done with adapting the Pipeline to use the Quay registry! Give it a try:
 
