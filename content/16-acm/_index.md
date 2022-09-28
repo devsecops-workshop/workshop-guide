@@ -252,12 +252,13 @@ Create an Ansible Job Template:
 - **Inventory**: Demo Inventory
 - **Project**: ACM Test
 - **Playbook**: message.yml
+- Check **Prompt on launch** for **Variables**
 - Click **Save**
 - Click **Launch**
 
 Verify that the Job run by going to **Jobs** and looking for an `acm-test` job showing a successful Playbook run.
 
-### Create AAP credential in ACM
+### Create AAP credentials in ACM
 
 Set up the credential which is going to allow ACM to interact with your AAP instance in your ACM Portal:
 
