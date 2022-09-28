@@ -116,7 +116,7 @@ Now you'll deploy a new OpenShift instance:
 * **Cluster name**: aws-sno
 * **Cluster set**: none
 * **Base DNS Domain**: Set automatically from the credentials
-* **Release name**: Use the latest release available
+* **Release name**: Use the latest **4.10** release available
 * **Additional Label**: sno=true
 * Click **Next**
 * On the Node pools view leave the **Region** set to `us-east-1`
@@ -200,5 +200,99 @@ Click **Create**, after a few minutes you will see the application available in 
 Now edit the application in the ACM console and change the label to `environment=prod`. What happens?
 
 In this simple example you have seen how to deploy an application to an OpenShift cluster using ACM. All manifests defining the application where kept in a Git repo, ACM then used the manifests to deploy the required objects into the target cluster.
+
+## Pre/Post Tasks with Ansible Automation Platform 2
+
+You can integrate Ansible Automation Platform and the Automation Controller (formerly known as Ansible Tower) with ACM to perform pre / post tasks within the application lifecycle engine. The prehook and posthook task allows you to trigger an Ansible playbook before and after the application is deployed, respectively.
+
+### Install Automation Controller
+
+To give this a try you need an Automation Controller instance. So let's deploy one on your cluster using the AAP Operator:
+
+- In OperatorHub search for the `Ansible Automation Platform` operator and install it using the default settings.
+- After installation has finished create an Automation Controller instance using the Operator, name it `automationcontroller`
+- When the instance is ready, look up `automationcontroller-admin-password` instance
+- Then look up the `automationcontroller` route, access it and login as user `admin` using the password from the secret
+- Apply a manifest or use the username/password login to the Red Hat Customer Portal and add a subscription
+
+You are now set with a shiny new Ansible Automation Platform Controller!
+
+### Add Auth Token
+
+In the Automation Controller web UI, generate a token for the admin user:
+
+- Go to **Users**
+- Click `admin` and select **Tokens**
+- Click the **Add** button
+- As description add `Token for use by ACM`
+- Update the **Scope** to `Write`
+- Click **Save**
+
+Save the token value to a text file, you will need this token later!
+
+### Configure Template in Automation Controller
+
+For Automation Controller to run something we must configure a Project and a Template first.
+
+Create an Ansible Project:
+
+- Select **Projects** in the left menu
+- Click **Add**
+- **Name**: ACM Test
+- **Organization**: Default
+- **SCM Type**: Git
+- **SCM URL**:  https://github.com/devsecops-workshop/ansible-acm.git
+- Click **Save**
+
+Create an Ansible Job Template:
+
+- Select **Templates** in the left menu.
+- Click **Add** then **Add Job Template**
+- **Name**: acm-test
+- **Inventory**: Demo Inventory
+- **Project**: ACM Test
+- **Playbook**: message.yml
+- Click **Save**
+- Click **Launch**
+
+Verify that the Job run by going to **Jobs** and looking for an `acm-test` job showing a successful Playbook run.
+
+### Create AAP credential in ACM
+
+Set up the credential which is going to allow ACM to interact with your AAP instance in your ACM Portal:
+
+- Click on **Credentials** on the left menu and select **Add Credential** button.
+- **Credential type**: Red Hat Ansible Automation Platform
+- **Credential name**: appaccess
+- **Namespace**: open-cluster-management
+- Click **Next**
+- **Ansible Tower Host**: <Automation Controller instance URL>
+- **Ansible Tower token**: <admin user token you generated earlier>
+- Click **Next** and **Add**
+
+### Use the ACM - Ansible integration
+
+And now let's configure the ACM integration with Ansible Automation Platform to kick off a job in Automation Controller. In this case the Ansible job will just run our simple playbook that will only output a message.
+
+In the ACM Portal:
+
+- Go to the **Applications** menu on the left and click **Create application → Subscription**
+- Enter the following information:
+  - **Name**: book-import2
+  - **Namespace**: book-import2
+- Under **repository types**, select **GIT repository**
+- **URL**: https://github.com/devsecops-workshop/book-import.git
+- **Branch**: prehook
+- **Path**: book-import
+- Expand the **Configure automation for prehook and posthook** dropdown menu
+- **Ansible Automation Platform credential**: appaccess
+- Select **Deploy application resources only on clusters matching specified labels**
+- **Label**: environment
+- **Value**: dev
+- Click **Create**
+
+Give this a few minutes. The application will complete and in the application topology view you will see the Ansible prehook. In Automation Controller go to **Jobs** and verify the Automation Job run.
+
+
 
 
