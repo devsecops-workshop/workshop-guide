@@ -1,6 +1,7 @@
 +++
 title = "Advanced ACS Pipeline"
 weight = 31
+draft = true
 +++
 
 ## Optimizing our DevSecOps Pipeline

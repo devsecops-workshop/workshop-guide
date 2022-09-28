@@ -37,7 +37,8 @@ Change to the **OpenShift Web Console** and create a secret with the API token i
 - Create a new key/value `Secret` named **roxsecrets**
 - Introduce these key/values into the secret:
   - **rox_central_endpoint**: \<the URL to your **ACS Portal**>
-    - It should be something like central-stackrox.apps.cluster-psslb.psslb.sandbox555.opentlc.com:443
+    - If the `DOMAIN` placeholder was automatically replaced it should be: central-stackrox.apps.\<DOMAIN>:443
+    - If not, replace it manually with your DOMAIN
   - **rox_api_token**: \<the API token you generated>
 
 {{% notice tip %}}

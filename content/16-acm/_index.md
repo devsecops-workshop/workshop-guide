@@ -74,9 +74,9 @@ One of the main features of Advanced Cluster Management is cluster lifecycle man
 
 Let's give this a try!
 
-## Deploy a Single Node OpenShift
+## Deploy an OpenShift Cluster
 
-To not overstress our cloud ressources and for the fun of it we'll deploy a Single Node OpenShift to the same AWS account your lab cluster is running in.
+Okay, to not overstress our cloud ressources and for the fun of it we'll deploy a Single Node OpenShift to the same AWS account your lab cluster is running in.
 
 ### Create Cloud Credentials
 
