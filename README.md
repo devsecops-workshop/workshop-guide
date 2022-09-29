@@ -15,7 +15,7 @@ Staging (master branch) : https://devsecops-workshop.github.io/devsecops-worksho
 
 You can add query parameters to customize the for each partcipant content
 
-**hostname** : Enter the hostname of the OpenShift instance (just the part after \*apps.) and all occurences of placeholder <HOSTNAME> will be replaced in the guide
+**domain** : Enter the hostname of the OpenShift instance (just the part after \*apps.) and all occurences of placeholder <HOSTNAME> will be replaced in the guide
 
 **hidechapters** : Pass a : separated list of chapternumbers to be hidden (starting from 0)
 

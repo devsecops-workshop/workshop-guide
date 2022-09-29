@@ -94,6 +94,8 @@ After creation has finished:
 | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | {{< figure src="../images/gitea-lang1.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}} | {{< figure src="../images/gitea-lang2.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}} |
 
+Now we will clone a git repository of a sample application into our Gitea, so we have some code to works with
+
 - Clone the example repo:
   - Click the **+** dropdown and choose **New Migration**
   - As type choose **Git**
