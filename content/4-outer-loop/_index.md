@@ -68,7 +68,7 @@ Now that the Registry is installed you have to configure a superuser:
 - Login with the values of the secret from above
 - Click **Sign in**
 - Scroll down to **Access Settings**
-- As **Super User** but in `quayadmin`
+- As **Super User** put in `quayadmin`
 - click **Validate Configuration Changes** and after the validation click **Reconfigure Quay**
 
 Reconfiguring Quay takes some time. The easiest way to determine if it's been finished is to open the Quay portal (using the `quay-quay` Route). At the upper right you'll see the username (`quayadmin`), if you click the username the drop-down should show a link **Super User Admin Panel**. When it shows up you can proceed.
