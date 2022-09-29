@@ -230,7 +230,9 @@ spec:
       name: workspace
 ```
 
-## Add Tekton Task to Your Pipeline
+## Add Tekton Tasks to your Pipeline to Promote your Image to workshop-prod
+
+So now we a new Tekton Task our catalog to update a Gitops Git repo, but we still need to pomote the actual Image from out workshop-int to workshop-prod project. Otherwise the image will not be available for our Deployment.
 
 - Go to **Pipelines > Pipelines > workshop** and then YAML
 
@@ -259,6 +261,24 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
 {{% /notice %}}
 
 ```yaml
+- name: skopeo-copy
+      params:
+        - name: srcImageURL
+          value: 'docker://$(params.QUAY_URL)/openshift_workshop-int/workshop:latest'
+        - name: destImageURL
+          value: 'docker://$(params.QUAY_URL)/openshift_workshop-prod/workshop:latest'
+        - name: srcTLSverify
+          value: 'false'
+        - name: destTLSverify
+          value: 'false'
+      runAfter:
+        - build
+      taskRef:
+        kind: ClusterTask
+        name: skopeo-copy
+      workspaces:
+        - name: images-url
+          workspace: workspace
 - name: git-update-deployment
   params:
     - name: GIT_REPOSITORY
@@ -274,7 +294,7 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
     - name: KUSTOMIZATION_PATH
       value: environments/dev
   runAfter:
-    - build
+    - buiskopeo-copy
   taskRef:
     kind: Task
     name: git-update-deployment
@@ -283,43 +303,37 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
       workspace: workspace
 ```
 
-The `Pipeline` should now look like this. Notice that the new `task` runs in parallel to the `deploy` task
+The `Pipeline` should now look like this. Notice that the new `tasks` runs in parallel to the `deploy` task
 
 <!-- ![workshop Pipeline](../images/tekton.png) -->
 
 {{< figure src="../images/pipeline1.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-- Create a **Secret** with credentials for your **Gitea** repository, so the **task** can authenticate and push to `Gitea`. If the `DOMAIN` placeholder hasn't been replaced automatically, do it manually to match your `Gitea` URL
-- You can add this by clicking on the **+** on the top right ob the Web Console
-
-```yaml
-kind: Secret
-apiVersion: v1
-metadata:
-  name: gitea
-  namespace: workshop-int
-  annotations:
-    tekton.dev/git-0: "https://repository-git.apps.<DOMAIN>/gitea/openshift-gitops-getting-started.git"
-data:
-  password: Z2l0ZWE=
-  username: Z2l0ZWE=
-type: kubernetes.io/basic-auth
-```
-
-Now we need to add the secret to the `serviceaccount` that runs our pipelines so the `task` can push to our config repo.
-
-- Go to **User Management > ServiceAccounts > pipeline**
-- To make the secret available during a pipeline run: Open the YAML and in the `secrets` section add:
-
-```yaml
-- name: gitea
-```
-
-- Save and ignore the warning
+Now the pipeline is set. The last thing we need is authentication against the Gitea repo and the workshop-prod Quay org. We will add those from the `start pipeline` form next.
 
 ## Update our Prod Stage via Pipeline and GitOps
 
-- Run the pipeline and see that in your Gitea repo `/environment/dev/kustomize.yaml` is updated with the new image version
+- Click on Pipeline **Start**
+
+  - In the form go down and expand **Show credential options**
+  - Click **Add Secret**, then enter
+    - **Secret name :** quay-workshop-prod-token
+    - **Access to:** Image Registry
+    - **Authentication type:** Basic Authentication
+    - **Server URL:**quay-quay-quay.apps.<DOMAIN>/openshift_workshop-prod
+    - **Username:** openshift_workshop-prod+builder
+    - **Password** : (Retrieve this from the Quay org openshift_workshop-int as before)
+    - Click the checkmark
+  - Then click **Add Secret** again
+    - **Secret name :** gitea-secret
+    - **Access to:** Git Server
+    - **Authentication type:** Basic Authentication
+    - **Server URL:**https://repository-git.apps.<DOMAIN>/gitea/openshift-gitops-getting-started.git
+    - **Username:** gitea
+    - **Password** : gitea
+    - Click the checkmark
+
+- Run the pipeline by clicking **Start** and see that in your Gitea repo `/environment/dev/kustomize.yaml` is updated with the new image version
   {{% notice tip %}}
   Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the powers of Tekton. It can scale natively with pods on OpenShift.
   {{% /notice %}}
@@ -330,4 +344,3 @@ Now we need to add the secret to the `serviceaccount` that runs our pipelines so
 ## Architecture recap
 
 {{< figure src="../images/workshop_architecture_gitops.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-
