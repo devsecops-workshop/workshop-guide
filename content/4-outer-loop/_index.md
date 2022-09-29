@@ -254,19 +254,18 @@ You are done with adapting the Pipeline to use the Quay registry! Give it a try:
 - First go to the Quay portal to the `openshift_workshop-int` organization.
 - In the `openshift_workshop-int / workshop` repository access **Tags** in the menu to the left. There should be no image (yet).
 
-Now it's time to configure and start the Pipeline. In the **Pipelines** view go to the top right menu and choose **Actions -> Start**. In the **Start Pipeline** window that opens add the secret for accessing the Quay repo:
+Now it's time to configure and start the Pipeline. In the **Pipelines** view go to the top right menu and choose **Actions -> Start**. In the **Start Pipeline** window that opens, but **before** starting the actual pipeline we need to add a Secret so pipeline can authenticate and push against the Quay repo:
 
-- Add a **Secret** with the repo's Quay Robot Account to enable the Pipeline Service Account to authenticate against Quay.
-  - Switch to the Quay Portal and click on the `openshift_workshop-int / workshop` repository
-  - On the left click on **Settings**
-  - Click on the `openshift_workshop-int+builder` Robot account and copy the username and token
+- Switch to the Quay Portal and click on the `openshift_workshop-int / workshop` repository
+- On the left click on **Settings**
+- Click on the `openshift_workshop-int+builder` Robot account and copy the username and token
 - Back in the **Start Pipeline** form
   - At the buttom, click on **Show credential options** and then **Add secret**
   - Set these values
-    - **Secret name** : `quay-token`
+    - **Secret name** : `quay-workshop-int-token`
     - **Access to** : `Image Registry`
     - **Authentication type** : `Basic Authentication`
-    - **Server URL** : `quay-quay-quay.apps.<DOMAIN>` (make sure to point to your cluster URL)
+    - **Server URL** : `quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int` (make sure to point to your cluster URL)
     - **Username** : `openshift_workshop-int+builder`
     - **Password or token** : the token you copied from the Quay robot account before ...
   - Then click on the checkmark below to add the secret
@@ -317,7 +316,7 @@ We will use this tag to test our security setup in a later chapter.
 For the subsequent exercises we need a new project:
 
 - Create a new OpenShift Project `workshop-prod`
+
 ## Architecture recap
 
 {{< figure src="../images/workshop_architecture_outer_loop.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-
