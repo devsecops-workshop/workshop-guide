@@ -7,9 +7,9 @@ weight = 40
 
 Red Hat Advanced Cluster Management for Kubernetes (ACM) provides management, visibility and control for your OpenShift and Kubernetes environments. It provides management capabilities for:
 
-* cluster creation
-* application lifecycle
-* security and compliance
+- cluster creation
+- application lifecycle
+- security and compliance
 
 All across hybrid cloud environments.
 
@@ -26,14 +26,9 @@ Before you can start using ACM, you have to install it using an Operator on your
 
 After the operator has been installed it will inform you to create a `MultiClusterHub`, the central component of ACM.
 
-
 {{< figure src="../images/acm-install1.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 Click the **Create MultiClusterHub** button and have a look at the available installation parameters, but don't change anything.
-
-{{% notice tip %}}
-Take note of the `Disable Hub Self Management` option. Leaving this set to `false` will add the cluster ACM is installed on as a managed cluster to ACM. You might not want this if you have a dedicated management cluster, for this lab leave as is.
-{{% /notice %}}
 
 Click **Create**.
 
@@ -45,12 +40,12 @@ Okay, right now you'll only see one, your `local-cluster` listend here.
 
 Now let's change to the full ACM console:
 
-* Switch back to the `local-clusters` view
-* Go to **Operators**->**Installed operators** and click the **Advanced Cluster Management for Kubernetes** operator
-* In the operator overview page choose the **MultiClusterHub** tab.
-* The `multiclusterhub` instance you deployed should be in **Status** `Running` by now.
-* Look up the route for the `multicloud-console` and access it.
-* Click the **Log in with OpenShift** button and login with your OpenShift account.
+- Switch back to the `local-clusters` view
+- Go to **Operators**->**Installed operators** and click the **Advanced Cluster Management for Kubernetes** operator
+- In the operator overview page choose the **MultiClusterHub** tab.
+- The `multiclusterhub` instance you deployed should be in **Status** `Running` by now.
+- Look up the route for the `multicloud-console` and access it.
+- Click the **Log in with OpenShift** button and login with your OpenShift account.
 
 You are now in your ACM dashboard!
 
@@ -58,19 +53,19 @@ You are now in your ACM dashboard!
 
 Have a look around:
 
-* Go to **Infrastructure**->**Clusters**
-* You'll see your lab OpenShift cluster here, the infrastructure it's running on and the version.
-  * There might be a version update available, don't run it please... ;)
-* If you click the cluster name, you'll get even more information, explore!
+- Go to **Infrastructure**->**Clusters**
+- You'll see your lab OpenShift cluster here, the infrastructure it's running on and the version.
+  - There might be a version update available, don't run it please... ;)
+- If you click the cluster name, you'll get even more information, explore!
 
 ## Manage Cluster Lifecycle
 
 One of the main features of Advanced Cluster Management is cluster lifecycle management. ACM can help to:
 
-* manage credentials
-* deploy clusters to different cloud providers and on-premise
-* import existing clusters
-* use labels on clusters for management purposes
+- manage credentials
+- deploy clusters to different cloud providers and on-premise
+- import existing clusters
+- use labels on clusters for management purposes
 
 Let's give this a try!
 
@@ -86,23 +81,23 @@ The first step is to create credentials in ACM to deploy to the Amazon Web Servi
 You'll get the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` needed to deploy to AWS from your facilitators.
 {{% /notice %}}
 
-* On your OpenShift cluster, create a new namespace `sno`
-* In the ACM web console, navigate to **Credentials** and click **Add credential**:
-  * As **Credential type** select `AWS`
-  * **Credential name**: sno
-  * **Namespace**: Choose the `sno` namespace
-  * **Base DNS domain**: `sandbox<NNNN>.opentlc.com`, replace `<NNNN>` with your id, you can find it e.g. in the URL
-  * Click **Next**
-  * Now you need to enter the AWS credentials, enter the `Access key ID` and `Secret access key` as provided.
-  * Click **Next**
-  * Click **Next** again for proxy settings
-  * Now you need to enter an OpenShift Pull Secret, copy it from your OCP cluster:
-    * Switch to the project `openshift-config` and copy the content of the secret `pull-secret`
-  * To connect to the managed SNO you need to enter a SSH private key (`$HOME/.ssh/<LABID>key.pem`) and public key (`$HOME/.ssh/<LABID>key.pub`).
-    * Use the respective keys from your lab environments bastion host, the access details will be provided.
-    * The `<LABID>` can be found in the URL, e.g. multicloud-console.apps.cluster-**z48z9**.z48z9.sandbox910.opentlc.com
-  * Click **Next**
-  * Click **Add**
+- On your OpenShift cluster, create a new namespace `sno`
+- In the ACM web console, navigate to **Credentials** and click **Add credential**:
+  - As **Credential type** select `AWS`
+  - **Credential name**: sno
+  - **Namespace**: Choose the `sno` namespace
+  - **Base DNS domain**: `sandbox<NNNN>.opentlc.com`, replace `<NNNN>` with your id, you can find it e.g. in the URL
+  - Click **Next**
+  - Now you need to enter the AWS credentials, enter the `Access key ID` and `Secret access key` as provided.
+  - Click **Next**
+  - Click **Next** again for proxy settings
+  - Now you need to enter an OpenShift Pull Secret, copy it from your OCP cluster:
+    - Switch to the project `openshift-config` and copy the content of the secret `pull-secret`
+  - To connect to the managed SNO you need to enter a SSH private key (`$HOME/.ssh/<LABID>key.pem`) and public key (`$HOME/.ssh/<LABID>key.pub`).
+    - Use the respective keys from your lab environments bastion host, the access details will be provided.
+    - The `<LABID>` can be found in the URL, e.g. multicloud-console.apps.cluster-**z48z9**.z48z9.sandbox910.opentlc.com
+  - Click **Next**
+  - Click **Add**
 
 You have created a new set of credentials to deploy to the AWS account you are using.
 
@@ -110,30 +105,30 @@ You have created a new set of credentials to deploy to the AWS account you are u
 
 Now you'll deploy a new OpenShift instance:
 
-* In the ACM console, navigate to **Infrastructure** -> **Clusters** and click **Create cluster**.
-* As provider choose **Amazon Web Services**
-* **Infrastructure provider credential**: Select the `sno` credential you created.
-* **Cluster name**: aws-sno
-* **Cluster set**: none
-* **Base DNS Domain**: Set automatically from the credentials
-* **Release name**: Use the latest **4.10** release available
-* **Additional Label**: sno=true
-* Click **Next**
-* On the Node pools view leave the **Region** set to `us-east-1`
-* **Architecture**: amd64
-* Expand **Control plane pool**
-  * read the information for **Zones** (and leave the setting empty)
-  * change **Instance Type** to `m5.2xlarge`.
-* Expand **Worker pool 1**:
-  * Set **Node count** to `0` (we want a single node OCP...).
-* Click **Next**
-* Have a look at the network screen but don't change anything
+- In the ACM console, navigate to **Infrastructure** -> **Clusters** and click **Create cluster**.
+- As provider choose **Amazon Web Services**
+- **Infrastructure provider credential**: Select the `sno` credential you created.
+- **Cluster name**: aws-sno
+- **Cluster set**: Leave empty ...
+- **Base DNS Domain**: Set automatically from the credentials
+- **Release name**: Use the latest **4.10** release available
+- **Additional Label**: sno=true
+- Click **Next**
+- On the Node pools view leave the **Region** set to `us-east-1`
+- **Architecture**: amd64
+- Expand **Control plane pool**
+  - read the information for **Zones** (and leave the setting empty)
+  - change **Instance Type** to `m5.2xlarge`.
+- Expand **Worker pool 1**:
+  - Set **Node count** to `0` (we want a single node OCP...).
+- Click **Next**
+- Have a look at the network screen but don't change anything
 
 Now click **Next** until you arrive at the **Review**. Do the following:
 
-* Set `YAML: On`
-* In the **cluster YAML** editor select the **install-config**
-* In the `controlPlane` section change the `replicas` field to `1`.
+- Set `YAML: On`
+- In the **cluster YAML** editor select the **install-config** tab
+- In the `controlPlane` section change the `replicas` field to `1`.
 
 It's time to deploy your cluster, click **Create**!
 
@@ -157,17 +152,17 @@ Application Lifecycle management is used to manage applications on your clusters
 
 The naming of the different components of the Application Lifecycle model in RHACM is as follows:
 
-* **Channel**: Defines a place where deployable resources are stored, such as an object store, Kubernetes namespace, Helm repository, or GitHub repository.
-* **Subscription**: Definitions that identify deployable resources available in a Channel resource that are to be deployed to a target cluster.
-* **PlacementRule**: Defines the target clusters where subscriptions deploy and maintain the application. It is composed of Kubernetes resources identified by the Subscription resource and pulled from the location defined in the Channel resource.
-* **Application**: A way to group the components here into a more easily viewable single resource. An Application resource typically references a Subscription resource.
+- **Channel**: Defines a place where deployable resources are stored, such as an object store, Kubernetes namespace, Helm repository, or GitHub repository.
+- **Subscription**: Definitions that identify deployable resources available in a Channel resource that are to be deployed to a target cluster.
+- **PlacementRule**: Defines the target clusters where subscriptions deploy and maintain the application. It is composed of Kubernetes resources identified by the Subscription resource and pulled from the location defined in the Channel resource.
+- **Application**: A way to group the components here into a more easily viewable single resource. An Application resource typically references a Subscription resource.
 
 ## Creating a Simple Application with ACM
 
 Start with adding labels to your two OpenShift clusters in your ACM console:
 
-* On the local cluster add a label: `environment=prod`
-* On the new SNO deployment add label: `environment=dev`
+- On the local cluster add a label: `environment=prod`
+- On the new SNO deployment add label: `environment=dev`
 
 {{< figure src="../images/acm-application1.png?width=60pc&classes=border,shadow" title="Click image to enlarge" >}}
 
@@ -175,17 +170,17 @@ Now it's time to actually deploy the application. But first have a look at the m
 
 Then in the ACM console navigate to **Applications**:
 
-* Click **Create application**, select  **Subscription**
-* Make sure the view is set to YAML
-* **Name**: book-import
-* **Namespace**: book-import
-* Under **Repository location for resources** -> **Repository types**, select `GIT`
-* **URL**:  https://github.com/devsecops-workshop/book-import.git
-* **Branch**:  master
-* **Path**:  book-import
-* Select **Deploy application resources only on clusters matching specified labels**
-* **Label**: environment
-* **Value**: dev
+- Click **Create application**, select **Subscription**
+- Make sure the view is set to YAML
+- **Name**: book-import
+- **Namespace**: book-import
+- Under **Repository location for resources** -> **Repository types**, select `GIT`
+- **URL**: https://github.com/devsecops-workshop/book-import.git
+- **Branch**: master
+- **Path**: book-import
+- Select **Deploy application resources only on clusters matching specified labels**
+- **Label**: environment
+- **Value**: dev
 
 {{< figure src="../images/acm-application2.png?width=20pc&classes=border,shadow" title="Click image to enlarge" >}}
 
@@ -193,9 +188,9 @@ Click **Create**, after a few minutes you will see the application available in 
 
 {{< figure src="../images/acm-application3.png?width=20pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-* Select **Cluster**, the application should have been deployed to the SNO cluster because of the label `environment=dev`
-* Select the **Route** and click on the URL, this should take you to the Book Import application
-* Explore the other objects
+- Select **Cluster**, the application should have been deployed to the SNO cluster because of the label `environment=dev`
+- Select the **Route** and click on the URL, this should take you to the Book Import application
+- Explore the other objects
 
 Now edit the application in the ACM console and change the label to `environment=prod`. What happens?
 
@@ -211,7 +206,7 @@ To give this a try you need an Automation Controller instance. So let's deploy o
 
 - In OperatorHub search for the `Ansible Automation Platform` operator and install it using the default settings.
 - After installation has finished create an Automation Controller instance using the Operator, name it `automationcontroller`
-- When the instance is ready, look up `automationcontroller-admin-password` instance
+- When the instance is ready, look up `automationcontroller-admin-password` secret
 - Then look up the `automationcontroller` route, access it and login as user `admin` using the password from the secret
 - Apply a manifest or use the username/password login to the Red Hat Customer Portal and add a subscription
 
@@ -241,7 +236,7 @@ Create an Ansible Project:
 - **Name**: ACM Test
 - **Organization**: Default
 - **SCM Type**: Git
-- **SCM URL**:  https://github.com/devsecops-workshop/ansible-acm.git
+- **SCM URL**: https://github.com/devsecops-workshop/ansible-acm.git
 - Click **Save**
 
 Create an Ansible Job Template:
@@ -293,7 +288,3 @@ In the ACM Portal:
 - Click **Create**
 
 Give this a few minutes. The application will complete and in the application topology view you will see the Ansible prehook. In Automation Controller go to **Jobs** and verify the Automation Job run.
-
-
-
-

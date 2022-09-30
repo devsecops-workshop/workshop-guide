@@ -180,6 +180,7 @@ The last step is to enforce the System Policy. If the policy is violated the pip
 - Expected results:
   - We are sure you know by now what to expect!
   - The pipeline should fail with the old image version and succeed with the latest image version!
+  - Make sure you run the pipeline once, otherwise your application will not have valid image tag when you kill the running pod in the next chapter
 
 {{< figure src="../images/acs-enforce-policy.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
