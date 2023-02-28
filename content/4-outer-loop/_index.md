@@ -38,7 +38,7 @@ If you don't have the checkbox **Add pipeline** and get the message `There are n
 
 ## Install Red Hat Quay Container Registry
 
-The image that we have just deployed was pushed to the internal OpenShift Registry which is a great starting point for your cloud native journey. But if you require more control over you image repos, a graphical GUI, scalability, internal security scanning and the like you may want to upgrade to Red Hat Quay. So as a next step we want to replace the internal registry with Quay.
+The image that we have just deployed was pushed to the internal OpenShift Registry which is a great starting point for your cloud native journey. But if you require more control over you image repos, a graphical GUI, scalability, internal security scanning and the like you may want to upgrade to **Red Hat Quay**. So as a next step we want to replace the internal registry with Quay.
 
 Quay installation is done through an operator, too:
 
@@ -80,25 +80,25 @@ Reconfiguring Quay takes some time. The easiest way to determine if it's been fi
 To synchronize the internal default OpenShift Registry with the Quay Registry, **Quay Bridge** is used.
 
 - In the OperatorHub of your cluster, search for the **Quay Bridge** Operator
-- Install it with default settings
-- While the Operator is installing, create a new Organization in Quay:
-  - Access the Quay Portal
+  - Install it with default settings
+- While the Operator is installing, create a new Organization in **Quay**:
+  - Access the **Quay** Portal
   - In the top _+_ menu click **Create New Organization**
     - Name it `openshift_integration`
   - Click **Create Organization**
 
 We need an OAuth Application in Quay for the integration:
 
-- In the Quay Portal, click the **Applications** icon in the menubar to the left
+- Again In the **Quay** Portal, click the **Applications** icon in the menubar to the left
 - Click **Create New Application** at the upper right
-  - Name it `openshift` and select it by clicking it
+  - Name it `openshift`, press Enter and click on the new `openshift` item by clicking it
 - In the menubar to the left click the **Generate Token** icon
   - Check all boxes and click **Generate Access token**
     {{< figure src="../images/quay-access-token.png?width=45pc&classes=border,shadow" title="Click image to enlarge" >}}
   - In the next view click **Authorize Application** and confirm
   - In the next view copy the **Access Token** and save it somewhere, we'll need it again
 
-Now we finally create an Quay Bridge instance. In the OpenShift web console make sure you are in the `quay` Project. Then:
+Now we finally create an **Quay Bridge** instance. In the OpenShift web console make sure you are in the `quay` Project. Then:
 
 - Create a new Secret
 
@@ -108,7 +108,7 @@ Now we finally create an Quay Bridge instance. In the OpenShift web console make
     - **Value**: paste the Access Token you generated in the Quay Portal before
     - Click **Create**
 
-- Go to the Red Hat Quay Bridge Operator overview (make sure you are in the `quay` namespace)
+- Go to the Red Hat **Quay Bridge** Operator overview (make sure you are in the `quay` namespace)
 - On the **Quay Integration** tile click **Create Instance**
   - Open **Credentials secret**
     - **Namespace containing the secret**: `quay`
