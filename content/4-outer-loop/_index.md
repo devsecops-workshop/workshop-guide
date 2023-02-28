@@ -58,7 +58,7 @@ Quay installation is done through an operator, too:
 Now that the Registry is installed you have to configure a superuser:
 
 - Make sure you are in the `quay` Project
-- Go to **Networking->Routes**, access the Quay portal using the first route (`quay-quay`)
+- Go to **Networking->Routes**, access the Quay portal using the URL of the first route (`quay-quay`)
 - Click **Create Account**
   - As username put in `quayadmin`, a (fake) email address and a password.
 - Click **Create Account** again

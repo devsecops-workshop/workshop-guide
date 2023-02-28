@@ -102,7 +102,7 @@ Now we will clone a git repository of a sample application into our Gitea, so we
   - **URL**: https://github.com/devsecops-workshop/quarkus-build-options.git
   - Click **Migrate Repository**
 
-In the cloned repository you'll find a `devfile_v2.yml`. We will need the URL to the file soon, so keep the tab open.
+In the cloned repository you'll find a `devspaces_devfile.yml`. We will need the URL to the file soon, so keep the tab open.
 
 ## Check OpenShift Data Foundation (ODF) Storage Deployment
 
