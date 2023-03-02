@@ -20,7 +20,7 @@ Let's install [OpenShift Data Foundation](https://www.redhat.com/en/technologies
 
 After the operator has been installed it will inform you to install a `StorageSystem`. From the operator overview page click `Create StorageSystem` with the following settings:
 
-- **Backing storage**: Leave `Deployment Type` `Full deployment` and for `Backing storage type` make sure `gp2` is selected.
+- **Backing storage**: Leave `Deployment Type` `Full deployment` and for `Backing storage type` leave the default `gp3-csi`.
 - Click **Next**
 - **Capacity and nodes**: Leave the `Requested capacity` as is (2 TiB) and select all nodes.
 - Click **Next**

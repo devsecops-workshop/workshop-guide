@@ -22,6 +22,7 @@ After installing the Operator create a new deployment of your game-changing appl
 - Switch to the **OpenShift Developer Console**
 - Click the **+Add** menu entry to the left and choose **Import from Git**
 - As **Git Repo URL** enter the clone URL for the `quarkus-build-options` repo in your your `Gitea` instance (There might be a warning about the repo url that you can ignore)
+- Set **Git type** to `Other`
 - Click **Show advanced Git options** and for **Git reference** enter `master`
 - As **Import Strategy** select `Builder Image`
 - As **Builder Image** select `Java` and `openjdk-11-el7 / Red Hat OpenJDK 11 (RHEL 7)`
@@ -48,11 +49,11 @@ Quay installation is done through an operator, too:
 - In the namespace go to **Administration->LimitRanges** and delete the `quay-core-resource-limits`
   {{< figure src="../images/delete-limit-range.png?width=45pc&classes=border,shadow" title="Click image to enlarge" >}}
 - In the operator overview of the Quay Operator on the **Quay Registry** tile click **Create instance**
-- If the _YAML view_ is shown sitch to _Form view_
+- If the _YAML view_ is shown switch to _Form view_
 - Make sure you are in the `quay` project
 - Change the name to `quay`
 - Click **Create**
-- Click the new Quayregistry, scroll down to **Conditions** and wait until the **Available** type changes to `True`
+- Click the new Quay registry, scroll down to **Conditions** and wait until the **Available** type changes to `True`
   {{< figure src="../images/quay-available.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 Now that the Registry is installed you have to configure a superuser:
@@ -68,7 +69,7 @@ Now that the Registry is installed you have to configure a superuser:
 - Login with the values of the secret from above
 - Click **Sign in**
 - Scroll down to **Access Settings**
-- As **Super User** put in `quayadmin`
+- As **Super User** put in `quayadmin`, click **Add**
 - click **Validate Configuration Changes** and after the validation click **Reconfigure Quay**
 
 Reconfiguring Quay takes some time. The easiest way to determine if it's been finished is to open the Quay portal (using the `quay-quay` Route). At the upper right you'll see the username (`quayadmin`), if you click the username the drop-down should show a link **Super User Admin Panel**. When it shows up you can proceed.
@@ -109,11 +110,11 @@ Now we finally create an **Quay Bridge** instance. In the OpenShift web console 
     - Click **Create**
 
 - Go to the Red Hat **Quay Bridge** Operator overview (make sure you are in the `quay` namespace)
-- On the **Quay Integration** tile click **Create Instance**
+- On the **Quay Integration** tile click **Create QuayIntegration**
   - Open **Credentials secret**
     - **Namespace containing the secret**: `quay`
     - **Key within the secret**: `token`
-  - Copy the Quay Portal hostname (including `https://`) and paste it into the **Quay Hostname** field
+  - Copy the Quay Portal hostname (including `https://`) and paste it into the **Quay Hostname** field (make sure not to paste the trailing slash).
   - Set **Insecure registry** to `true`
   - Click **Create**
 
@@ -200,6 +201,11 @@ If you use this lab guide with your domain as query parameter, you are good to g
 {{% /notice %}}
 
 - To replace the `DOMAIN` placeholder with your lab domain, run: `sed -i 's/DOMAIN/<DOMAIN>/g' workshop-pipeline-without-git-update.yml`
+
+{{% notice tip %}}
+Get the DOMAIN string from your browser, it should look like `cluster-wjwc7.wjwc7.sandbox2225.opentlc.com` with different IDs, of course.
+{{% /notice %}}
+
 - Apply the new definition: `oc replace -f workshop-pipeline-without-git-update.yml`
 
 Again take the time to review the changes in the web console:
