@@ -21,7 +21,7 @@ In the **ACS Portal**, go to **Platform Configuration->Policy Management**, sear
 You can use the included policies as they are but you can always e.g. clone and adapt them to your needs or write completely new ones.
 {{% /notice %}}
 
-As you can see the **Red Hat Package Manager Execution** policy will alert as soon as a process **rpm or dnf or yum** is executed.
+As you can see the **Red Hat Package Manager Execution** policy will alert as soon as a process **rpm or or microdnf or dnf or yum** is executed.
 
 {{% notice tip %}}
 Like with most included policies it is not set to enforce!

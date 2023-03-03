@@ -128,6 +128,7 @@ spec:
         ./roxctl image check -c Workshop --insecure-skip-tls-verify -e $ROX_CENTRAL_ENDPOINT
         --image $(params.image)@$(params.image_digest)
 ```
+- Click **Save**
 
 Take your time to **understand** the Tekton task definition:
 
@@ -171,18 +172,21 @@ With our custom **System Policy** still not set to `enforce` we first are going 
 - Expected Result:
   - The `rox-image-check` task should succeed, but if you have a look at the output (click the task in the visual representation) you should see that the **build violated our policy**!
 
+{{< figure src="../images/roxctl-pipeline-result.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 ## Enforce the Policy
 
 The last step is to enforce the System Policy. If the policy is violated the pipeline should be stopped and the application should not be deployed.
 
-- Edit your custom **System Policy** `Workshop RHSA-2021:4904` in **ACS Portal** and set **Response Method** to **Inform and enforce** and then switch on **Build** and **Deploy** below.
+- Edit your custom **System Policy** `Workshop RHSA-2021:4904` in **ACS Portal** and set **Response Method** to **Inform and enforce** and then switch on **Enforce on Build** and **Enforce on Deploy** like shown below.
+
+{{< figure src="../images/acs-enforce-policy.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 - Run the pipeline again, first with **Version** `java-old-image` and then with **Version** `openjdk-11-el7` (default)
 - Expected results:
   - We are sure you know by now what to expect!
   - The pipeline should fail with the old image version and succeed with the latest image version!
-  - Make sure you run the pipeline once, otherwise your application will not have valid image tag when you kill the running pod in the next chapter
-
-{{< figure src="../images/acs-enforce-policy.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+  - Make sure you run the pipeline at least once, otherwise your application will not have valid image tag when you kill the running pod in the next chapter
 
 ## Architecture recap
 
