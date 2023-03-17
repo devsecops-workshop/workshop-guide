@@ -46,7 +46,7 @@ oc policy add-role-to-user \
     --namespace=workshop-int
 ```
 
-- Find the local **ArgoCD URL** by going to **Networking > Routes** in namespace `workshop-prod`
+- Find the local **ArgoCD URL** (not the global instance) by going to **Networking > Routes** in namespace `workshop-prod`
 - Open the ArgoCD website ignoring the certificate warning
 - Don't login with OpenShift but with username and password
 - User is `admin` and password will be in Secret `argocd-cluster`
@@ -243,7 +243,7 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
 Add the new Task to your Pipeline by adding it to the YAML like this:
 
 - First we will add a new Pipeline Parameter 'GIT_CONFIG_REPO' at the beginning of the Pipeline and set it by default to our GitOps Config Repository (This will be updated by the Pipeline and then trigger ArgoCD to deploy to Prod)
-- So in the YAML view at the end of the `spec > params` section add the following (if the `DOMAIN` placeholder hasn't been replaced automatically, do it manually):
+- So in the YAML view at the end of the `spec > params` section add the following (if the `<DOMAIN>` placeholder hasn't been replaced automatically, do it manually):
 
 ```yaml
 - default: >-
@@ -275,7 +275,7 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
         - build
       taskRef:
         kind: ClusterTask
-        name: skopeo-copy
+        name: skopeo-copy-updated
       workspaces:
         - name: images-url
           workspace: workspace
@@ -294,7 +294,7 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
     - name: KUSTOMIZATION_PATH
       value: environments/dev
   runAfter:
-    - buiskopeo-copy
+    - skopeo-copy
   taskRef:
     kind: Task
     name: git-update-deployment
@@ -309,7 +309,7 @@ The `Pipeline` should now look like this. Notice that the new `tasks` runs in pa
 
 {{< figure src="../images/pipeline1.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-Now the pipeline is set. The last thing we need is authentication against the Gitea repo and the workshop-prod Quay org. We will add those from the `start pipeline` form next.
+Now the pipeline is set. The last thing we need is authentication against the Gitea repo and the workshop-prod Quay org. We will add those from the `start pipeline` form next. Make sure to replace the <DOMAIN> placeholder if required.
 
 ## Update our Prod Stage via Pipeline and GitOps
 
@@ -320,7 +320,7 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
     - **Secret name :** quay-workshop-prod-token
     - **Access to:** Image Registry
     - **Authentication type:** Basic Authentication
-    - **Server URL:**quay-quay-quay.apps.<DOMAIN>/openshift_workshop-prod
+    - **Server URL:** quay-quay-quay.apps.&lt;DOMAIN&gt;/openshift_workshop-prod
     - **Username:** openshift_workshop-prod+builder
     - **Password** : (Retrieve this from the Quay org openshift_workshop-int as before)
     - Click the checkmark
@@ -328,7 +328,7 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
     - **Secret name :** gitea-secret
     - **Access to:** Git Server
     - **Authentication type:** Basic Authentication
-    - **Server URL:**https://repository-git.apps.<DOMAIN>/gitea/openshift-gitops-getting-started.git
+    - **Server URL:** https://repository-git.apps.&lt;DOMAIN&gt;/gitea/openshift-gitops-getting-started.git
     - **Username:** gitea
     - **Password** : gitea
     - Click the checkmark

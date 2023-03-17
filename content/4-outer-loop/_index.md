@@ -138,6 +138,11 @@ The first thing is to create a new source-to-image Task to automatically update 
 - Change into the `yaml` directory
 - Apply the first YAML: `oc create -f s2i-java-workshop.yml`
 
+{{% notice warning %}}
+There is an issue with the delivered version of the Skopeo Clustertask, so we will also import an updated version. This may not be necessary in the future
+Apply the YAML: `oc create -f skopeo-copy-updated.yml`
+{{% /notice %}}
+
 {{% notice tip %}}
 You can do the above steps from any Linux system where you set up the `oc` command.
 {{% /notice %}}

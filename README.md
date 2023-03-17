@@ -5,6 +5,16 @@ a hands-on introduction to modern adn secure application development and deploym
 
 The markdown source lives in /content, this repo is rendered with a Hugo static site generator automatically
 
+## Running the Guide locally
+
+The guide is based on the static content framework hugo. Make sure to install hugo on your system, then run
+
+```
+hugo server
+```
+
+The guide will be available on http://localhost:1313
+
 ## Access the Rendered Guide
 
 Production (latest-release branch) : https://devsecops-workshop.github.io/
