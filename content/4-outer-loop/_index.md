@@ -140,7 +140,7 @@ The first thing is to create a new source-to-image Task to automatically update 
 
 {{% notice warning %}}
 There is an issue with the delivered version of the Skopeo Clustertask, so we will also import an updated version. This may not be necessary in the future
-Apply the YAML: `oc create -f skopeo-copy-updated.yml`
+Apply the YAML: `oc create -f skopeo-update.yml`
 {{% /notice %}}
 
 {{% notice tip %}}
