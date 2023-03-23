@@ -284,11 +284,9 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
     - name: GIT_REPOSITORY
       value: $(params.GIT_CONFIG_REPO)
     - name: CURRENT_IMAGE
-      value: >-
-        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
+      value: 'quay.io/nexus6/hello-microshift:1.0.0-SNAPSHOT'
     - name: NEW_IMAGE
-      value: >-
-        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+      value: $(params.QUAY_URL)/openshift_workshop-prod/workshop
     - name: NEW_DIGEST
       value: $(tasks.build.results.IMAGE_DIGEST)
     - name: KUSTOMIZATION_PATH
