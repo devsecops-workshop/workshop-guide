@@ -36,15 +36,7 @@ Have quick look at the structure of this project :
 
 ## Setup GitOps Project
 
-Let's setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly.
-
-- Give namespace `workshop-prod` permissions to pull images from `workshop-int`
-
-```
-oc policy add-role-to-user \
-    system:image-puller system:serviceaccount:workshop-prod:default \
-    --namespace=workshop-int
-```
+Let's setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly.```
 
 - Find the local **ArgoCD URL** (not the global instance) by going to **Networking > Routes** in namespace `workshop-prod`
 - Open the ArgoCD website ignoring the certificate warning
@@ -68,6 +60,10 @@ ArgoCD works with the concept of **Apps**. We will create an App and point it to
   - Click on the `workshop` to show the deployment graph
 
 Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice we have also scaled our app to 2 pods in the prod stage as we want some HA.
+
+{{% notice info %}}
+Since we have not published our image to the Quay `workshop-int` repository the initial Deployment will roll out a defined dummy image from the public quay.io Registry. This is just to ensure a initial succesful sync in ArgoCD. Once the fist pipeline runs, our actual built image will be rolled out.
+{{% /notice %}}
 
 Our complete prod stage is now configured and controlled though GitOps. But how do we tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo.
 
@@ -262,29 +258,29 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
 
 ```yaml
 - name: skopeo-copy
-      params:
-        - name: srcImageURL
-          value: 'docker://$(params.QUAY_URL)/openshift_workshop-int/workshop:latest'
-        - name: destImageURL
-          value: 'docker://$(params.QUAY_URL)/openshift_workshop-prod/workshop:latest'
-        - name: srcTLSverify
-          value: 'false'
-        - name: destTLSverify
-          value: 'false'
-      runAfter:
-        - build
-      taskRef:
-        kind: ClusterTask
-        name: skopeo-copy-updated
-      workspaces:
-        - name: images-url
-          workspace: workspace
+  params:
+    - name: srcImageURL
+      value: "docker://$(params.QUAY_URL)/openshift_workshop-int/workshop:latest"
+    - name: destImageURL
+      value: "docker://$(params.QUAY_URL)/openshift_workshop-prod/workshop:latest"
+    - name: srcTLSverify
+      value: "false"
+    - name: destTLSverify
+      value: "false"
+  runAfter:
+    - build
+  taskRef:
+    kind: ClusterTask
+    name: skopeo-copy-updated
+  workspaces:
+    - name: images-url
+      workspace: workspace
 - name: git-update-deployment
   params:
     - name: GIT_REPOSITORY
       value: $(params.GIT_CONFIG_REPO)
     - name: CURRENT_IMAGE
-      value: 'quay.io/nexus6/hello-microshift:1.0.0-SNAPSHOT'
+      value: "quay.io/nexus6/hello-microshift:1.0.0-SNAPSHOT"
     - name: NEW_IMAGE
       value: $(params.QUAY_URL)/openshift_workshop-prod/workshop
     - name: NEW_DIGEST
