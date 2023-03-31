@@ -287,7 +287,7 @@ Now there your build pipeline has been set up and is ready. There is one more st
 
 - Using the **Administrator** view, switch to the project `openshift` and under **Builds** click on the **ImageStreams**
 - Search and open the **ImageStream** `java`
-- Switch to YAML view and add the following snippet to the `tags:` section.
+- Switch to YAML view and add the following snippet to the `spec > tags:` section.
   - Be careful to keep the needed indentation!
 
 ```yaml

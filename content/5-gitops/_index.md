@@ -73,6 +73,19 @@ As we do not want to modify our original repo file we will use a tool called [Ku
 It is also possible to update the repo with a Pull request. Then you have an approval process for your prod deployment.
 {{% /notice %}}
 
+## Initialize the workshop-prod/worshop repo in Quay
+
+We will need to initialize the `workshop-prod/workshop` in Quay so the robo user will be able to to push images there later on.
+
+- In Quay select the organization `openshift_workshop-prod` on the right
+- Click on **+ Create New Repository** on the top left
+  {{< figure src="../images/quay-create-repo.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+- Make sure to select `openehsift_workshop-prod` as Organization
+- Enter `workshop`as repo name
+- Set the repo to **Public**
+- Click **Create Public Repository**
+  {{< figure src="../images/quay-create-repo2.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 ## Add Kustomize and Git Push Tekton Task
 
 Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build an then push the change to out git config repo.
@@ -316,7 +329,7 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
     - **Authentication type:** Basic Authentication
     - **Server URL:** quay-quay-quay.apps.&lt;DOMAIN&gt;/openshift_workshop-prod
     - **Username:** openshift_workshop-prod+builder
-    - **Password** : (Retrieve this from the Quay org openshift_workshop-int as before)
+    - **Password** : (Retrieve this from the Quay organization openshift_workshop-prod robo account `openshift_workshop-prod+builder` as before)
     - Click the checkmark
   - Then click **Add Secret** again
     - **Secret name :** gitea-secret
@@ -327,7 +340,7 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
     - **Password** : gitea
     - Click the checkmark
 
-- Run the pipeline by clicking **Start** and see that in your Gitea repo `/environment/dev/kustomize.yaml` is updated with the new image version
+- Run the pipeline by clicking **Start** and see that in your Gitea config repo the file `/environment/dev/kustomize.yaml` is updated with the new image version
   {{% notice tip %}}
   Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the powers of Tekton. It can scale natively with pods on OpenShift.
   {{% /notice %}}
