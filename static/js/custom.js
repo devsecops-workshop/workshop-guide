@@ -39,6 +39,8 @@ window.onload = function () {
   console.log("Adding urlParams -> " + urlParams);
   var links = document.getElementsByTagName("a");
   for (var i = 0, link; (link = links[i]); ++i) {
+    console.log("URL -> " + link.id + " " + link.href);
+    if (link.id == "skip") continue;
     const url = new URL(link.href);
     const newUrl = new URL(`${url.origin}${url.pathname}?${urlParams}`);
     link.href = newUrl;
