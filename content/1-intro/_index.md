@@ -71,7 +71,7 @@ You'll notice placeholders for cluster access details, mainly the **part of the 
 
 ## URL Generator for Custom Lab Guide
 
-Enter you Openshift url after the `apps` part (e.g. `console-openshift-console.apps.cluster-t50z9.t50z9.sandbox4711.opentlc.com` ) and click th butoon to generate a link that will customize your lab guide.
+Enter your Openshift url after the `apps` part (e.g. `cluster-t50z9.t50z9.sandbox4711.opentlc.com` ) and click the button to generate a link that will customize your lab guide.
 
 Click the generated link once to apply it the the current guide.
 
