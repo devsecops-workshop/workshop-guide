@@ -36,14 +36,14 @@ Have quick look at the structure of this project :
 
 ## Setup GitOps Project
 
-Let's setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly.```
+Let's setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly.
 
 - Find the local **ArgoCD URL** (not the global instance) by going to **Networking > Routes** in namespace `workshop-prod`
 - Open the ArgoCD website ignoring the certificate warning
 - Don't login with OpenShift but with username and password
 - User is `admin` and password will be in Secret `argocd-cluster`
 
-ArgoCD works with the concept of **Apps**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html) :
+ArgoCD works with the concept of **Apps**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html).
 
 - Create App
   - Click the **Manage your applications** icon on the left
@@ -73,22 +73,22 @@ As we do not want to modify our original repo file we will use a tool called [Ku
 It is also possible to update the repo with a Pull request. Then you have an approval process for your prod deployment.
 {{% /notice %}}
 
-## Initialize the workshop-prod/worshop repo in Quay
+## Initialize the workshop-prod/workshop repo in Quay
 
 We will need to initialize the `workshop-prod/workshop` in Quay so the robo user will be able to to push images there later on.
 
 - In Quay select the organization `openshift_workshop-prod` on the right
 - Click on **+ Create New Repository** on the top left
   {{< figure src="../images/quay-create-repo.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-- Make sure to select `openehsift_workshop-prod` as Organization
+- Make sure to select `openshift_workshop-prod` as Organization
 - Enter `workshop`as repo name
 - Set the repo to **Public**
 - Click **Create Public Repository**
-  {{< figure src="../images/quay-create-repo2.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+  {{< figure src="../images/quay-create-repo2.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Add Kustomize and Git Push Tekton Task
 
-Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build an then push the change to out git config repo.
+Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build and then push the change to our git config repo.
 
 - In the namespace `workshop-int` switch to the **Administrator** Perspective and go to **Pipelines > Tasks > Create Task**
 - Replace the YAML definition with the following and click **Create**:
@@ -241,7 +241,7 @@ spec:
 
 ## Add Tekton Tasks to your Pipeline to Promote your Image to workshop-prod
 
-So now we a new Tekton Task our catalog to update a Gitops Git repo, but we still need to pomote the actual Image from out workshop-int to workshop-prod project. Otherwise the image will not be available for our Deployment.
+So now we have a new Tekton Task in our task catalog to update a Gitops Git repo, but we still need to pomote the actual Image from out `workshop-int` to `workshop-prod` project. Otherwise the image will not be available for our Deployment.
 
 - Go to **Pipelines > Pipelines > workshop** and then YAML
 
@@ -314,7 +314,7 @@ The `Pipeline` should now look like this. Notice that the new `tasks` runs in pa
 
 <!-- ![workshop Pipeline](../images/tekton.png) -->
 
-{{< figure src="../images/pipeline1.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/pipeline1.png?width=40pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 Now the pipeline is set. The last thing we need is authentication against the Gitea repo and the workshop-prod Quay org. We will add those from the `start pipeline` form next. Make sure to replace the <DOMAIN> placeholder if required.
 
