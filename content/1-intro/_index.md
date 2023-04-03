@@ -40,19 +40,16 @@ You'll get all access details for your lab cluster from the facilitators. This i
 
 As there is not special setup for the OpenShift cluster you should be able to run the workshop with any 4.10 cluster of you own. Just make sure you have cluster admin privileges.
 
-**Warning**
-Currently on OpenShift 4.10.x is supported !
-
 This workshop was tested with these versions :
 
-- Red Hat OpenShift : 4.10.26
-- Red Hat Advanced Cluster Security for Kubernetes: 3.71.0
-- Red Hat OpenShift Dev Spaces : 3.1.0
-- Red Hat OpenShift Pipelines: 1.8.0
-- Red Hat OpenShift GitOps: 1.6.0
-- Red Hat Quay: 3.7.7
-- Red Hat Quay Bridge Operator: 3.7.7
-- Red Hat Data Foundation : 4.10.5
+- Red Hat OpenShift : 4.10.36
+- Red Hat Advanced Cluster Security for Kubernetes: 3.74.1
+- Red Hat OpenShift Dev Spaces : 3.5.0
+- Red Hat OpenShift Pipelines: 1.6.4
+- Red Hat OpenShift GitOps: 1.5.1
+- Red Hat Quay: 3.8.5
+- Red Hat Quay Bridge Operator: 3.7.11
+- Red Hat Data Foundation : 4.10.11
 - Gitea Operator 1.3.0
 
 ## Workshop Flow
