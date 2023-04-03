@@ -1,0 +1,58 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  annotations:
+    tekton.dev/pipelines.minVersion: 0.12.1
+    tekton.dev/tags: git
+  labels:
+    app.kubernetes.io/version: "0.1"
+    operator.tekton.dev/provider-type: community
+  name: git-update-deployment
+  namespace: workshop-int
+spec:
+  description: This Task can be used to update image digest in a Git repo using kustomize
+  params:
+  - name: GIT_REPOSITORY
+    type: string
+  - name: CURRENT_IMAGE
+    type: string
+  - name: NEW_IMAGE
+    type: string
+  - name: NEW_DIGEST
+    type: string
+  - name: KUSTOMIZATION_PATH
+    type: string
+  results:
+  - description: The commit SHA
+    name: commit
+    type: string
+  steps:
+  - image: docker.io/alpine/git:v2.26.2
+    name: git-clone
+    resources: {}
+    script: "rm -rf git-update-digest-workdir\ngit clone $(params.GIT_REPOSITORY)
+      git-update-digest-workdir        \n"
+    workingDir: $(workspaces.workspace.path)
+  - image: quay.io/wpernath/kustomize-ubi:latest
+    name: update-digest
+    resources: {}
+    script: "#!/usr/bin/env bash\necho \"Start\"\npwd\ncd git-update-digest-workdir/$(params.KUSTOMIZATION_PATH)\npwd\n\n#echo
+      \"kustomize edit set image #$(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)\"\n\nkustomize
+      version\n\nkustomize edit set image $(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)\n\necho
+      \"##########################\"\n\n\necho \"### kustomization.yaml ###\"\n\n\necho
+      \"##########################\"\n\nls\n\ncat kustomization.yaml        \n"
+    workingDir: $(workspaces.workspace.path)
+  - image: docker.io/alpine/git:v2.26.2
+    name: git-commit
+    resources: {}
+    script: "pwd\n\ncd git-update-digest-workdir\n\n\ngit config user.email \"tekton-pipelines-ci@redhat.com\"\n\n\ngit
+      config user.name \"tekton-pipelines-ci\"\n\n\ngit status\n\n\ngit add $(params.KUSTOMIZATION_PATH)/kustomization.yaml\n\n#
+      git commit -m \"[$(context.pipelineRun.name)] Image digest updated\"\n\ngit
+      status\n\ngit commit -m \"[ci] Image digest updated\"\n\ngit status\ngit push\n\n\nRESULT_SHA=\"$(git
+      rev-parse HEAD | tr -d '\\n')\"\n\n\nEXIT_CODE=\"$?\"\n\n\nif [ \"$EXIT_CODE\"
+      != 0 ]\n\n\nthen\n  exit $EXIT_CODE\nfi\n\n# Make sure we don't add a trailing
+      newline to the result!\n\necho -n \"$RESULT_SHA\" > $(results.commit.path)        \n"
+    workingDir: $(workspaces.workspace.path)
+  workspaces:
+  - description: The workspace consisting of maven project.
+    name: workspace

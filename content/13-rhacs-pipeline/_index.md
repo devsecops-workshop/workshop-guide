@@ -37,7 +37,8 @@ Change to the **OpenShift Web Console** and create a secret with the API token i
 - Create a new key/value `Secret` named **roxsecrets**
 - Introduce these key/values into the secret:
   - **rox_central_endpoint**: \<the URL to your **ACS Portal**>
-    - It should be something like central-stackrox.apps.cluster-psslb.psslb.sandbox555.opentlc.com:443
+    - If the `DOMAIN` placeholder was automatically replaced it should be: central-stackrox.apps.\<DOMAIN>:443
+    - If not, replace it manually with your DOMAIN
   - **rox_api_token**: \<the API token you generated>
 
 {{% notice tip %}}
@@ -48,11 +49,11 @@ Even if the form says **Drag and drop file with your value here...** you can jus
 
 There is one more thing you have to do before integrating the image scanning into your build pipeline: When you created your deployment, a `trigger` was automatically added that will deploy a new version when the image referenced by the `ImageStream` changes.
 
-This is not what we want! Because this way a newly build image would be deployed into a running container even if the `roxctl` scan finds a policy violation and terminates the pipeline.
+This is not what we want! Because this way a newly build image would be deployed immediately even if the `roxctl` scan finds a policy violation and terminates the pipeline.
 
 Have a look for yourself:
 
-- In the OCP console go to **Workloads->Deployments** and open the `workshop` deployment
+- In the OCP console go to **Workloads->Deployments** and open the `workshop` Deployment
 - Switch to the YAML view
 - Near the top under **annotations** (around lines 11-12) you'll find an annotation `image.openshift.io/triggers`.
 
@@ -63,7 +64,7 @@ image.openshift.io/triggers: >-
   [{"from":{"kind":"ImageStreamTag","name":"workshop2:latest","namespace":"workshop-int"},"fieldPath":"spec.template.spec.containers[?(@.name==\"workshop2\")].image","pause":"false"
 ```
 
-This way we made sure that a new image won't be deployed automatically "outside" of a pipeline run.
+This way we made sure that a new image won't be deployed automatically right after the `build` task which also updates th` **ImageStream**.
 
 ### Create a Scan Task
 
@@ -137,7 +138,7 @@ Take your time to **understand** the Tekton task definition:
   - only checks against policies from category **Workshop** that was created above. This way you can check against a subset of policies!
   - defines the image to check and it's digest
 
-### Add the Task to the Pipeline
+### Add the Scan Task to the Pipeline
 
 Now add the **rox-image-check** task to your pipeline between the **build** and **deploy** steps.
 
@@ -147,21 +148,41 @@ Now add the **rox-image-check** task to your pipeline between the **build** and 
 Remember how we edited the pipeline directly in yaml before? OpenShift comes with a graphical Pipeline editor that we will use this time.
 {{% /notice %}}
 
-- Hover your mouse over **build** task and click the **+** at the right side side of it, to add a task
-- This will open a task selector where you can choose to your **rox-image-check** and double-click to add it to the pipeline
-- To add the required parameters from the pipeline for the task, click the **rox-image-check** task.
+- Hover your mouse over `build` task and click the **+** at the right side side of it, to add a task
+- Click on **Add task**
+- Then enter **rox-image-check** in the search box
+  {{< figure src="../images/pipeline-select-roxctl-task.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
+- Click the **Add** button to add to the pipeline
+- To add the required parameters from the pipeline for the task so the ACS client can connect to **central**, click the **rox-image-check** task.
+  {{< figure src="../images/pipeline-edit-roxctl-task.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
 - A form with the parameters will open, fill it in:
-
   - **rox_central_endpoint**: `roxsecrets`
   - **rox_api_token**: `roxsecrets`
-  - **image**: `quay-quay-quay.apps.{YOUR DOMAIN NAME}/openshift_workshop-int/workshop` (replacing {YOUR DOMAIN NAME})
+  - **image**: `quay-quay-quay.apps.<DOMAIN>/openshift_workshop-int/workshop` (if the `DOMAIN` placeholder hasn't been replaced automatically, do it manually)
   - Adapt the Project name if you changed it
-
 - **image_digest**: $(tasks.build.results.IMAGE_DIGEST)
   - This variable takes the result of the **build** task and uses it in the scan task.
-- Click **Save**
+    {{< figure src="../images/pipeline-with-roxctl.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
+- Don't save yet
 
-{{< figure src="../images/pipeline.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
+### Add the oc patch Task to the Pipeline
+
+As you remember we removed the **trigger** that updates the **Deployment** on **ImageStream** chnages. Now the **Deployment** will never be updated and our new Image version will never be deployed to `workshop-int`.
+
+To fix this we will add a new **oc client Task** that updates the **Deployment**, only after the **Scan Task** has run.
+
+- While still in the visual pipeline editor
+- Click on the **+** button to the left of the `deploy` Task
+- Click on **Add Task**
+- In the search window enter `openshift`and select the **openshift-client** from Red Hat
+- Click on **Add**
+- In Task form on the right enter
+  - Display name : update-deploy
+  - SCRIPT : oc patch deploy/workshop -p '{"spec":{"template":{"spec":{"containers":[{"name":"workshop","image":"$(params.QUAY_URL)/openshift_workshop-int/workshop@$(tasks.build.results.IMAGE_DIGEST)"}]}}}}'
+
+{{< figure src="../images/pipeline-update-deployment.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+- Now save the pipeline
 
 ## Test the Scan Task
 
@@ -179,6 +200,7 @@ The last step is to enforce the System Policy. If the policy is violated the pip
 - Expected results:
   - We are sure you know by now what to expect!
   - The pipeline should fail with the old image version and succeed with the latest image version!
+  - Make sure you run the pipeline once, otherwise your application will not have valid image tag when you kill the running pod in the next chapter
 
 {{< figure src="../images/acs-enforce-policy.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 

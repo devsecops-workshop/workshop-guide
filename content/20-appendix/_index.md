@@ -1,6 +1,6 @@
 +++
 title = "Appendix"
-weight = 40
+weight = 45
 +++
 
 ## Create a serviceaccount to scan the internal OpenShift registry

@@ -11,10 +11,10 @@ So let's start be installing the OpenShift GitOps Operator based on project Argo
 
 - Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with default settings
   {{% notice tip %}}
-  The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.  
+  The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.
   {{% /notice %}}
-- Create a new OpenShift Project `workshop-prod`
-- Then in the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
+- You should already have created an OpenShift **Project** `workshop-prod`
+- In the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
 - On the **ArgoCD** "tile" click on **Create instance** to create an ArgoCD instance in the `workshop-prod` project.
 
 <!-- ![ArgoCD](../images/argo.png) -->
@@ -38,20 +38,12 @@ Have quick look at the structure of this project :
 
 Let's setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly.
 
-- Give namespace `workshop-prod` permissions to pull images from `workshop-int`
-
-```
-oc policy add-role-to-user \
-    system:image-puller system:serviceaccount:workshop-prod:default \
-    --namespace=workshop-int
-```
-
-- Find the local **ArgoCD URL** by going to **Networking > Routes** in namespace `workshop-prod`
+- Find the local **ArgoCD URL** (not the global instance) by going to **Networking > Routes** in namespace `workshop-prod`
 - Open the ArgoCD website ignoring the certificate warning
 - Don't login with OpenShift but with username and password
 - User is `admin` and password will be in Secret `argocd-cluster`
 
-ArgoCD works with the concept of **Apps**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html) :
+ArgoCD works with the concept of **Apps**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html).
 
 - Create App
   - Click the **Manage your applications** icon on the left
@@ -59,7 +51,7 @@ ArgoCD works with the concept of **Apps**. We will create an App and point it to
   - **Application Name**: workshop
   - **Project**: default
   - **SYNC POLICY**: Automatic
-  - **Repository URL**: Copy the URL of your config repo from Gitea (It should resemble `http://repository-git.apps.{YOUR DOMAIN}.com/gitea/openshift-gitops-getting-started.git`)
+  - **Repository URL**: Copy the URL of your config repo from Gitea
   - **Path**: environments/dev
   - **Cluster URL**: https://kubernetes.default.svc
   - **Namespace**: workshop-prod
@@ -69,6 +61,10 @@ ArgoCD works with the concept of **Apps**. We will create an App and point it to
 
 Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice we have also scaled our app to 2 pods in the prod stage as we want some HA.
 
+{{% notice info %}}
+Since we have not published our image to the Quay `workshop-int` repository the initial Deployment will roll out a defined dummy image from the public quay.io Registry. This is just to ensure a initial succesful sync in ArgoCD. Once the fist pipeline runs, our actual built image will be rolled out.
+{{% /notice %}}
+
 Our complete prod stage is now configured and controlled though GitOps. But how do we tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo.
 
 As we do not want to modify our original repo file we will use a tool called [Kustomize](https://kustomize.io/) that can add incremental change layers to YAML files. Since ArgoCD permanently watches this repo it will pick up these Kustomize changes.
@@ -77,160 +73,32 @@ As we do not want to modify our original repo file we will use a tool called [Ku
 It is also possible to update the repo with a Pull request. Then you have an approval process for your prod deployment.
 {{% /notice %}}
 
+## Initialize the workshop-prod/workshop repo in Quay
+
+We will need to initialize the `workshop-prod/workshop` in Quay so the robo user will be able to to push images there later on.
+
+- In Quay select the organization `openshift_workshop-prod` on the right
+- Click on **+ Create New Repository** on the top left
+  {{< figure src="../images/quay-create-repo.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+- Make sure to select `openshift_workshop-prod` as Organization
+- Enter `workshop`as repo name
+- Set the repo to **Public**
+- Click **Create Public Repository**
+  {{< figure src="../images/quay-create-repo2.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
+
 ## Add Kustomize and Git Push Tekton Task
 
-Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build an then push the change to out git config repo.
+Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build and then push the change to our git config repo.
 
-- In the namespace `workshop-int` switch to the **Administrator** Perspective and go to **Pipelines > Tasks > Create Task**
-- Replace the YAML definition with the following and click **Create**:
+We could add this through the OpenShift Web Console as well but to save time we will apply the file directly via the `oc` command.
 
-```yaml
-apiVersion: tekton.dev/v1beta1
-kind: Task
-metadata:
-  annotations:
-    tekton.dev/pipelines.minVersion: 0.12.1
-    tekton.dev/tags: git
-  name: git-update-deployment
-  namespace: workshop-int
-  labels:
-    app.kubernetes.io/version: "0.1"
-    operator.tekton.dev/provider-type: community
-spec:
-  description: This Task can be used to update image digest in a Git repo using kustomize
-  params:
-    - name: GIT_REPOSITORY
-      type: string
-    - name: CURRENT_IMAGE
-      type: string
-    - name: NEW_IMAGE
-      type: string
-    - name: NEW_DIGEST
-      type: string
-    - name: KUSTOMIZATION_PATH
-      type: string
-  results:
-    - description: The commit SHA
-      name: commit
-  steps:
-    - image: "docker.io/alpine/git:v2.26.2"
-      name: git-clone
-      resources: {}
-      script: |
-        rm -rf git-update-digest-workdir
-        git clone $(params.GIT_REPOSITORY) git-update-digest-workdir
-      workingDir: $(workspaces.workspace.path)
-    - image: "quay.io/wpernath/kustomize-ubi:latest"
-      name: update-digest
-      resources: {}
-      script: >
-        #!/usr/bin/env bash
+- Reconnnect to your bastion host via ssh if necessary and make sure you are in the `yaml` directory
+- Apply the task via YAML: `oc create -f tekton-kustomize.yml`
+- In the OpenShift Webconsole go to **Pipelines > Tasks > ClusterTasks** and have a look at the just imported task `git-update-deployment`. You should see the git commands how the config repo will be cloned, patched by **Kustomize** and the pushed again.
 
-        echo "Start"
+## Add Tekton Tasks to your Pipeline to Promote your Image to workshop-prod
 
-        pwd
-
-        cd git-update-digest-workdir/$(params.KUSTOMIZATION_PATH)
-
-        pwd
-
-
-        #echo "kustomize edit set image
-        #$(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)"
-
-
-        kustomize version
-
-
-        kustomize edit set image
-        $(params.CURRENT_IMAGE)=$(params.NEW_IMAGE)@$(params.NEW_DIGEST)
-
-
-        echo "##########################"
-
-
-
-        echo "### kustomization.yaml ###"
-
-
-
-        echo "##########################"
-
-
-        ls
-
-
-        cat kustomization.yaml
-      workingDir: $(workspaces.workspace.path)
-    - image: "docker.io/alpine/git:v2.26.2"
-      name: git-commit
-      resources: {}
-      script: >
-        pwd
-
-
-        cd git-update-digest-workdir
-
-
-
-        git config user.email "tekton-pipelines-ci@redhat.com"
-
-
-
-        git config user.name "tekton-pipelines-ci"
-
-
-
-        git status
-
-
-
-        git add $(params.KUSTOMIZATION_PATH)/kustomization.yaml
-
-
-        # git commit -m "[$(context.pipelineRun.name)] Image digest updated"
-
-
-        git status
-
-
-        git commit -m "[ci] Image digest updated"
-
-
-        git status
-
-        git push
-
-
-
-        RESULT_SHA="$(git rev-parse HEAD | tr -d '\n')"
-
-
-
-        EXIT_CODE="$?"
-
-
-
-        if [ "$EXIT_CODE" != 0 ]
-
-
-
-        then
-          exit $EXIT_CODE
-        fi
-
-
-        # Make sure we don't add a trailing newline to the result!
-
-
-        echo -n "$RESULT_SHA" > $(results.commit.path)
-      workingDir: $(workspaces.workspace.path)
-  workspaces:
-    - description: The workspace consisting of maven project.
-      name: workspace
-```
-
-## Add Tekton Task to Your Pipeline
+So now we have a new Tekton Task in our task catalog to update a Gitops Git repo, but we still need to pomote the actual Image from out `workshop-int` to `workshop-prod` project. Otherwise the image will not be available for our Deployment.
 
 - Go to **Pipelines > Pipelines > workshop** and then YAML
 
@@ -241,11 +109,11 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
 Add the new Task to your Pipeline by adding it to the YAML like this:
 
 - First we will add a new Pipeline Parameter 'GIT_CONFIG_REPO' at the beginning of the Pipeline and set it by default to our GitOps Config Repository (This will be updated by the Pipeline and then trigger ArgoCD to deploy to Prod)
-- So in the YAML view at the end of the `spec > params` section add and replace {YOUR_DOMAIN_NAME}
+- So in the YAML view at the end of the `spec > params` section add the following (if the `<DOMAIN>` placeholder hasn't been replaced automatically, do it manually):
 
 ```yaml
 - default: >-
-      https://repository-git.apps.{YOUR_DOMAIN_NAME}/gitea/openshift-gitops-getting-started.git
+      https://repository-git.apps.<DOMAIN>/gitea/openshift-gitops-getting-started.git
     name: GIT_CONFIG_REPO
     type: string
 ```
@@ -259,22 +127,38 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
 {{% /notice %}}
 
 ```yaml
+- name: skopeo-copy
+  params:
+    - name: srcImageURL
+      value: "docker://$(params.QUAY_URL)/openshift_workshop-int/workshop:latest"
+    - name: destImageURL
+      value: "docker://$(params.QUAY_URL)/openshift_workshop-prod/workshop:latest"
+    - name: srcTLSverify
+      value: "false"
+    - name: destTLSverify
+      value: "false"
+  runAfter:
+    - build
+  taskRef:
+    kind: ClusterTask
+    name: skopeo-copy-updated
+  workspaces:
+    - name: images-url
+      workspace: workspace
 - name: git-update-deployment
   params:
     - name: GIT_REPOSITORY
       value: $(params.GIT_CONFIG_REPO)
     - name: CURRENT_IMAGE
-      value: >-
-        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop:latest
+      value: "quay.io/nexus6/hello-microshift:1.0.0-SNAPSHOT"
     - name: NEW_IMAGE
-      value: >-
-        image-registry.openshift-image-registry.svc:5000/workshop-int/workshop
+      value: $(params.QUAY_URL)/openshift_workshop-prod/workshop
     - name: NEW_DIGEST
       value: $(tasks.build.results.IMAGE_DIGEST)
     - name: KUSTOMIZATION_PATH
       value: environments/dev
   runAfter:
-    - build
+    - skopeo-copy
   taskRef:
     kind: Task
     name: git-update-deployment
@@ -283,45 +167,39 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
       workspace: workspace
 ```
 
-The `Pipeline` should now look like this. Notice that the new `task` runs in parallel to the `deploy` task
+The `Pipeline` should now look like this. Notice that the new `tasks` runs in parallel to the `deploy` task
 
 <!-- ![workshop Pipeline](../images/tekton.png) -->
 
-{{< figure src="../images/pipeline1.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/pipeline1.png?width=40pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-- Create a **Secret** with credentials for your **Gitea** repository, so the **task** can authenticate and push to `Gitea`. Replace {YOUR_DOMAIN_NAME} here to match your `Gitea`URL
-- You can add this by clicking on the **+** on the top right ob the Web Console
-
-```yaml
-kind: Secret
-apiVersion: v1
-metadata:
-  name: gitea
-  namespace: workshop-int
-  annotations:
-    tekton.dev/git-0: "https://repository-git.apps.{YOUR_DOMAIN_NAME}/gitea/openshift-gitops-getting-started.git"
-data:
-  password: Z2l0ZWE=
-  username: Z2l0ZWE=
-type: kubernetes.io/basic-auth
-```
-
-Now we need to add the secret to the `serviceaccount` that runs our pipelines so the `task` can push to our config repo.
-
-- Go to **User Management > ServiceAccounts > pipeline**
-- To make the secret available during a pipeline run: Open the YAML and in the `secrets` section add:
-
-```yaml
-- name: gitea
-```
-
-- Save and ignore the warning
+Now the pipeline is set. The last thing we need is authentication against the Gitea repo and the workshop-prod Quay org. We will add those from the `start pipeline` form next. Make sure to replace the <DOMAIN> placeholder if required.
 
 ## Update our Prod Stage via Pipeline and GitOps
 
-- Run the pipeline and see that in your Gitea repo `/environment/dev/kustomize.yaml` is updated with the new image version
+- Click on Pipeline **Start**
+
+  - In the form go down and expand **Show credential options**
+  - Click **Add Secret**, then enter
+    - **Secret name :** quay-workshop-prod-token
+    - **Access to:** Image Registry
+    - **Authentication type:** Basic Authentication
+    - **Server URL:** quay-quay-quay.apps.&lt;DOMAIN&gt;/openshift_workshop-prod
+    - **Username:** openshift_workshop-prod+builder
+    - **Password** : (Retrieve this from the Quay organization openshift_workshop-prod robo account `openshift_workshop-prod+builder` as before)
+    - Click the checkmark
+  - Then click **Add Secret** again
+    - **Secret name :** gitea-secret
+    - **Access to:** Git Server
+    - **Authentication type:** Basic Authentication
+    - **Server URL:** https://repository-git.apps.&lt;DOMAIN&gt;/gitea/openshift-gitops-getting-started.git
+    - **Username:** gitea
+    - **Password** : gitea
+    - Click the checkmark
+
+- Run the pipeline by clicking **Start** and see that in your Gitea config repo the file `/environment/dev/kustomize.yaml` is updated with the new image version
   {{% notice tip %}}
-  Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the powers of Tekton. It can scale natively with pods on OpenShift.  
+  Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the powers of Tekton. It can scale natively with pods on OpenShift.
   {{% /notice %}}
 
 - This will tell ArgoCD to update the `Deployment` with this new image version
@@ -330,4 +208,3 @@ Now we need to add the secret to the `serviceaccount` that runs our pipelines so
 ## Architecture recap
 
 {{< figure src="../images/workshop_architecture_gitops.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-
