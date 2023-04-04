@@ -73,7 +73,7 @@ oc new-project workshop-dev
 
 `odo` is smart enough to figure out what programming language and frameworks you are using. So let's let initialize our project
 
-```
+```DevWorkspace
 odo init
 ```
 
@@ -106,7 +106,7 @@ Your app should show up as a simple web page. In the `RESTEasy JAX-RS` section c
 
 Now for the fun part: Using `odo` you can just dynamically change your code and push it out again without doing a new image build! No dev magic involved:
 
-- In your CRW Workspace on the left, expand the file tree to open file `src/main/java/org/acme/GreetingRessource.java` and change the string "Hello RESTEasy" to "Hello Workshop" (CRW saves every edit directly. No need to save)
+- In your DevWorkspace on the left, expand the file tree to open file `src/main/java/org/acme/GreetingRessource.java` and change the string "Hello RESTEasy" to "Hello Workshop" (DevSpaces saves every edit directly. No need to save)
 
 - And reload the app webpage.
 - Bam! The change should be there in a matter of seconds
