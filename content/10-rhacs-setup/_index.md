@@ -70,6 +70,20 @@ To actually do and see anything you need to add a **SecuredCluster** (be it the 
 
 This is because you don't have a monitored and secured OpenShift cluster yet.
 
+### Create an integration to scan the Quay registry
+
+So to enable scanning of images in Quay, you'll have to configure an **Integration** with valid credentials, so this is what you'll do.
+
+Now create a new Integration:
+- Access the **RHACS Portal** and configure the already existing integrations of type **Generic Docker Registry**.
+- Go to **Platform Configuration -> Integrations -> Generic Docker Registry**.
+- Click the **New integration** button
+- **Integration name**: Quay local
+- **Endpoint**: `https://quay-quay-quay.apps.<DOMAIN>` (replace domain if required)
+- **Username**: quayadmin
+- **Password**: quayadmin
+- Press the **Test** button to validate the connection and press **Save** when the test is successful.
+
 ### Prepare to add Secured Clusters
 
 First you have to generate an init bundle which contains certificates and is used to authenticate a **SecuredCluster** to the **Central** instance, again regardless if it's the same cluster as the Central instance or a remote/other cluster.

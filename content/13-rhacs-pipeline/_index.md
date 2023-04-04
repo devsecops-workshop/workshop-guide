@@ -64,7 +64,7 @@ image.openshift.io/triggers: >-
   [{"from":{"kind":"ImageStreamTag","name":"workshop2:latest","namespace":"workshop-int"},"fieldPath":"spec.template.spec.containers[?(@.name==\"workshop2\")].image","pause":"false"
 ```
 
-This way we made sure that a new image won't be deployed automatically right after the `build` task which also updates th` **ImageStream**.
+This way we made sure that a new image won't be deployed automatically right after the `build` task which also updates the **ImageStream**.
 
 ### Create a Scan Task
 
@@ -178,7 +178,7 @@ To fix this we will add a new **oc client Task** that updates the **Deployment**
 - Click on **Add**
 - In Task form on the right enter
   - Display name : update-deploy
-  - SCRIPT : oc patch deploy/workshop -p '{"spec":{"template":{"spec":{"containers":[{"name":"workshop","image":"$(params.QUAY_URL)/openshift_workshop-int/workshop@$(tasks.build.results.IMAGE_DIGEST)"}]}}}}'
+  - SCRIPT : `oc patch deploy/workshop -p '{"spec":{"template":{"spec":{"containers":[{"name":"workshop","image":"$(params.QUAY_URL)/openshift_workshop-int/workshop@$(tasks.build.results.IMAGE_DIGEST)"}]}}}}'`
 
 {{< figure src="../images/pipeline-update-deployment.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
 

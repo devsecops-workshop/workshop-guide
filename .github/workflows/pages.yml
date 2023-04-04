@@ -5,7 +5,7 @@ on:
   push:
     branches:
     - master
-    - release
+    - latest-release
 
 jobs:
   build-deploy:
