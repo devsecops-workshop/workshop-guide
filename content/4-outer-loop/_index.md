@@ -60,7 +60,7 @@ Now that the Registry is installed you have to configure a superuser:
 - Make sure you are in the `quay` Project
 - Go to **Networking->Routes**, access the Quay portal using the URL of the first route (`quay-quay`)
 - Click **Create Account**
-  - As username put in `quayadmin`, a (fake) email address and a password.
+  - As username put in `quayadmin`, a (fake) email address and and `quayadmin` as password.
 - Click **Create Account** again
 - In the OpenShift web console open **Workloads->Secrets**
 - Search for `quay-config-editor-credentials-...`, open the secret and copy the values, you'll need them in a second.
