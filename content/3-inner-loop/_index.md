@@ -71,9 +71,15 @@ oc new-project workshop-dev
 
 **odo** or 'OpenShift do' is a cli that enables developers to get started quickly with cloud native app development without being a Kubernetes expert. It offers support for multiple runtimes and you can easily setup microservice components, push code changes into running containers and debug remotely with just a few simple commands. To find out more, have look [here](https://odo.dev/)
 
+First we need to switch into the folder of your cloned project
+
+```
+cd quarkus-build-options
+```
+
 `odo` is smart enough to figure out what programming language and frameworks you are using. So let's let initialize our project
 
-```DevWorkspace
+```
 odo init
 ```
 
