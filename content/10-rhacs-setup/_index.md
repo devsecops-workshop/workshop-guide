@@ -88,13 +88,39 @@ Now create a new Integration:
 
 First you have to generate an init bundle which contains certificates and is used to authenticate a **SecuredCluster** to the **Central** instance, again regardless if it's the same cluster as the Central instance or a remote/other cluster.
 
-In the **ACS Portal**:
+There are two ways doing this:
+
+- Use the ACS Portal: here you'll download the init bundle using the browser to your laptop
+- Use the API e.g. with `curl`: this can be run in any terminal without the need for a browser because the init bundle will be create in the terminal session where you then run `oc`.
+
+But anyway you need to run an `oc` command to apply the init bundle!
+
+{{% notice warning %}}
+If you are running `oc` on your laptop, you are set. If you are SSH-ing to another host (like the bastion host) to run `oc`, you have to scp the init bundle file over there. If you are using the **OpenShift Web Terminal** you have to use the API method.
+{{% /notice %}}
+
+Creating the init bundle using the **ACS Portal**:
 
 - Navigate to **Platform Configuration → Integrations**.
 - Under the **Authentication Tokens** section, click on **Cluster Init Bundle**.
 - Click **Generate bundle**
 - Enter a name for the cluster init bundle and click **Generate**.
 - Click **Download Kubernetes Secret File** to download the generated bundle.
+
+Creating the init bundle using the **API** on the commandline:
+
+``` bash
+#Export ACS central instance endpoint
+export ROX_ENDPOINT=<central_url:443>
+# Export bundle-name
+export DATA={\"name\":\"<bundle name>\"}
+# Export ACS admin password
+export PASSWORD=<password>
+
+curl -k -o bundle.json -X POST -u "admin:$PASSWORD" -H "Content-Type: application/json" --data $DATA https://${ROX_ENDPOINT}/v1/cluster-init/init-bundles
+
+cat bundle.json | jq -r '.kubectlBundle'  | base64 -d
+```
 
 The init bundle needs to be applied on all OpenShift clusters you want to secure & monitor.
 
@@ -106,8 +132,9 @@ For this workshop we run **Central** and **SecuredCluster** on one OpenShift clu
 
 - Use the `oc` command to log in to the OpenShift cluster as `cluster-admin`.
   - The easiest way might be to use the **Copy login command** link from the UI
+  - If on the bastion or in a Web Terminal session, `oc` will just work
 - Switch to the **Project** you installed **ACS Central** in, it should be `stackrox`.
-- Run `oc create -f <init_bundle>.yaml -n stackrox` pointing to the init bundle you downloaded from the Central instance and the Project you created.
+- Run `oc create -f <init_bundle>.yaml -n stackrox` pointing to the init bundle you downloaded from the Central instance or created via the API as above.
 - This will create a number of secrets:
 
 ```
