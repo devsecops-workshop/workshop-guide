@@ -79,7 +79,7 @@ Now create a new Integration:
 - Go to **Platform Configuration -> Integrations -> Generic Docker Registry**.
 - Click the **New integration** button
 - **Integration name**: Quay local
-- **Endpoint**: https://quay-quay-quay.apps.<DOMAIN> (replace domain if required)
+- **Endpoint**: `https://quay-quay-quay.apps.<DOMAIN>` (replace domain if required)
 - **Username**: quayadmin
 - **Password**: quayadmin
 - Press the **Test** button to validate the connection and press **Save** when the test is successful.
