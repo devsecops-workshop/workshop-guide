@@ -65,8 +65,10 @@ oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea
 
 - In the Web Console, go to **Operators > OperatorHub** and search for `Gitea` (You may need to disable search filters)
 - Install the `Gitea Operator` with default settings
-- Create a new OpenShift project called `git`
-- Go to **Installed Operators > Gitea Operator** and click on the **Create Instance** tile in the `git` project
+- Go to **Installed Operators > Gitea Operator**
+- Create a new OpenShift **project** called `git` with the Project selection menu at the top
+- Make sure you are in the `git` project via the top Project selection menu !
+- Click on **Create new instance**
 
 <!-- ![Gitea](../images/gitea.png) -->
 
