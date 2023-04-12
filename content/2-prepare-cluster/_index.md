@@ -39,11 +39,7 @@ As mentioned already this takes some time so go ahead and install the other prer
 
 ## Prepare to run oc commands
 
-You will be asked to run `oc` (the OpenShift commandline tool) commands a couple of times. This can be done:
-
-- By installing and running `oc` on your laptop
-- By SSH-ing into the bastion host, if running on a Red Hat RHPDS lab environment. From here you can just run `oc` without login etc.
-- By using the **OpenShift Web Terminal**. This is the easiest way because you don't have to install `oc` or an SSH client.
+You will be asked to run `oc` (the OpenShift commandline tool) commands a couple of times. We will do this by using the **OpenShift Web Terminal**. This is the easiest way because you don't have to install `oc` or an SSH client.
 
 ### Install OpenShift Web Terminal
 
@@ -59,9 +55,16 @@ After the operator has installed, reload the OCP Web Console browser window. You
 
 {{< figure src="../images/web-terminal.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-{{% notice tip %}}
+{{% notice warning %}}
 The terminal is not persistent, so if it was closed for any reason anything you did in the terminal is gone after re-opening.
 {{% /notice %}}
+
+If for any reason you can't use the webterminal, your options are:
+
+- Install and run `oc` on your laptop
+- SSH into the bastion host, if running on a Red Hat RHDP lab environment. From here you can just run `oc` without login.
+
+TODO: Change yaml applies to direct git download
 
 ## Install and Prepare Gitea
 
