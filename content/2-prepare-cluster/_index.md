@@ -33,6 +33,35 @@ You'll see a review of your settings, hit `Create StorageSystem`. Don't worry if
 
 As mentioned already this takes some time so go ahead and install the other prerequisites. We'll come back later.
 
+## Prepare to run oc commands
+
+You will be asked to run `oc` (the OpenShift commandline tool) commands a couple of times. We will do this by using the **OpenShift Web Terminal**. This is the easiest way because you don't have to install `oc` or an SSH client.
+
+### Install OpenShift Web Terminal
+
+To extend OpenShift with the Web Terminal option, install the **Web Terminal** operator:
+
+- Login to the OpenShift Webconsole with you cluster admin credentials
+- In the Web Console, go to **Operators > OperatorHub** and search for the **Web Terminal** operator
+- Install the operator with default settings
+
+This will take some time and installs another operator as dependency.
+
+After the operator has installed, reload the OCP Web Console browser window. You will now have a new button (**>\_**) in the upper right. Click it to start a new web terminal. From here you can run the `oc` commands when the lab guide requests it (copy/paste might depend on your laptop OS and browser settings, e.g. try `Ctrl-Shift-V` for pasting).
+
+{{< figure src="../images/web-terminal.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+{{% notice warning %}}
+The terminal is not persistent, so if it was closed for any reason anything you did in the terminal is gone after re-opening.
+{{% /notice %}}
+
+If for any reason you can't use the webterminal, your options are:
+
+- Install and run `oc` on your laptop
+- SSH into the bastion host, if running on a Red Hat RHDP lab environment. From here you can just run `oc` without login.
+
+TODO: Change yaml applies to direct git download
+
 ## Install and Prepare Gitea
 
 We'll need Git repository services to keep our app and infrastructure source code, so let's just install trusted `Gitea` using an operator:
