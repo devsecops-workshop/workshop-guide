@@ -88,13 +88,24 @@ Now create a new Integration:
 
 First you have to generate an init bundle which contains certificates and is used to authenticate a **SecuredCluster** to the **Central** instance, again regardless if it's the same cluster as the Central instance or a remote/other cluster.
 
-In the **ACS Portal**:
+We are using the API to create the init bundle in this workshop. For the steps to create the init bundle in the ACS Portal see the appendix.
 
-- Navigate to **Platform Configuration → Integrations**.
-- Under the **Authentication Tokens** section, click on **Cluster Init Bundle**.
-- Click **Generate bundle**
-- Enter a name for the cluster init bundle and click **Generate**.
-- Click **Download Kubernetes Secret File** to download the generated bundle.
+Creating the init bundle using the **API** on the commandline:
+
+TODO: explain
+
+``` bash
+#Export ACS central instance endpoint
+export ROX_ENDPOINT=<central_url:443>
+# Export bundle-name
+export DATA={\"name\":\"<bundle name>\"}
+# Export ACS admin password
+export PASSWORD=<password>
+
+curl -k -o bundle.json -X POST -u "admin:$PASSWORD" -H "Content-Type: application/json" --data $DATA https://${ROX_ENDPOINT}/v1/cluster-init/init-bundles
+
+cat bundle.json | jq -r '.kubectlBundle'  | base64 -d > kube-secrets.bundle
+```
 
 The init bundle needs to be applied on all OpenShift clusters you want to secure & monitor.
 
@@ -104,11 +115,10 @@ For this workshop we run **Central** and **SecuredCluster** on one OpenShift clu
 
 **Apply the init bundle**
 
-- Use the `oc` command to log in to the OpenShift cluster as `cluster-admin`.
-  - The easiest way might be to use the **Copy login command** link from the UI
-- Switch to the **Project** you installed **ACS Central** in, it should be `stackrox`.
-- Run `oc create -f <init_bundle>.yaml -n stackrox` pointing to the init bundle you downloaded from the Central instance and the Project you created.
-- This will create a number of secrets:
+- Open a web terminal
+- Use the `oc` command to switch to the **Project** you installed **ACS Central** in, it should be `stackrox`.
+- Run `oc create -f > kube-secrets.bundle -n stackrox` pointing to the init bundle you downloaded from the Central instance or created via the API as above.
+- This will create a number of secrets, the output should be:
 
 ```
 secret/collector-tls created

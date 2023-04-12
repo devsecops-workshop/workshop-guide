@@ -3,6 +3,20 @@ title = "Appendix"
 weight = 45
 +++
 
+## Create ACS init bundle in ACS Portal
+
+Creating the init bundle using the **ACS Portal**:
+
+- Navigate to **Platform Configuration → Integrations**.
+- Under the **Authentication Tokens** section, click on **Cluster Init Bundle**.
+- Click **Generate bundle**
+- Enter a name for the cluster init bundle and click **Generate**.
+- Click **Download Kubernetes Secret File** to download the generated bundle.
+
+{{% notice warning %}}
+If you are running `oc` on your laptop, you are set. If you are SSH-ing to another host (like the bastion host) to run `oc`, you have to scp the init bundle file over there. If you are using the **OpenShift Web Terminal** you have to use the API method.
+{{% /notice %}}
+
 ## Create a serviceaccount to scan the internal OpenShift registry
 
 The integrations to the internal registry were created automatically. But to enable scanning of images in the internal registry, you'll have to configure valid credentials, so this is what you'll do:
