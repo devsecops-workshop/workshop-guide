@@ -27,11 +27,7 @@ After the operator has been installed it will inform you to install a `StorageSy
 - **Security and network**: Leave set to `Default (SDN)`
 - Click **Next**
 
-You'll see a review of your settings, hit `Create StorageSystem`
-
-{{% notice tip %}}
-Don't worry if you see a _404 Page_. The ODF Operator has just extended the OpenShift Console which may no be availabe in your current view. Just relead the browser page once and your will see the System Overview
-{{% /notice %}}
+You'll see a review of your settings, hit `Create StorageSystem`. Don't worry if you see a temporary _404 Page_. Just releod the browser page once and your will see the System Overview
 
 {{< figure src="../images/odf-systems.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
@@ -67,12 +63,14 @@ oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea
 - Install the `Gitea Operator` with default settings
 - Go to **Installed Operators > Gitea Operator**
 - Create a new OpenShift **project** called `git` with the Project selection menu at the top
+  TODO : Screenshot
 - Make sure you are in the `git` project via the top Project selection menu !
-- Click on **Create new instance**
+- Click on **Create new instance** ( while in project `git`)
 
 <!-- ![Gitea](../images/gitea.png) -->
 
 {{< figure src="../images/gitea.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+TODO : Replace Screenshot
 
 - On the **Create Gitea** page switch to the YAML view and add the following `spec` values :
 
@@ -87,7 +85,7 @@ spec:
 
 After creation has finished:
 
-- Access the route URL (you'll find it e.g. in **Networking > Routes > repository > Location**)
+- Access the route URL (you'll find it e.g. in **Networking > Routes > repository > Location**). If the Route is not yet there just wait a couple of minutes.
 - This will take you to the Gitea web UI
 - Sign-In to `Gitea` with user `gitea` and password `gitea`
 - If your Gitea UI appears in a language other then English (depending on your locale settings), switch it to English. Change the language in your Gitea UI, the example below shows a German example:
@@ -121,7 +119,92 @@ Now it's time to check if the `StorageSystem` deployment from ODF completed succ
 
 Your container storage is ready to go, explore the information on the overview pages if you'd like.
 
-Your cluster is now prepared for the next step, proceed to the **Inner Loop**.
+## Install Red Hat Quay Container Registry
+
+The image that we have just deployed was pushed to the internal OpenShift Registry which is a great starting point for your cloud native journey. But if you require more control over you image repos, a graphical GUI, scalability, internal security scanning and the like you may want to upgrade to **Red Hat Quay**. So as a next step we want to replace the internal registry with Quay.
+
+Quay installation is done through an operator, too:
+
+- In **Operators->OperatorHub** filter for `Quay`
+- Install the **Red Hat Quay** operator with default settings
+- Create a new project called `quay` at the top Project selection menu
+- While in the project `quay` go to **Administration->LimitRanges** and delete the `quay-core-resource-limits`
+  {{< figure src="../images/delete-limit-range.png?width=45pc&classes=border,shadow" title="Click image to enlarge" >}}
+- In the operator overview of the Quay Operator on the **Quay Registry** tile click **Create instance**
+- If the _YAML view_ is shown switch to _Form view_
+- Make sure you are in the `quay` project
+- Change the name to `quay`
+- Click **Create**
+- Click the new Quayregistry, scroll down to **Conditions** and wait until the **Available** type changes to `True`
+  {{< figure src="../images/quay-available.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+Now that the Registry is installed you have to configure a superuser:
+
+- Make sure you are in the `quay` Project
+- Go to **Networking->Routes**, access the Quay portal using the URL of the first route (`quay-quay`)
+- Click **Create Account**
+  - As username put in `quayadmin`, a (fake) email address and and `quayadmin` as password.
+- Click **Create Account** again
+- In the OpenShift web console open **Workloads->Secrets**
+- Search for `quay-config-editor-credentials-...`, open the secret and copy the values, you'll need them in a second.
+- Go back to the **Routes** and open the `quay-quay-config-editor` route
+- Login with the values of the secret from above
+- Click **Sign in**
+- Scroll down to **Access Settings**
+- As **Super User** put in `quayadmin`
+- click **Validate Configuration Changes** and after the validation click **Reconfigure Quay**
+
+Reconfiguring Quay takes some time. The easiest way to determine if it's been finished is to open the Quay portal (using the `quay-quay` Route). At the upper right you'll see the username (`quayadmin`), if you click the username the drop-down should show a link **Super User Admin Panel**. When it shows up you can proceed.
+
+{{< figure src="../images/quay-superuser.png?width=15pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+## Integrate Quay as Registry into OpenShift
+
+To synchronize the internal default OpenShift Registry with the Quay Registry, **Quay Bridge** is used.
+
+- In the OperatorHub of your cluster, search for the **Quay Bridge** Operator
+  - Install it with default settings
+- While the Operator is installing, create a new Organization in **Quay**:
+  - Access the **Quay** Portal
+  - In the top _+_ menu click **Create New Organization**
+    - Name it `openshift_integration`
+  - Click **Create Organization**
+
+We need an OAuth Application in Quay for the integration:
+
+- Again In the **Quay** Portal, click the **Applications** icon in the menubar to the left
+- Click **Create New Application** at the upper right
+  - Name it `openshift`, press Enter and click on the new `openshift` item by clicking it
+- In the menubar to the left click the **Generate Token** icon
+  - Check all boxes and click **Generate Access token**
+    {{< figure src="../images/quay-access-token.png?width=45pc&classes=border,shadow" title="Click image to enlarge" >}}
+  - In the next view click **Authorize Application** and confirm
+  - In the next view copy the **Access Token** and save it somewhere, we'll need it again
+
+Now we finally create an **Quay Bridge** instance. In the OpenShift web console make sure you are in the `quay` Project. Then:
+
+- Create a new Secret
+
+  - Go to **Workloads->Secrets** and click **Create->Key/value secret**
+    - **Secret name**: quay-credentials
+    - **Key**: token
+    - **Value**: paste the Access Token you generated in the Quay Portal in the shite text field below the grey _Value_ field
+    - Click **Create**
+
+- Go to the Red Hat **Quay Bridge** Operator overview (make sure you are in the `quay` namespace)
+- On the **Quay Integration** tile click **Create Instance**
+  - Open **Credentials secret**
+    - **Namespace containing the secret**: `quay`
+    - **Key within the secret**: `token`
+  - Copy the Quay Portal hostname (including `https://`) and paste it into the **Quay Hostname** field
+  - Set **Insecure registry** to `true`
+  - Click **Create**
+
+And you are done with the installation and integration of Quay as your registry! Test if the integration works:
+
+- In the Quay Portal you should see your Openshift Projects are synced and represented as Quay Organizations, prefixed with `openshift_` (you might have to reload the browser).
+  - E.g. there should be a `openshift_git` Quay Organization.
+- In the OpenShift web console create a new test Project, make sure it's synced to Quay as an Organization and delete it again.
 
 ## Architecture recap
 

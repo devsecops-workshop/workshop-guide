@@ -28,17 +28,31 @@ We try to balance guided workshop steps and challenging you to use your knowledg
 
 ## Workshop Environment
 
-To run this workshop you basically need a fresh and empty OpenShift 4.10 cluster with cluster-admin access. In addition you will be asked to use the `oc` commandline client for some tasks.
-
 ### As Part of a Red Hat Workshop
+
+#### For Attendees
 
 As part of the workshop you will be provided with freshly installed OpenShift 4.10 clusters. Depending on attendee numbers we might ask you to gather in teams. Some workshop tasks must be done only once for the cluster (e.g. installing Operators), others like deploying and securing the application can be done by every team member separately in their own Project. This will be mentioned in the guide.
 
 You'll get all access details for your lab cluster from the facilitators. This includes the URL to the OpenShift console and information about how to SSH into your bastion host to run `oc` if asked to.
 
-### On Your Own
+#### For Facilitators
 
-As there is not special setup for the OpenShift cluster you should be able to run the workshop with any 4.10 cluster of you own. Just make sure you have cluster admin privileges.
+The easiest way to provide this environment is through the Red Hat Demo System. Provision catalog item **Red Hat OpenShift Container Platform 4 Demo** for the the attendees.
+
+### Self Hosted
+
+While the workshop is designed to be run on Red Hat Demo System you should be able to run the workshop on a 4.10 cluster of you own.
+
+Just make sure :
+
+- You have cluster admin privileges
+- Sizing
+  - 3 Master Nodes (m5.2x.large)
+  - 2 Worker (m5.4x.large)
+- Authentication htpasswd enabled
+- For the ACS Chapter you will need your AWS credentials
+- Some names in the workshop may need to be customized for your environment (e.g. storage naming)
 
 This workshop was tested with these versions :
 
