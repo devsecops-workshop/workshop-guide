@@ -18,7 +18,7 @@ In this part of the workshop you'll experience how modern software development u
 - Allow selected permissions
 
 {{% notice tip %}}
-We could create a workspace from one of the templates that come with CodeReady Workspaces, but we want to use a customized workspace with some additionally defined plugins in a [v2 devfile](https://devfile.io/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.
+We could create a workspace from one of the templates that come with DevSpaces, but we want to use a customized workspace with some additionally defined plugins in a [v2 devfile](https://devfile.io/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.
 {{% /notice %}}
 
 - In the left menu click on **Create Workspace**
@@ -28,7 +28,6 @@ We could create a workspace from one of the templates that come with CodeReady W
 {{< figure src="../images/crw.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 - You'll get into the **Creating a workspace ...** view, give the workspace containers some time to spin up.
-- If a popup appears asking you to wether you "Trust the code", accept with Yes
 
 When your workspace has finally started, have a good look around in the UI. It should look familiar if you have ever worked with VSCode or similar IDEs.
 
@@ -47,12 +46,20 @@ We will use a Java application based on the [Quarkus](https://quarkus.io/) stack
 Let's clone our project into our workspace :
 
 - Bring up your `OpenShiftDev Spaces` in your browser
-- In center of the editor area click on **Clone Git Repository ....** and then at the top enter the `Git URL` to your `Gitea` Repo (You can copy the URL by clicking on the clipboard icon in Gitea) and press enter
+- If a popup appears asking you to wether you "Do you truste the authors ...", check **Trust the authors of all files ...** and click on **Yes, I trust the authors**
+  {{< figure src="../images/vscode_trust.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+- Click on the the "Hamburger" menu in the top left, then **View > Command Palette**
+  - In the **Command Palette** prompt that appears on the top, start typing `git clone` until you can select the **Git: Clone** item
+    {{< figure src="../images/vscode_clone.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+  - Enter the `Git URL` to your **Gitea** Repository (You can copy the URL by clicking on the clipboard icon in **Gitea**) and press enter
+    {{< figure src="../images/gitea_clone_icon.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - In the following dialog **Choose a folder to clone ...**
-  - Navigate up 2 directories by clicking **..** twice
+  - Navigate up 2 directories by clicking `..` twice
   - Select the folder **projects**
+    {{< figure src="../images/vscode_git_folder.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
   - Click the button **OK**
 - In the following dialog when asked how to open the code, click on **Open**
+  {{< figure src="../images/vscode_open_folder.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - The windows will briefly reload and then you will be in the cloned project folder
 
 ## Access OpenShift and Create the Development Stage Project
