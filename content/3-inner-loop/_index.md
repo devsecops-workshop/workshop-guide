@@ -13,7 +13,7 @@ In this part of the workshop you'll experience how modern software development u
 - Install the **Red Hat OpenShift Dev Spaces** Operator from OperatorHub (not the previous Codeready Workspaces versions!) with default settings
 - Go to **Installed Operators -> Red Hat OpenShift Dev Spaces** and create a new instance (**Red Hat OpenShift Dev Spaces instance Specification**) using the default settings in the project `openshift-operators`
 - Wait until deployment has finished. This may take a couple of minutes as several components will be deployed.
-- Once the instance status is ready (You can check the YAML of the instance: `status > chePhase: Active`), look up the `devspaces` Route in the `openshift-workspaces` project (You may need to toggle the **Show default project** button).
+- Once the instance status is ready (You can check the YAML of the instance: `status > chePhase: Active`), look up the `devspaces` Route in the `openshift-workspaces` project (If you can see the `openshift-workspaces`, you may need to toggle the **Show default project** button).
 - Open the link in a new browser tab, click on **Log in with OpenShift** and log in with your OCP credentials
 - Allow selected permissions
 

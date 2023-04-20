@@ -94,7 +94,7 @@ We could add this through the OpenShift Web Console as well but to save time we 
 
 - Go to your Web Terminal or open a new one.
 - Apply the task via YAML: `oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/tekton-kustomize.yml`
-- In the OpenShift Webconsole go to **Pipelines > Tasks > ClusterTasks** and have a look at the just imported task `git-update-deployment`. You should see the git commands how the config repo will be cloned, patched by **Kustomize** and the pushed again.
+- In the OpenShift Webconsole go to **Pipelines > Tasks > Tasks** and have a look at the just imported task `git-update-deployment`. You should see the git commands how the config repo will be cloned, patched by **Kustomize** and the pushed again.
 
 ## Add Tekton Tasks to your Pipeline to Promote your Image to workshop-prod
 
