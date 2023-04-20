@@ -53,17 +53,18 @@ To leverage our brand new **Quay** registry we need to modify the Pipeline so it
 
 The first thing is to create a new **Source-To-Image Pipeline Task** to automatically update the **ImageStream** to point to **Quay**. You could of course copy and modify the default `s2i-java` task using the built-in YAML editor of the **OpenShift Web Console**. But to make this as painless as possible we have prepared the needed YAML object definition for you already.
 
-- Login to your bastion host via SSH, from here you can run `oc` commands
-- Clone the Git repo with the YAML files you'll need: `git clone https://github.com/devsecops-workshop/yaml.git`
-- Change into the `yaml` directory
-- Apply the first YAML: `oc create -f s2i-java-workshop.yml`
+- Open a Web Terminal by clicking the **>\_** in the upper right of the web console, from here you can run `oc` commands
+- The YAML object definitions for this lab are in the repo `https://github.com/devsecops-workshop/yaml.git`, go there and review the YAML definition.
+- Apply the YAML for the new ClusterTask: `oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/s2i-java-workshop.yml`
+
+{{< figure src="../images/web-terminal2.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 There is an issue with the delivered version of the **Skopeo Pipeline Task**, so we will also import an updated version. This may not be necessary in the future
 
-- Apply the YAML to import it: `oc create -f skopeo-update.yml`
+- Apply the YAML to import it: `oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/skopeo-update.yml`
 
 {{% notice tip %}}
-You can do the above steps from any Linux system where you set up the `oc` command.
+To make this lab pretty much self-contained, we run `oc` commands from the OCP Web Terminal. But of course you can do the above steps from any Linux system where you set up the `oc` command.
 {{% /notice %}}
 
 You should now have a new **ClusterTask** named `s2i-java-workshop`, go to the **OpenShift Web Console** and check:
@@ -119,13 +120,16 @@ To make this easier we again provide you with a full YAML definition of the Pipe
 
 Do the following:
 
-- Bring up the terminal and make sure you are in the `yaml` directory.
+- Go to your Web Terminal (if it timed out just start it again)
 
 {{% notice tip %}}
-If you use this lab guide with your domain as query parameter, you are good to go with the command, if not, you have to replace \<DOMAIN> manually in the following command.
+If you use this lab guide with your domain as query parameter (see [here](https://devsecops-workshop.github.io/1-intro/#and-finally-a-sprinkle-of-javascript-magic)), you are good to go with the command below because your domain was already inserted into the command.
+If not, you have to replace \<DOMAIN> manually.
 {{% /notice %}}
 
-- To replace the `DOMAIN` placeholder with your lab domain, run: `sed -i 's/DOMAIN/<DOMAIN>/g' workshop-pipeline-without-git-update.yml`
+- First get the YAML file: `curl https://raw.githubusercontent.com/devsecops-workshop/yaml/main/workshop-pipeline-without-git-update.yml -o workshop-pipeline-without-git-update.yml`
+- Now we have to replace the `REPLACEME` placeholders in the YAML file with your lab domain.
+- Run: `sed -i 's/REPLACEME/<DOMAIN>/g' workshop-pipeline-without-git-update.yml` (Insert your domain if not done automatically).
 - Apply the new definition: `oc replace -f workshop-pipeline-without-git-update.yml`
 
 Again take the time to review the changes in the web console:
