@@ -11,7 +11,7 @@ To create and run the build pipeline you'll use OpenShift Pipelines based on pro
 
 - Install the `Red hat OpenShift Pipelines` Operator
   - In the **OpenShift Web Console** select **Operators > OperatorHub**
-  - Find and install and install the `Red hat OpenShift Pipelines` Operator with default settings
+  - Find the `Red hat OpenShift Pipelines` Operator and install it with default settings
     {{% notice warning %}}
     Since the Piplines assets are installed asynchronously it is possible that the `Pipeline Templates` are not yet setup when proceeding immedately to the next step. So now is good time to grab a coffee.
     {{% /notice %}}
@@ -20,17 +20,18 @@ To create and run the build pipeline you'll use OpenShift Pipelines based on pro
 
 After installing the Operator create a new deployment of your game-changing application:
 
-- Create a new OpenShift project `workshop-int` (e.g. using the **Projects** menu item )
+- Create a new OpenShift project called `workshop-int` (e.g. using the **Projects** menu item at the top)
 - In the left menu at the top switch to the **OpenShift Developer Console** by clicking on **Administrator > Developer**
 - Close the welcome pop up
 - Make sure you are still in the `workshop-int` project by verifying in the top **Project** menu
 - Click the **+Add** menu entry to the left and choose the **Import from Git** card
-- As **Git Repo URL** enter the clone URL for the `quarkus-build-options` repo in your your `Gitea` instance
+- As **Git Repo URL** enter the clone URL for the `quarkus-build-options` repo in your `Gitea` instance
   - There might be a warning about the repo url that you can ignore
   - Leave **Git type** set to `other`
 - Click **Show advanced Git options** and for **Git reference** enter `master`
 - As **Import Strategy** select `Builder Image`
 - As **Builder Image** select `Java` and `openjdk-11-el7 / Red Hat OpenJDK 11 (RHEL 7)`
+  - We are choosing this image as we have prepared some CVEs in a later chapter based on this image
 - As **Application Name** enter `workshop-app`
 - As **Name** enter `workshop`
 - Check **Add pipeline**
@@ -55,13 +56,21 @@ The first thing is to create a new **Source-To-Image Pipeline Task** to automati
 
 - Open a Web Terminal by clicking the **>\_** in the upper right of the web console, from here you can run `oc` commands
 - The YAML object definitions for this lab are in the repo `https://github.com/devsecops-workshop/yaml.git`, go there and review the YAML definition.
-- Apply the YAML for the new ClusterTask: `oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/s2i-java-workshop.yml`
+- Apply the YAML for the new ClusterTask:
+
+```bash
+oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/s2i-java-workshop.yml
+```
 
 {{< figure src="../images/web-terminal2.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 There is an issue with the delivered version of the **Skopeo Pipeline Task**, so we will also import an updated version. This may not be necessary in the future
 
-- Apply the YAML to import it: `oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/skopeo-update.yml`
+- Apply the YAML to import it:
+
+```bash
+oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/skopeo-update.yml
+```
 
 {{% notice tip %}}
 To make this lab pretty much self-contained, we run `oc` commands from the OCP Web Terminal. But of course you can do the above steps from any Linux system where you set up the `oc` command.
@@ -111,9 +120,9 @@ At the end of the `steps` section is a new step that takes care of actaully crea
 
 ### Modify the Pipeline
 
-After adding the new **Pipeline Task** we need to modify the pipeline to:
+Now that we have our new build tasks we need to modify the pipeline to:
 
-- Introduce the new parameters into the Pipeline configuration
+- Introduce the new parameters into the **Pipeline** configuration
 - Use the new `s2i-java-workshop` task
 
 To make this easier we again provide you with a full YAML definition of the Pipeline.
@@ -127,10 +136,24 @@ If you use this lab guide with your domain as query parameter (see [here](https:
 If not, you have to replace \<DOMAIN> manually.
 {{% /notice %}}
 
-- First get the YAML file: `curl https://raw.githubusercontent.com/devsecops-workshop/yaml/main/workshop-pipeline-without-git-update.yml -o workshop-pipeline-without-git-update.yml`
+- First get the YAML file:
+
+```bash
+curl https://raw.githubusercontent.com/devsecops-workshop/yaml/main/workshop-pipeline-without-git-update.yml -o workshop-pipeline-without-git-update.yml
+```
+
 - Now we have to replace the `REPLACEME` placeholders in the YAML file with your lab domain.
-- Run: `sed -i 's/REPLACEME/<DOMAIN>/g' workshop-pipeline-without-git-update.yml` (Insert your domain if not done automatically).
-- Apply the new definition: `oc replace -f workshop-pipeline-without-git-update.yml`
+- Run (Insert your domain if not done automatically):
+
+```bash
+sed -i 's/REPLACEME/<DOMAIN>/g' workshop-pipeline-without-git-update.yml
+```
+
+- Apply the new definition:
+
+```bash
+oc replace -f workshop-pipeline-without-git-update.yml
+```
 
 Again take the time to review the changes in the web console:
 

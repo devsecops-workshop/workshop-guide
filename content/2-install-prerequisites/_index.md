@@ -123,6 +123,8 @@ After creation has finished:
 | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | {{< figure src="../images/gitea-lang1.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}} | {{< figure src="../images/gitea-lang2.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}} |
 
+## Import the Required Repositories
+
 Now we will clone a git repository of a sample application into our Gitea, so we have some code to works with
 
 - Clone the example repo:
@@ -132,6 +134,11 @@ Now we will clone a git repository of a sample application into our Gitea, so we
   - Click **Migrate Repository**
 
 In the cloned repository you'll find a `devspaces_devfile.yml`. We will need the URL to the file soon, so keep the tab open.
+
+In later chapters we will need a second repository to hold your GitOps yaml resources. Let's create this now as well
+
+- In `Gitea` create a **New Migration** and clone the Config GitOps Repo which will be the repository that contains our GitOps infrastructure components and state
+- The URL is https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
 
 ## Check OpenShift Data Foundation (ODF) Storage Deployment
 

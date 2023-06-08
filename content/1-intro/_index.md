@@ -48,23 +48,24 @@ Just make sure :
 
 - You have cluster admin privileges
 - Sizing
-  - 3 Master Nodes (m5.2x.large)
-  - 2 Worker (m5.4x.large)
+  - 3 Master Nodes (Similar to AWS m5.2x.large)
+  - 2 Worker (Similar to AWS m5.4x.large)
 - Authentication htpasswd enabled
-- For the ACS Chapter you will need your AWS credentials
+- For the ACM chapter you will need AWS credentials to automatically deploy a SingleNode OpenShift
 - Some names in the workshop may need to be customized for your environment (e.g. storage naming)
 
 This workshop was tested with these versions :
 
-- Red Hat OpenShift : 4.10.36
+- Red Hat OpenShift : 4.12.12
 - Red Hat Advanced Cluster Security for Kubernetes: 3.74.1
-- Red Hat OpenShift Dev Spaces : 3.5.0
-- Red Hat OpenShift Pipelines: 1.6.4
-- Red Hat OpenShift GitOps: 1.5.1
-- Red Hat Quay: 3.8.5
+- Red Hat OpenShift Dev Spaces : 3.6.0
+- Red Hat OpenShift Pipelines: 1.10.3
+- Red Hat OpenShift GitOps: 1.8.3
+- Red Hat Quay: 3.8.8
 - Red Hat Quay Bridge Operator: 3.7.11
-- Red Hat Data Foundation : 4.10.11
-- Gitea Operator 1.3.0
+- Red Hat Data Foundation : 4.12.03
+- Gitea Operator: 1.3.0
+- Web Terminal: 1.7.0
 
 ## Workshop Flow
 

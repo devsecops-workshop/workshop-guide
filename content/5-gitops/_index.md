@@ -14,7 +14,7 @@ So let's start be installing the OpenShift GitOps Operator based on project Argo
   The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.
   {{% /notice %}}
 - You should already have created an OpenShift **Project** `workshop-prod`
-- In the project `workshop-prod` click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
+- With the project `workshop-prod` selected in the top menu click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
 - On the **ArgoCD** "tile" click on **Create instance** to create an ArgoCD instance in the `workshop-prod` project.
 
 <!-- ![ArgoCD](../images/argo.png) -->
@@ -23,10 +23,9 @@ So let's start be installing the OpenShift GitOps Operator based on project Argo
 
 - Keep the settings as they are and click **Create**
 
-## Prepare the GitOps Config Repository
+## Check the GitOps Config Repository
 
-- In `Gitea` create a **New Migration** and clone the Config GitOps Repo which will be the repository that contains our GitOps infrastructure components and state
-- The URL is https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
+We already have a second repo in Gitea that holds the required Gitops yaml resources. We will use this repo to push changes to our `workshop-dev` enivronment.
 
 Have quick look at the structure of this project :
 
@@ -34,16 +33,16 @@ Have quick look at the structure of this project :
 
 **environments/dev** - contains the `kustomization.yaml` which will be modified by our builds with new Image versions. ArgoCD will pick up these changes and trigger new deployments.
 
-## Setup GitOps Project
+## Setup the GitOps Project in ArgoCD
 
 Let's setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly.
 
 - Find the local **ArgoCD URL** (not the global instance) by going to **Networking > Routes** in namespace `workshop-prod`
-- Open the ArgoCD website ignoring the certificate warning
+- Open the ArgoCD website, ignoring the certificate warning
 - Don't login with OpenShift but with username and password
-- User is `admin` and password will be in Secret `argocd-cluster`
+  - User is `admin` and password will be in **Secret** `argocd-cluster` in the **Project** `workspace-prod`
 
-ArgoCD works with the concept of **Apps**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html).
+ArgoCD works with the concept of **Applications**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html).
 
 - Create App
   - Click the **Manage your applications** icon on the left
@@ -62,7 +61,7 @@ ArgoCD works with the concept of **Apps**. We will create an App and point it to
 Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice we have also scaled our app to 2 pods in the prod stage as we want some HA.
 
 {{% notice info %}}
-Since we have not published our image to the Quay `workshop-int` repository the initial Deployment will roll out a defined dummy image from the public quay.io Registry. This is just to ensure a initial succesful sync in ArgoCD. Once the fist pipeline runs, our actual built image will be rolled out.
+Since we have not published our image to the Quay `workshop-prod` repository the initial Deployment will roll out a defined dummy image from the public quay.io Registry. This is just to ensure a initial succesful sync in ArgoCD for the woorkshop. Once the fist pipeline runs, our actual built image will be rolled out.
 {{% /notice %}}
 
 Our complete prod stage is now configured and controlled though GitOps. But how do we tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo.
@@ -73,7 +72,7 @@ As we do not want to modify our original repo file we will use a tool called [Ku
 It is also possible to update the repo with a Pull request. Then you have an approval process for your prod deployment.
 {{% /notice %}}
 
-## Initialize the workshop-prod/workshop repo in Quay
+## Initialize the workshop-prod/workshop Repository in Quay
 
 We will need to initialize the `workshop-prod/workshop` in Quay so the robo user will be able to to push images there later on.
 
@@ -93,7 +92,12 @@ Let's add a new custom Tekton task that can update the Image `tag` via Kustomize
 We could add this through the OpenShift Web Console as well but to save time we will apply the file directly via the `oc` command.
 
 - Go to your Web Terminal or open a new one.
-- Apply the task via YAML: `oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/tekton-kustomize.yml`
+- Apply the task via YAML:
+
+```bash
+oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/tekton-kustomize.yml
+```
+
 - In the OpenShift Webconsole go to **Pipelines > Tasks > Tasks** and have a look at the just imported task `git-update-deployment`. You should see the git commands how the config repo will be cloned, patched by **Kustomize** and the pushed again.
 
 ## Add Tekton Tasks to your Pipeline to Promote your Image to workshop-prod
@@ -167,13 +171,13 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
       workspace: workspace
 ```
 
-The `Pipeline` should now look like this. Notice that the new `tasks` runs in parallel to the `deploy` task
+The `Pipeline` should now look like this. Notice that the new **tasks** runs in parallel to the `deploy` task
 
 <!-- ![workshop Pipeline](../images/tekton.png) -->
 
 {{< figure src="../images/pipeline1.png?width=40pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-Now the pipeline is set. The last thing we need is authentication against the Gitea repo and the workshop-prod Quay org. We will add those from the `start pipeline` form next. Make sure to replace the <DOMAIN> placeholder if required.
+Now the pipeline is set. The last thing we need is authentication against the Gitea repo and the workshop-prod Quay org. We will add those from the **_start pipeline_** form next. Make sure to replace the <DOMAIN> placeholder if required.
 
 ## Update our Prod Stage via Pipeline and GitOps
 
@@ -192,7 +196,7 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
     - **Secret name :** gitea-secret
     - **Access to:** Git Server
     - **Authentication type:** Basic Authentication
-    - **Server URL:** https://repository-git.apps.&lt;DOMAIN&gt;/gitea/openshift-gitops-getting-started.git
+    - **Server URL:** https://repository-git.apps.&lt;DOMAIN&gt;/gitea/openshift-gitops-getting-started.git (replace url if necassary)
     - **Username:** gitea
     - **Password** : gitea
     - Click the checkmark
@@ -202,7 +206,7 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
   Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the powers of Tekton. It can scale natively with pods on OpenShift.
   {{% /notice %}}
 
-- This will tell ArgoCD to update the `Deployment` with this new image version
+- This will tell ArgoCD to update the **Deployment** with this new image version
 - Check that the new image is rolled out (you may need to sync manually in ArgoCD to speed things up)
 
 ## Architecture recap

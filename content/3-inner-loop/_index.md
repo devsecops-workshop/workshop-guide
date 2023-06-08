@@ -45,7 +45,7 @@ We will use a Java application based on the [Quarkus](https://quarkus.io/) stack
 
 Let's clone our project into our workspace :
 
-- Bring up your `OpenShiftDev Spaces` in your browser
+- Bring up your `OpenShift DevSpaces` in your browser
 - If a popup appears asking you to wether you "Do you truste the authors ...", check **Trust the authors of all files ...** and click on **Yes, I trust the authors**
   {{< figure src="../images/vscode_trust.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - Click on the the "Hamburger" menu in the top left, then **View > Command Palette**
@@ -68,7 +68,7 @@ Now we want to create a new OpenShift project for our app:
 
 - Open a `terminal` in your DevSpaces IDE
   - In the top left 'hamburger' menu click on **Terminal > New Terminal**)
-- The `oc` OpenSHift cli client is already installed and you are already logged into the cluster
+- The `oc` OpenShift cli client is already installed and you are already logged into the cluster
 - So go ahead and create a new project `workshop-dev`
 
 ```
@@ -79,13 +79,17 @@ oc new-project workshop-dev
 
 **odo** or 'OpenShift do' is a cli that enables developers to get started quickly with cloud native app development without being a Kubernetes expert. It offers support for multiple runtimes and you can easily setup microservice components, push code changes into running containers and debug remotely with just a few simple commands. To find out more, have look [here](https://odo.dev/)
 
-First we need to switch into the folder of your cloned project
+First we need to make sure we are folder of the cloned project.
+
+Enter
 
 ```
-cd quarkus-build-options
+pwd
 ```
 
-`odo` is smart enough to figure out what programming language and frameworks you are using. So let's let initialize our project
+if you are not in the `/projects/quarkus-build-options` folder, change into with the cd command
+
+**odo** is smart enough to figure out what programming language and frameworks you are using. So let's let initialize our project
 
 ```
 odo init
@@ -96,7 +100,7 @@ odo init
 - You can select a container in which odo will be started. Hit **Enter** (None)
 - As componenten name keep the suggestion. Hit **Enter**
 
-`odo` is not intialized for your app. Let's deploy the app to openshift in odo dev mode
+**odo** is not intialized for your app. Let's deploy the app to openshift in odo dev mode
 
 ```
 odo dev
