@@ -90,9 +90,42 @@ Click the generated link once to apply it the the current guide.
 {{< rawhtml >}}
 
 <script>
+
+  function replaceURLParameter(url, parameter) {
+    //prefer to use l.search if you have a location/link object
+
+     console.log("ReplaceURLParameter in -> " + url + " " + parameter);
+
+    var urlparts = url.split('?');   
+    if (urlparts.length >= 2) {
+
+        var prefix = encodeURIComponent("domain") + '=';
+        var pars = urlparts[1].split(/[&;]/g);
+
+        //reverse iteration as may be destructive
+        for (var i = pars.length; i-- > 0;) {    
+            //idiom for string.startsWith
+            if (pars[i].lastIndexOf(prefix, 0) !== -1) {  
+                pars.splice(i, 1);
+               
+            }
+        }
+        pars.push("domain=" + parameter)
+
+        return urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : '');
+    }
+    else
+    {
+       url = url + "?domain=" +  parameter;
+    }
+    consol.log("Returning -> " + url) 
+    return url;
+}
   function get_domain() {
-  var domain = document.getElementById("domain").value;
-  var url = window.location.href + "?domain=" +  domain;
+    
+  var domainVal = document.getElementById("domain").value;
+  var url = replaceURLParameter(window.location.href, domainVal)
+ 
   var a = document.createElement('a');
   var linkText = document.createTextNode(url);
       a.appendChild(linkText);
