@@ -21,14 +21,16 @@ These are the steps you will go through:
 
 ## Create a Custom System Policy
 
-First create the system policy. In the **ACS Portal** do the following:
+First create a new policy category and the system policy. In the **ACS Portal** do the following:
 
-- **Platform Configuration->Policy Management->Create policy**
+- **Platform Configuration->Policy Management->Policy categories tab->Create category**
+  - Enter `Workshop` as **Category name**
+  - Click **Create**
+- **Platform Configuration->Policy Management->Policies tab->Create policy**
 - **Policy Details**
   - **Name:** Workshop RHSA-2021:4904
   - **Severity:** Critical
   - **Categories:** Workshop
-    - This will create a new Category if it doesn't exist
   - Click **Next**
 - **Policy Behaviour**
   - **Lifecycle Stages:** Build, Deploy
