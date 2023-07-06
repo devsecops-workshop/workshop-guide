@@ -10,7 +10,16 @@ And all in a fun way.
 
 {{< figure src="images/workshop_architecture_full.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-## Collaboration
+## Credits & Contribution
 
-This workshop was created by **Daniel Brintzinger**, **Goetz Rieger** and **Sebastian Dehn**.
-Feel free to create a pull request or an issue in [GitHub](https://github.com/devsecops-workshop)
+This workshop was created by
+
+- [Daniel Brintzinger](https://www.linkedin.com/in/danielbrintzinger/)
+- [Goetz Rieger](https://www.linkedin.com/in/goetzrieger/)
+- [Sebastian Dehn](https://www.linkedin.com/in/sdehn/)
+
+with contributions from
+
+- [Tobias Michelis](https://www.linkedin.com/in/tobias-michelis-6928b59b/)
+
+Feel free to open an issue or create a pull request in [GitHub](https://github.com/devsecops-workshop)

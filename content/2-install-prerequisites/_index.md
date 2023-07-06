@@ -1,9 +1,9 @@
 +++
-title = "Prepare Cluster"
+title = "Install Prerequisites"
 weight = 5
 +++
 
-## Cluster Preparation
+## Install Prerequisites
 
 During this workshop you'll install and use a good number of software components. The first one is `OpenShift Data Foundation` for providing storage. We'll start with it because the install takes a fair amount of time. Number two is `Gitea` for providing Git services in your cluster with more to follow in subsequent chapters.
 
@@ -27,15 +27,40 @@ After the operator has been installed it will inform you to install a `StorageSy
 - **Security and network**: Leave set to `Default (SDN)`
 - Click **Next**
 
-You'll see a review of your settings, hit `Create StorageSystem`
-
-{{% notice tip %}}
-Don't worry if you see a _404 Page_. The ODF Operator has just extended the OpenShift Console which may no be availabe in your current view. Just relead the browser page once and your will see the System Overview
-{{% /notice %}}
+You'll see a review of your settings, hit `Create StorageSystem`. Don't worry if you see a temporary _404 Page_. Just releod the browser page once and your will see the System Overview
 
 {{< figure src="../images/odf-systems.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 As mentioned already this takes some time so go ahead and install the other prerequisites. We'll come back later.
+
+## Prepare to run oc commands
+
+You will be asked to run `oc` (the OpenShift commandline tool) commands a couple of times. We will do this by using the **OpenShift Web Terminal**. This is the easiest way because you don't have to install `oc` or an SSH client.
+
+### Install OpenShift Web Terminal
+
+To extend OpenShift with the Web Terminal option, install the **Web Terminal** operator:
+
+- Login to the OpenShift Webconsole with you cluster admin credentials
+- In the Web Console, go to **Operators > OperatorHub** and search for the **Web Terminal** operator
+- Install the operator with default settings
+
+This will take some time and installs another operator as dependency.
+
+After the operator has installed, reload the OCP Web Console browser window. You will now have a new button (**>\_**) in the upper right. Click it to start a new web terminal. From here you can run the `oc` commands when the lab guide requests it (copy/paste might depend on your laptop OS and browser settings, e.g. try `Ctrl-Shift-V` for pasting).
+
+{{< figure src="../images/web-terminal.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+{{% notice warning %}}
+The terminal is not persistent, so if it was closed for any reason anything you did in the terminal is gone after re-opening.
+{{% /notice %}}
+
+If for any reason you can't use the webterminal, your options are:
+
+- Install and run `oc` on your laptop
+- SSH into the bastion host, if running on a Red Hat RHDP lab environment. From here you can just run `oc` without login.
+
+TODO: Change yaml applies to direct git download
 
 ## Install and Prepare Gitea
 
@@ -65,12 +90,16 @@ oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea
 
 - In the Web Console, go to **Operators > OperatorHub** and search for `Gitea` (You may need to disable search filters)
 - Install the `Gitea Operator` with default settings
-- Create a new OpenShift project called `git`
-- Go to **Installed Operators > Gitea Operator** and click on the **Create Instance** tile in the `git` project
+- Go to **Installed Operators > Gitea Operator**
+- Create a new OpenShift **project** called `git` with the Project selection menu at the top
+  TODO : Screenshot
+- Make sure you are in the `git` project via the top Project selection menu !
+- Click on **Create new instance** ( while in project `git`)
 
 <!-- ![Gitea](../images/gitea.png) -->
 
 {{< figure src="../images/gitea.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+TODO : Replace Screenshot
 
 - On the **Create Gitea** page switch to the YAML view and add the following `spec` values :
 
@@ -85,7 +114,7 @@ spec:
 
 After creation has finished:
 
-- Access the route URL (you'll find it e.g. in **Networking > Routes > repository > Location**)
+- Access the route URL (you'll find it e.g. in **Networking > Routes > repository > Location**). If the Route is not yet there just wait a couple of minutes.
 - This will take you to the Gitea web UI
 - Sign-In to `Gitea` with user `gitea` and password `gitea`
 - If your Gitea UI appears in a language other then English (depending on your locale settings), switch it to English. Change the language in your Gitea UI, the example below shows a German example:
@@ -93,6 +122,8 @@ After creation has finished:
 |                                                                                                                |                                                                                                                |
 | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | {{< figure src="../images/gitea-lang1.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}} | {{< figure src="../images/gitea-lang2.png?width=10pc&classes=border,shadow" title="Click image to enlarge" >}} |
+
+## Import the Required Repositories
 
 Now we will clone a git repository of a sample application into our Gitea, so we have some code to works with
 
@@ -103,6 +134,11 @@ Now we will clone a git repository of a sample application into our Gitea, so we
   - Click **Migrate Repository**
 
 In the cloned repository you'll find a `devspaces_devfile.yml`. We will need the URL to the file soon, so keep the tab open.
+
+In later chapters we will need a second repository to hold your GitOps yaml resources. Let's create this now as well
+
+- In `Gitea` create a **New Migration** and clone the Config GitOps Repo which will be the repository that contains our GitOps infrastructure components and state
+- The URL is https://github.com/devsecops-workshop/openshift-gitops-getting-started.git
 
 ## Check OpenShift Data Foundation (ODF) Storage Deployment
 
@@ -119,7 +155,62 @@ Now it's time to check if the `StorageSystem` deployment from ODF completed succ
 
 Your container storage is ready to go, explore the information on the overview pages if you'd like.
 
-Your cluster is now prepared for the next step, proceed to the **Inner Loop**.
+## Install Red Hat Quay Container Registry
+
+The image that we have just deployed was pushed to the internal OpenShift Registry which is a great starting point for your cloud native journey. But if you require more control over you image repos, a graphical GUI, scalability, internal security scanning and the like you may want to upgrade to **Red Hat Quay**. So as a next step we want to replace the internal registry with Quay.
+
+Quay installation is done through an operator, too:
+
+- In **Operators->OperatorHub** filter for `Quay`
+- Install the **Red Hat Quay** operator with default settings
+- Create a new project called `quay` at the top Project selection menu
+- While in the project `quay` go to **Administration->LimitRanges** and delete the `quay-core-resource-limits`
+  {{< figure src="../images/delete-limit-range.png?width=45pc&classes=border,shadow" title="Click image to enlarge" >}}
+- In the operator overview of the Quay Operator on the **Quay Registry** tile click **Create instance**
+- If the _YAML view_ is shown switch to _Form view_
+- Make sure you are in the `quay` project
+- Change the name to `quay`
+- Click **Create**
+- Click the new Quayregistry, scroll down to **Conditions** and wait until the **Available** type changes to `True`
+  {{< figure src="../images/quay-available.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+Now that the Registry is installed you have to configure a superuser:
+
+- Make sure you are in the `quay` Project
+- Go to **Networking->Routes**, access the Quay portal using the URL of the first route (`quay-quay`)
+- Click **Create Account**
+  - As username put in `quayadmin`, a (fake) email address and and `quayadmin` as password.
+- Click **Create Account** again
+- In the OpenShift web console open **Workloads->Secrets**
+- Search for `quay-config-editor-credentials-...`, open the secret and copy the values, you'll need them in a second.
+- Go back to the **Routes** and open the `quay-quay-config-editor` route
+- Login with the values of the secret from above
+- Click **Sign in**
+- Scroll down to **Access Settings**
+- As **Super User** put in `quayadmin`
+- click **Validate Configuration Changes** and after the validation click **Reconfigure Quay**
+
+Reconfiguring Quay takes some time. The easiest way to determine if it's been finished is to open the Quay portal (using the `quay-quay` Route). At the upper right you'll see the username (`quayadmin`), if you click the username the drop-down should show a link **Super User Admin Panel**. When it shows up you can proceed.
+
+{{< figure src="../images/quay-superuser.png?width=15pc&classes=border,shadow" title="Click image to enlarge" >}}
+
+## Integrate Quay as Registry into OpenShift
+
+To synchronize the internal default OpenShift Registry with the Quay Registry, **Quay Bridge** is used.
+
+- In the OperatorHub of your cluster, search for the **Quay Bridge** Operator
+  - Install it with default settings
+
+Now we finally create an **Quay Bridge** instance. :
+
+- Go to the Red Hat **Quay Bridge** Operator overview (make sure you are in the `quay` namespace)
+- On the **Quay Integration** tile click **Create Instance**
+  - Open **Credentials secret**
+    - **Namespace containing the secret**: `quay`
+    - **Key within the secret**: `token`
+  - Copy the Quay Portal hostname (including `https://`) and paste it into the **Quay Hostname** field
+  - Set **Insecure registry** to `true`
+  - Click **Create**
 
 ## Architecture recap
 

@@ -13,12 +13,12 @@ In this part of the workshop you'll experience how modern software development u
 - Install the **Red Hat OpenShift Dev Spaces** Operator from OperatorHub (not the previous Codeready Workspaces versions!) with default settings
 - Go to **Installed Operators -> Red Hat OpenShift Dev Spaces** and create a new instance (**Red Hat OpenShift Dev Spaces instance Specification**) using the default settings in the project `openshift-operators`
 - Wait until deployment has finished. This may take a couple of minutes as several components will be deployed.
-- Once the instance status is ready (You can check the YAML of the instance: `status > chePhase: Active`), look up the `devspaces` Route in the `openshift-workspaces` namespace (You may need to toggle the **Show default project** button).
+- Once the instance status is ready (You can check the YAML of the instance: `status > chePhase: Active`), look up the `devspaces` Route in the `openshift-workspaces` project (If you can see the `openshift-workspaces`, you may need to toggle the **Show default project** button).
 - Open the link in a new browser tab, click on **Log in with OpenShift** and log in with your OCP credentials
 - Allow selected permissions
 
 {{% notice tip %}}
-We could create a workspace from one of the templates that come with CodeReady Workspaces, but we want to use a customized workspace with some additionally defined plugins in a [v2 devfile](https://devfile.io/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.
+We could create a workspace from one of the templates that come with DevSpaces, but we want to use a customized workspace with some additionally defined plugins in a [v2 devfile](https://devfile.io/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.
 {{% /notice %}}
 
 - In the left menu click on **Create Workspace**
@@ -45,13 +45,21 @@ We will use a Java application based on the [Quarkus](https://quarkus.io/) stack
 
 Let's clone our project into our workspace :
 
-- Bring up your `OpenShiftDev Spaces` in your browser
-- In center of the editor area click on **Clone Git Repository ....** and then at the top enter the `Git URL` to your `Gitea` Repo (You can copy the URL by clicking on the clipboard icon in Gitea) and press enter
+- Bring up your `OpenShift DevSpaces` in your browser
+- If a popup appears asking you to wether you "Do you truste the authors ...", check **Trust the authors of all files ...** and click on **Yes, I trust the authors**
+  {{< figure src="../images/vscode_trust.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+- Click on the the "Hamburger" menu in the top left, then **View > Command Palette**
+  - In the **Command Palette** prompt that appears on the top, start typing `git clone` until you can select the **Git: Clone** item
+    {{< figure src="../images/vscode_clone.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+  - Enter the `Git URL` to your **Gitea** Repository (You can copy the URL by clicking on the clipboard icon in **Gitea**) and press enter
+    {{< figure src="../images/gitea_clone_icon.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - In the following dialog **Choose a folder to clone ...**
-  - Navigate up 2 directories by clicking **..** twice
+  - Navigate up 2 directories by clicking `..` twice
   - Select the folder **projects**
+    {{< figure src="../images/vscode_git_folder.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
   - Click the button **OK**
 - In the following dialog when asked how to open the code, click on **Open**
+  {{< figure src="../images/vscode_open_folder.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - The windows will briefly reload and then you will be in the cloned project folder
 
 ## Access OpenShift and Create the Development Stage Project
@@ -60,7 +68,7 @@ Now we want to create a new OpenShift project for our app:
 
 - Open a `terminal` in your DevSpaces IDE
   - In the top left 'hamburger' menu click on **Terminal > New Terminal**)
-- The `oc` OpenSHift cli client is already installed and you are already logged into the cluster
+- The `oc` OpenShift cli client is already installed and you are already logged into the cluster
 - So go ahead and create a new project `workshop-dev`
 
 ```
@@ -71,13 +79,17 @@ oc new-project workshop-dev
 
 **odo** or 'OpenShift do' is a cli that enables developers to get started quickly with cloud native app development without being a Kubernetes expert. It offers support for multiple runtimes and you can easily setup microservice components, push code changes into running containers and debug remotely with just a few simple commands. To find out more, have look [here](https://odo.dev/)
 
-First we need to switch into the folder of your cloned project
+First we need to make sure we are folder of the cloned project.
+
+Enter
 
 ```
-cd quarkus-build-options
+pwd
 ```
 
-`odo` is smart enough to figure out what programming language and frameworks you are using. So let's let initialize our project
+if you are not in the `/projects/quarkus-build-options` folder, change into with the cd command
+
+**odo** is smart enough to figure out what programming language and frameworks you are using. So let's let initialize our project
 
 ```
 odo init
@@ -88,7 +100,7 @@ odo init
 - You can select a container in which odo will be started. Hit **Enter** (None)
 - As componenten name keep the suggestion. Hit **Enter**
 
-`odo` is not intialized for your app. Let's deploy the app to openshift in odo dev mode
+**odo** is not intialized for your app. Let's deploy the app to openshift in odo dev mode
 
 ```
 odo dev

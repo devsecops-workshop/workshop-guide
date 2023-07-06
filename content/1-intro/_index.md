@@ -28,29 +28,44 @@ We try to balance guided workshop steps and challenging you to use your knowledg
 
 ## Workshop Environment
 
-To run this workshop you basically need a fresh and empty OpenShift 4.10 cluster with cluster-admin access. In addition you will be asked to use the `oc` commandline client for some tasks.
-
 ### As Part of a Red Hat Workshop
+
+#### For Attendees
 
 As part of the workshop you will be provided with freshly installed OpenShift 4.10 clusters. Depending on attendee numbers we might ask you to gather in teams. Some workshop tasks must be done only once for the cluster (e.g. installing Operators), others like deploying and securing the application can be done by every team member separately in their own Project. This will be mentioned in the guide.
 
 You'll get all access details for your lab cluster from the facilitators. This includes the URL to the OpenShift console and information about how to SSH into your bastion host to run `oc` if asked to.
 
-### On Your Own
+#### For Facilitators
 
-As there is not special setup for the OpenShift cluster you should be able to run the workshop with any 4.10 cluster of you own. Just make sure you have cluster admin privileges.
+The easiest way to provide this environment is through the Red Hat Demo System. Provision catalog item **Red Hat OpenShift Container Platform 4 Demo** for the the attendees.
+
+### Self Hosted
+
+While the workshop is designed to be run on Red Hat Demo System you should be able to run the workshop on a 4.10 cluster of you own.
+
+Just make sure :
+
+- You have cluster admin privileges
+- Sizing
+  - 3 Master Nodes (Similar to AWS m5.2x.large)
+  - 2 Worker (Similar to AWS m5.4x.large)
+- Authentication htpasswd enabled
+- For the ACM chapter you will need AWS credentials to automatically deploy a SingleNode OpenShift
+- Some names in the workshop may need to be customized for your environment (e.g. storage naming)
 
 This workshop was tested with these versions :
 
-- Red Hat OpenShift : 4.10.36
+- Red Hat OpenShift : 4.12.12
 - Red Hat Advanced Cluster Security for Kubernetes: 3.74.1
-- Red Hat OpenShift Dev Spaces : 3.5.0
-- Red Hat OpenShift Pipelines: 1.6.4
-- Red Hat OpenShift GitOps: 1.5.1
-- Red Hat Quay: 3.8.5
+- Red Hat OpenShift Dev Spaces : 3.6.0
+- Red Hat OpenShift Pipelines: 1.10.3
+- Red Hat OpenShift GitOps: 1.8.3
+- Red Hat Quay: 3.8.8
 - Red Hat Quay Bridge Operator: 3.7.11
-- Red Hat Data Foundation : 4.10.11
-- Gitea Operator 1.3.0
+- Red Hat Data Foundation : 4.12.03
+- Gitea Operator: 1.3.0
+- Web Terminal: 1.7.0
 
 ## Workshop Flow
 
@@ -75,9 +90,42 @@ Click the generated link once to apply it the the current guide.
 {{< rawhtml >}}
 
 <script>
+
+  function replaceURLParameter(url, parameter) {
+    //prefer to use l.search if you have a location/link object
+
+     console.log("ReplaceURLParameter in -> " + url + " " + parameter);
+
+    var urlparts = url.split('?');   
+    if (urlparts.length >= 2) {
+
+        var prefix = encodeURIComponent("domain") + '=';
+        var pars = urlparts[1].split(/[&;]/g);
+
+        //reverse iteration as may be destructive
+        for (var i = pars.length; i-- > 0;) {    
+            //idiom for string.startsWith
+            if (pars[i].lastIndexOf(prefix, 0) !== -1) {  
+                pars.splice(i, 1);
+               
+            }
+        }
+        pars.push("domain=" + parameter)
+
+        return urlparts[0] + (pars.length > 0 ? '?' + pars.join('&') : '');
+    }
+    else
+    {
+       url = url + "?domain=" +  parameter;
+    }
+    consol.log("Returning -> " + url) 
+    return url;
+}
   function get_domain() {
-  var domain = document.getElementById("domain").value;
-  var url = window.location.href + "?domain=" +  domain;
+    
+  var domainVal = document.getElementById("domain").value;
+  var url = replaceURLParameter(window.location.href, domainVal)
+ 
   var a = document.createElement('a');
   var linkText = document.createTextNode(url);
       a.appendChild(linkText);

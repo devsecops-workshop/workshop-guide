@@ -5,7 +5,7 @@ weight = 15
 
 During the workshop you went through the OpenShift developer experience starting from software development using Quarkus and `odo`, moving on to automating build and deployment using Tekton pipelines and finally using GitOps for production deployments.
 
-Now it's time to add another extremely important piece to the setup; enhancing application security in a containerized world. Using a recent addition to the OpenShift portfolio: **Red Hat Advanced Cluster Security for Kubernetes**!
+Now it's time to add another extremely important piece to the setup; enhancing application security in a containerized world. Using **Red Hat Advanced Cluster Security for Kubernetes**, of course!
 
 ## Install RHACS
 
@@ -33,8 +33,51 @@ You must install the ACS Central instance in its own project and not in the **rh
   - Select **Project: rhacs-operator → Create project**
   - Create a new project called **stackrox** (Red Hat recommends using **stackrox** as the project name.)
 - In the Operator view under **Provided APIs** on the tile **Central** click **Create Instance**
-- Accept the name **stackrox-central-services**
-- Adjust the memory limit of the central instance to `6Gi` (**Central Component Settings->Resources->Limits>Memory**).
+- Switch to the YAMl View.
+- Replace the YAML content with the following:
+
+``` yaml
+apiVersion: platform.stackrox.io/v1alpha1
+kind: Central
+metadata:
+  name: stackrox-central-services
+  namespace: stackrox
+spec:
+  central:
+    db:
+      isEnabled: Default
+      persistence:
+        persistentVolumeClaim:
+          claimName: central-db
+      resources:
+        limits:
+          cpu: 2
+          memory: 6Gi
+        requests:
+          cpu: 500m
+          memory: 1Gi
+    exposure:
+      loadBalancer:
+        enabled: false
+        port: 443
+      nodePort:
+        enabled: false
+      route:
+        enabled: true
+    persistence:
+      persistentVolumeClaim:
+        claimName: stackrox-db
+  egress:
+    connectivityPolicy: Online
+  scanner:
+    analyzer:
+      scaling:
+        autoScaling: Disabled
+        maxReplicas: 2
+        minReplicas: 1
+        replicas: 1
+    scannerComponent: Enabled
+```
 - Click **Create**
 
 After deployment has finished (**Status** `Conditions: Deployed, Initialized` in the Operator view on the tab **Central**) it can take some time until the application is completely up and running. One easy way to check the state is to switch to the **Developer** console view at the upper left. Then make sure you are in the **stackrox** project and open the **Topology** map. You'll see the three deployments of an **Central** instance:
@@ -70,33 +113,46 @@ To actually do and see anything you need to add a **SecuredCluster** (be it the 
 
 This is because you don't have a monitored and secured OpenShift cluster yet.
 
-### Create an integration to scan the Quay registry
-
-So to enable scanning of images in Quay, you'll have to configure an **Integration** with valid credentials, so this is what you'll do.
-
-Now create a new Integration:
-- Access the **RHACS Portal** and configure the already existing integrations of type **Generic Docker Registry**.
-- Go to **Platform Configuration -> Integrations -> Generic Docker Registry**.
-- Click the **New integration** button
-- **Integration name**: Quay local
-- **Endpoint**: `https://quay-quay-quay.apps.<DOMAIN>` (replace domain if required)
-- **Username**: quayadmin
-- **Password**: quayadmin
-- Press the **Test** button to validate the connection and press **Save** when the test is successful.
-
 ### Prepare to add Secured Clusters
 
-First you have to generate an init bundle which contains certificates and is used to authenticate a **SecuredCluster** to the **Central** instance, again regardless if it's the same cluster as the Central instance or a remote/other cluster.
+Now we'll add your OpenShift cluster as **Secured Cluster** to ACS.
 
-In the **ACS Portal**:
+First you have to generate an init bundle which contains certificates and is used to authenticate a **SecuredCluster** to the **Central** instance, regardless if it's the same cluster as the Central instance or a remote/other cluster.
 
-- Navigate to **Platform Configuration → Integrations**.
-- Under the **Authentication Tokens** section, click on **Cluster Init Bundle**.
-- Click **Generate bundle**
-- Enter a name for the cluster init bundle and click **Generate**.
-- Click **Download Kubernetes Secret File** to download the generated bundle.
+We are using the API to create the init bundle in this workshop because we use the Web Terminal and can't upload a downloaded file to it. For the steps to create the init bundle in the ACS Portal see the appendix.
+
+Let's create the init bundle using the ACS **API** on the commandline:
+
+Go to your Web Terminal (if it timed out just start it again), then paste, edit and execute the following lines:
+
+- Set the ACS API endpoint, replace `<central_url>` with the URL of your ACS portal
+``` bash
+export ROX_ENDPOINT=<central_url>:443
+```
+- Set the admin password (same as for the portal, look up the secrets again)
+``` bash
+export PASSWORD=<password>
+```
+- Give the init bundle a name
+``` bash
+export DATA={\"name\":\"my-init-bundle\"}
+```
+- Finally run the `curl` command against the API to create the init bundle using the variables set above
+``` bash
+curl -k -o bundle.json -X POST -u "admin:$PASSWORD" -H "Content-Type: application/json" --data $DATA https://${ROX_ENDPOINT}/v1/cluster-init/init-bundles
+```
+- Convert it to the needed format
+``` bash
+cat bundle.json | jq -r '.kubectlBundle'  | base64 -d > kube-secrets.bundle
+```
+
+You should now have two files in your Web Terminal session: `bundle.json` and `kube-secrets.bundle`.
 
 The init bundle needs to be applied on all OpenShift clusters you want to secure & monitor.
+
+{{% notice info %}}
+As said, you can create an init bundle in the ACS Portal, download it and apply it from any terminal where you can run `oc` against your cluster. We did it the API way to show you how to do it and to enable you to use the Web Terminal.
+{{% /notice %}}
 
 ### Prepare the Secured Cluster
 
@@ -104,11 +160,9 @@ For this workshop we run **Central** and **SecuredCluster** on one OpenShift clu
 
 **Apply the init bundle**
 
-- Use the `oc` command to log in to the OpenShift cluster as `cluster-admin`.
-  - The easiest way might be to use the **Copy login command** link from the UI
-- Switch to the **Project** you installed **ACS Central** in, it should be `stackrox`.
-- Run `oc create -f <init_bundle>.yaml -n stackrox` pointing to the init bundle you downloaded from the Central instance and the Project you created.
-- This will create a number of secrets:
+Again in the web terminal:
+- Run `oc create -f kube-secrets.bundle -n stackrox` pointing to the init bundle you downloaded from the Central instance or created via the API as above.
+- This will create a number of secrets, the output should be:
 
 ```
 secret/collector-tls created
@@ -135,21 +189,19 @@ Now go to your **ACS Portal** again, after a couple of minutes you should see yo
 
 ## Configure Quay Integrations in ACS
 
-For ACS to be able to access images in your local Quay registry, one additional step has to be taken.
+### Create an integration to scan the Quay registry
 
-Access the ACS Portal and go to **Platform Configuration -> Integrations -> Generic Docker Registry**. You should see a number of autogenerated (from existing pull-secrets) entries.
+To enable scanning of images in your Quay registry, you'll have to configure an **Integration** with valid credentials, so this is what you'll do.
 
-You have to change the entry pointing to the local Quay registry, it should look like:
-
-`Autogenerated https://quay-quay-quay.apps.<DOMAIN> ....`
-
-Open and edit the integration using the three dots at the right:
-
+Now create a new Integration:
+- Access the **RHACS Portal** and configure the already existing integrations of type **Generic Docker Registry**.
+- Go to **Platform Configuration -> Integrations -> Generic Docker Registry**.
+- Click the **New integration** button
+- **Integration name**: Quay local
+- **Endpoint**: `https://quay-quay-quay.apps.<DOMAIN>` (replace domain if required)
 - **Username**: quayadmin
-- **Password**: the password you entered when creating the quayadmin user
-- Make sure **Update stored credentials** is checked
-- Press the Test button to validate the connection
-- Press Save when the test is successful.
+- **Password**: quayadmin
+- Press the **Test** button to validate the connection and press **Save** when the test is successful.
 
 ## Architecture recap
 
