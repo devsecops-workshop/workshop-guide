@@ -118,7 +118,7 @@ Click the generated link once to apply it the the current guide.
     {
        url = url + "?domain=" +  parameter;
     }
-    consol.log("Returning -> " + url) 
+    console.log("Returning -> " + url) 
     return url;
 }
   function get_domain() {
