@@ -85,7 +85,7 @@ Or, if working on a Red Hat RHPDS environment:
 Now using `oc` add the Gitea Operator to your OpenShift OperatorHub catalog:
 
 ```
-oc apply -f https://raw.githubusercontent.com/redhat-gpte-devopsautomation/gitea-operator/master/catalog_source.yaml
+oc apply -f https://raw.githubusercontent.com/rhpds/gitea-operator/ded5474ee40515c07211a192f35fb32974a2adf9/catalog_source.yaml
 ```
 
 - In the Web Console, go to **Operators > OperatorHub** and search for `Gitea` (You may need to disable search filters)
