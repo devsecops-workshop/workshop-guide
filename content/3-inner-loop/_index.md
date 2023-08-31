@@ -22,7 +22,7 @@ We could create a workspace from one of the templates that come with DevSpaces, 
 {{% /notice %}}
 
 - In the left menu click on **Create Workspace**
-- Copy the **raw URL** of the `devspaces_devfile.yml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
+- Copy the **raw URL** of the `devfile.yaml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
 - Paste the full URL into the **Git Repo URL** field and click **Create & Open**
 
 {{< figure src="../images/crw.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
