@@ -7,7 +7,7 @@ weight = 6
 
 ## Integrate Quay as Registry into OpenShift
 
-To synchronize the internal default OpenShift Registry with the Quay Registry, **Quay Bridge** is used. Now we need to create a new Organization in **Quay**:
+To synchronize the internal default OpenShift Registry with the Quay Registry, the **Quay Bridge** is used. Now we need to create a new Organization in **Quay**:
 
 - To access the **Quay** Portal make sure you are in the `quay` Project
 - Go to **Networking->Routes**, access the Quay portal using the URL of the first route (`quay-quay`)
@@ -29,7 +29,7 @@ We need an OAuth Application in Quay for the integration:
   - In the next view click **Authorize Application** and confirm
   - In the next view copy the **Access Token** and save it somewhere, we'll need it again
 
-Now create a new secret for Quay Bridge to access Quay. In the OpenShift web console make sure you are in the `quay` Project. Then:
+Now create a new secret for the Quay Bridge to access Quay. In the OpenShift web console make sure you are in the `quay` Project. Then:
 
   - Go to **Workloads->Secrets** and click **Create->Key/value secret**
     - **Secret name**: quay-credentials
@@ -37,9 +37,10 @@ Now create a new secret for Quay Bridge to access Quay. In the OpenShift web con
     - **Value**: paste the Access Token you generated in the Quay Portal in the text field below the grey _Value_ field
     - Click **Create**
 
-And you are done with the installation and integration of Quay as your registry! Test if the integration works:
+And you are done with the installation and integration of Quay as your registry!  
+Test if the integration works:
 
-- In the Quay Portal you should see your Openshift Projects are synced and represented as Quay Organizations, prefixed with `openshift_` (you might have to reload the browser).
+- In the Quay Portal you should see your OpenShift Projects are synced and represented as Quay Organizations, prefixed with `openshift_` (you might have to reload the browser).
   - E.g. there should be a `openshift_git` Quay Organization.
 - In the OpenShift web console create a new test Project, make sure it's synced to Quay as an Organization and delete it again.
 
