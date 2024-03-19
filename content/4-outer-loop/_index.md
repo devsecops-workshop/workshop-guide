@@ -3,18 +3,19 @@ title = "Outer Loop"
 weight = 8
 +++
 
-Now that you have seen how a developer can quickly start to code using modern cloud native tooling, it's time to learn how to proceed with the application towards production. The first step is to implement a CI/CD pipeline to automate new builds. Let's call this stage `int` for integration.
+Now that you have seen how a developer can quickly start to code using modern cloud native tooling, it's time to learn how to push the application towards a production environment. The first step is to implement a CI/CD pipeline to automate new builds. Let's call this stage `int` for integration.
 
 ## Install OpenShift Pipelines
 
 To create and run the build pipeline you'll use OpenShift Pipelines based on project Tekton. The first step is to install it:
 
-- Install the `Red hat OpenShift Pipelines` Operator
+- Install the `Red Hat OpenShift Pipelines` Operator
   - In the **OpenShift Web Console** select **Operators > OperatorHub**
-  - Find the `Red hat OpenShift Pipelines` Operator and install it with default settings
-    {{% notice warning %}}
-    Since the Piplines assets are installed asynchronously it is possible that the `Pipeline Templates` are not yet setup when proceeding immedately to the next step. So now is good time to grab a coffee.
-    {{% /notice %}}
+  - Find the `Red Hat OpenShift Pipelines` Operator and install it with the default settings
+
+{{% notice warning %}}
+Since the Piplines assets are installed asynchronously it is possible that the `Pipeline Templates` are not yet setup when proceeding immedately to the next step. So now is good time to grab a coffee.
+{{% /notice %}}
 
 ## Create App Deployment and Build Pipeline
 
@@ -41,14 +42,14 @@ If you don't have the checkbox **Add pipeline** and get the message `There are n
 {{% /notice %}}
 
 - Click **Create**
-- In the main menu left, click on **Pipelines** and then the instance in column **Last run** and observe how the Pipeline is run
+- In the main menu left, click on **Pipelines** and then the instance in column **Last run** and observe how the Pipeline is executed
   {{< figure src="../images/pipeline_initial.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Adjust the Pipeline to Deploy to Quay
 
-The current Pipeline deploys to the Internal Registry by default, so the image that was created by the first run was pushed there.
+The current Pipeline deploys to the Internal Registry by default. The image that was just created by the first run was pushed there.
 
-To leverage our brand new **Quay** registry we need to modify the Pipeline so it pushes images to the **Quay** registry. In addition the \*_OpenShift ImageStream_ must be modified to point to the Quay registry, too.
+To leverage our brand new **Quay** registry we need to modify the Pipeline in order to push the images to the **Quay** registry. In addition the \*_OpenShift ImageStream_ must be modified to point to the Quay registry, too.
 
 ### Create a new `s2i-java` ClusterTask
 
@@ -125,7 +126,7 @@ Now that we have our new build tasks we need to modify the pipeline to:
 - Introduce the new parameters into the **Pipeline** configuration
 - Use the new `s2i-java-workshop` task
 
-To make this easier we again provide you with a full YAML definition of the Pipeline.
+To make this easier we again provide you with a full YAML definition for the Pipeline.
 
 Do the following:
 
@@ -179,7 +180,7 @@ The preexisting parameter **IMAGE_NAME** now points to your local **Quay** regis
       type: string
 ```
 
-And finally the `build` task was modified work with the two new parameters:
+And finally the `build` task was modified to work with the two new parameters:
 
 ```yaml
 tasks:
@@ -192,7 +193,7 @@ tasks:
           value: $(params.IMAGESTREAMTAG)
 ```
 
-- The name of the `taskRef` was changed to `s2i-java-workshop`, so we are using our custom **Pipeline Task**:
+- The name of the `taskRef` was changed to `s2i-java-workshop`, in order to use our custom **Pipeline Task**:
 
 ```yaml
 taskRef:
@@ -206,7 +207,7 @@ We are ready to give it a try, but first let's have quick look at our target **Q
 
 - Go to the **Quay** portal and there to the `openshift_workshop-int` organization.
 - In the `openshift_workshop-int / workshop` repository access the **Tags** in the menu to the left.
-- There should be no image (yet)
+- There should be no container image (yet)
   {{< figure src="../images/quay_empty_repo.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 Now it's time to configure and start the Pipeline.
@@ -215,7 +216,7 @@ Now it's time to configure and start the Pipeline.
 - Open the `workshop` Pipeline
 - Go to the top right menu and choose **Actions -> Start**
 
-In the **Start Pipeline** window that opens, but **before (!)** starting the actual pipeline, we need to add a **Secret** so the pipeline can authenticate and push against the **Quay** repo:
+In the **Start Pipeline** window that opens, but **before (!)** starting the actual pipeline, we need to add a **Secret** so the pipeline can authenticate and push to the **Quay** repository:
 
 - Switch to the **Quay Web Portal** and click on the `openshift_workshop-int / workshop` repository
 - On the left click on **Settings**
@@ -236,7 +237,7 @@ In the **Start Pipeline** window that opens, but **before (!)** starting the act
 
 Once the Pipeline run has finished, go to the **Quay Portal** and check the **Repository** `openshift_workshop-int/workshop` again. Under **Tags** you should now see a new `workshop` Image version that was just pushed by the pipeline.
 
-Congratulations : **Quay** is now a first level citizen of your pipeline build strategy.
+Congratulations: **Quay** is now a first level citizen of your pipeline build strategy.
 
 ## Create an ImageStream Tag with an Old Image Version
 
