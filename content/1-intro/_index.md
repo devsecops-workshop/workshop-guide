@@ -5,18 +5,18 @@ weight = 1
 
 ## Intro
 
-This is the storyline you'll follow:
+This is the storyline you are going to follow:
 
-- Create application using the browser based development environment [Red Hat OpenShift Dev Spaces](https://developers.redhat.com/products/openshift-dev-spaces/overview)
+- Create an application using the browser based development environment [Red Hat OpenShift Dev Spaces](https://developers.redhat.com/products/openshift-dev-spaces/overview)
 - Setting up the **Inner Development Loop** for the individual developer
   - Use the cli tool [odo](https://developers.redhat.com/products/odo/overview) to create, push, change apps on the fly
-- Setting up the **Outer Development Loop** for the team CI/CD
+- Setting up the **Outer Development Loop** for the CI/CD team
   - Learn to work with OpenShift Pipelines based on Tekton
   - Use OpenShift GitOps based on ArgoCD
 - Secure your app and OpenShift cluster with **ACS**
   - Introduction to ACS
   - Example use cases
-  - Add ACS scanning to Tekton Pipeline
+  - Add ACS scanning to a Tekton Pipeline
 
 ## What to Expect
 
@@ -24,7 +24,7 @@ This is the storyline you'll follow:
 This workshop is for intermediate OpenShift users. A good understanding of how OpenShift works along with hands-on experience is expected. For example we will not tell you how to log in with `oc` to your cluster or tell you what it is... ;)
 {{% /notice %}}
 
-We try to balance guided workshop steps and challenging you to use your knowledge to learn new skills. This means you'll get detailed step-by-step instructions for every new chapter/task, later on the guide will become less verbose and we'll weave in some challenges.
+We try to balance guided workshop steps and challenge you to use your knowledge to learn new skills. This means you'll get detailed step-by-step instructions for every new chapter/task, later on the guide will become less verbose and we'll weave in some challenges.
 
 ## Workshop Environment
 
@@ -42,13 +42,13 @@ The easiest way to provide this environment is through the Red Hat Demo System. 
 
 ### Self Hosted
 
-While the workshop is designed to be run on Red Hat Demo System you should be able to run the workshop on a 4.10 cluster of you own.
+While the workshop is designed to be run on Red Hat Demo System you should be able to run the workshop on a 4.10 cluster of your own.
 
 Just make sure :
 
 - You have cluster admin privileges
 - Sizing
-  - 3 Master Nodes (Similar to AWS m5.2x.large)
+  - 3 Controlplane Nodes (Similar to AWS m5.2x.large)
   - 2 Worker (Similar to AWS m5.4x.large)
 - Authentication htpasswd enabled
 - For the ACM chapter you will need AWS credentials to automatically deploy a SingleNode OpenShift
@@ -69,7 +69,7 @@ This workshop was tested with these versions :
 
 ## Workshop Flow
 
-We'll tackle the topics at hand step by step with an introduction covering the things worked on before every section.
+We'll tackle the topics at hand step by step with an introduction covering the things worked on before each section.
 
 ## And finally a sprinkle of JavaScript magic
 
@@ -83,7 +83,7 @@ You'll notice placeholders for cluster access details, mainly the **part of the 
 
 ## URL Generator for Custom Lab Guide
 
-Enter your Openshift url after the `apps` part (e.g. `cluster-t50z9.t50z9.sandbox4711.opentlc.com` ) and click the button to generate a link that will customize your lab guide.
+Enter your OpenShift url after the `apps` part (e.g. `cluster-t50z9.t50z9.sandbox4711.opentlc.com` ) and click the button to generate a link that will customize your lab guide.
 
 Click the generated link once to apply it the the current guide.
 
