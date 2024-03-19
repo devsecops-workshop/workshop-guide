@@ -9,7 +9,7 @@ Now that our CI/CD build and integration stage is ready we could promote the app
 
 So let's start be installing the OpenShift GitOps Operator based on project ArgoCD.
 
-- Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with default settings
+- Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with the default settings
   {{% notice tip %}}
   The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.
   {{% /notice %}}
@@ -25,24 +25,24 @@ So let's start be installing the OpenShift GitOps Operator based on project Argo
 
 ## Check the GitOps Config Repository
 
-We already have a second repo in Gitea that holds the required Gitops yaml resources. We will use this repo to push changes to our `workshop-dev` enivronment.
+We already have a second repository in Gitea that holds the required Gitops yaml resources. We will use this repo to push changes to our `workshop-dev` enivronment.
 
-Have quick look at the structure of this project :
+Have a quick look at the structure of this project:
 
-**app** - contains yamls for the deployment, service and route resources needed by our application. These will be applied to the cluster. There is also a `kustomization.yaml` defining that kustomize layers will be applied to all yamls
+**app** - contains yaml files for the deployment, service and route resources needed by our application. These will be applied to the cluster. There is also a `kustomization.yaml` defining that kustomize layers will be applied to all yamls
 
 **environments/dev** - contains the `kustomization.yaml` which will be modified by our builds with new Image versions. ArgoCD will pick up these changes and trigger new deployments.
 
 ## Setup the GitOps Project in ArgoCD
 
-Let's setup the project that tells ArgoCD to watch our config repo and updated resources in the `workshop-prod` project accordingly.
+Let's setup the project that tells ArgoCD to watch our configuration repository and update resources in the `workshop-prod` project accordingly.
 
 - Find the local **ArgoCD URL** (not the global instance) by going to **Networking > Routes** in namespace `workshop-prod`
 - Open the ArgoCD website, ignoring the certificate warning
 - Don't login with OpenShift but with username and password
   - User is `admin` and password will be in **Secret** `argocd-cluster` in the **Project** `workspace-prod`
 
-ArgoCD works with the concept of **Applications**. We will create an App and point it to the Config Git Repo. ArgoCD will look for k8s yaml files in the repo and path and deploy them to the defined namespace. Additionally ArgoCD will also react to changes to the repo and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html).
+ArgoCD works with the concept of **Applications**. We will create an App and point it to the configuration Git repository. ArgoCD will look for Kubernetes yaml files in the repository and path and deploy them to the defined namespace. Additionally, ArgoCD will also react to changes to the repository and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html).
 
 - Create App
   - Click the **Manage your applications** icon on the left
@@ -58,23 +58,23 @@ ArgoCD works with the concept of **Applications**. We will create an App and poi
   - Click on **Sync** and then **Synchronize** to manually trigger the first sync
   - Click on the `workshop` to show the deployment graph
 
-Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice we have also scaled our app to 2 pods in the prod stage as we want some HA.
+Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice, we have also scaled our app to 2 pods in the production stage as we want some high availability.
 
 {{% notice info %}}
-Since we have not published our image to the Quay `workshop-prod` repository the initial Deployment will roll out a defined dummy image from the public quay.io Registry. This is just to ensure a initial succesful sync in ArgoCD for the woorkshop. Once the fist pipeline runs, our actual built image will be rolled out.
+Since we have not published our image to the Quay `workshop-prod` repository the initial Deployment will roll out a defined dummy image from the public quay.io Registry. This is just to ensure a initial succesful sync in ArgoCD for the woorkshop. Once the first pipeline run is complete, our newly built image will be deployed.
 {{% /notice %}}
 
-Our complete prod stage is now configured and controlled though GitOps. But how do we tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the config repo.
+Our complete production stage is now configured and controlled through GitOps. But how do we tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the configuration repository.
 
-As we do not want to modify our original repo file we will use a tool called [Kustomize](https://kustomize.io/) that can add incremental change layers to YAML files. Since ArgoCD permanently watches this repo it will pick up these Kustomize changes.
+As we do not want to modify our original repository file we will use a tool called [Kustomize](https://kustomize.io/) that can add incremental change layers to YAML files. Since ArgoCD permanently watches this repository it will pick up these Kustomize changes.
 
 {{% notice tip %}}
-It is also possible to update the repo with a Pull request. Then you have an approval process for your prod deployment.
+It is also possible to update the repository with a Pull request. Then you have an approval process for your production deployment.
 {{% /notice %}}
 
 ## Initialize the workshop-prod/workshop Repository in Quay
 
-We will need to initialize the `workshop-prod/workshop` in Quay so the robo user will be able to to push images there later on.
+We will need to initialize the `workshop-prod/workshop` in Quay so the robo user will be able to push images there later on.
 
 - In Quay select the organization `openshift_workshop-prod` on the right
 - Click on **+ Create New Repository** on the top left
@@ -87,7 +87,7 @@ We will need to initialize the `workshop-prod/workshop` in Quay so the robo user
 
 ## Add Kustomize and Git Push Tekton Task
 
-Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build and then push the change to our git config repo.
+Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build and then push the change to our git configuration repository.
 
 We could add this through the OpenShift Web Console as well but to save time we will apply the file directly via the `oc` command.
 
@@ -98,11 +98,11 @@ We could add this through the OpenShift Web Console as well but to save time we 
 oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/tekton-kustomize.yml
 ```
 
-- In the OpenShift Webconsole go to **Pipelines > Tasks > Tasks** and have a look at the just imported task `git-update-deployment`. You should see the git commands how the config repo will be cloned, patched by **Kustomize** and the pushed again.
+- In the OpenShift Web Console go to **Pipelines > Tasks > Tasks** and have a look at the just imported task `git-update-deployment`. You should see the git commands how the configuration repository will be cloned, patched by **Kustomize** and then pushed again.
 
 ## Add Tekton Tasks to your Pipeline to Promote your Image to workshop-prod
 
-So now we have a new Tekton Task in our task catalog to update a Gitops Git repo, but we still need to pomote the actual Image from out `workshop-int` to `workshop-prod` project. Otherwise the image will not be available for our Deployment.
+So now we have a new Tekton Task in our task catalog to update a GitOps Git repository, but we still need to promote the actual image from out `workshop-int` to `workshop-prod` project. Otherwise the image will not be available for our deployment.
 
 - Go to **Pipelines > Pipelines > workshop** and then YAML
 
@@ -112,7 +112,7 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
 
 Add the new Task to your Pipeline by adding it to the YAML like this:
 
-- First we will add a new Pipeline Parameter 'GIT_CONFIG_REPO' at the beginning of the Pipeline and set it by default to our GitOps Config Repository (This will be updated by the Pipeline and then trigger ArgoCD to deploy to Prod)
+- First we will add a new Pipeline Parameter 'GIT_CONFIG_REPO' at the beginning of the Pipeline and set it by default to our GitOps configuration repository (This will be updated by the Pipeline and then trigger ArgoCD to deploy to Production)
 - So in the YAML view at the end of the `spec > params` section add the following (if the `<DOMAIN>` placeholder hasn't been replaced automatically, do it manually):
 
 ```yaml
@@ -177,7 +177,7 @@ The `Pipeline` should now look like this. Notice that the new **tasks** runs in 
 
 {{< figure src="../images/pipeline1.png?width=40pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-Now the pipeline is set. The last thing we need is authentication against the Gitea repo and the workshop-prod Quay org. We will add those from the **_start pipeline_** form next. Make sure to replace the <DOMAIN> placeholder if required.
+Now the pipeline is set. The last thing we need is authentication against the Gitea repository and the workshop-prod Quay org. We will add those from the **_start pipeline_** form next. Make sure to replace the <DOMAIN> placeholder if required.
 
 ## Update our Prod Stage via Pipeline and GitOps
 
@@ -201,9 +201,9 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
     - **Password** : gitea
     - Click the checkmark
 
-- Run the pipeline by clicking **Start** and see that in your Gitea config repo the file `/environment/dev/kustomize.yaml` is updated with the new image version
+- Run the pipeline by clicking **Start** and see that in your Gitea configuration repository the file `/environment/dev/kustomize.yaml` is updated with the new image version
   {{% notice tip %}}
-  Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the powers of Tekton. It can scale natively with pods on OpenShift.
+  Notice that the `deploy` and the `git-update` steps now run in parallel. This is one of the strength of Tekton. It can scale natively with pods on OpenShift.
   {{% /notice %}}
 
 - This will tell ArgoCD to update the **Deployment** with this new image version
