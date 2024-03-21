@@ -5,7 +5,7 @@ weight = 15
 
 During the workshop you went through the OpenShift developer experience starting from software development using Quarkus and `odo`, moving on to automating build and deployment using Tekton pipelines and finally using GitOps for production deployments.
 
-Now it's time to add another extremely important piece to the setup; enhancing application security in a containerized world. Using **Red Hat Advanced Cluster Security for Kubernetes**, of course!
+Now it's time to add another extremely important piece to the setup: enhancing application security in a containerized world. Using **Red Hat Advanced Cluster Security for Kubernetes**, of course!
 
 ## Install RHACS
 
@@ -80,7 +80,7 @@ spec:
 ```
 - Click **Create**
 
-After deployment has finished (**Status** `Conditions: Deployed, Initialized` in the Operator view on the tab **Central**) it can take some time until the application is completely up and running. One easy way to check the state is to switch to the **Developer** console view at the upper left. Then make sure you are in the **stackrox** project and open the **Topology** map. You'll see the three deployments of an **Central** instance:
+After the deployment has finished (**Status** `Conditions: Deployed, Initialized` in the Operator view on the **Central** tab), it can take some time until the application is completely up and running. One easy way to check the state, is to switch to the **Developer** console view on the upper left. Then make sure you are in the **stackrox** project and open the **Topology** map. You'll see the three deployments of the **Central** instance:
 
 - **scanner-db**
 - **scanner**
@@ -107,7 +107,7 @@ RHACS setup:
 
 - The application management interface and services. It handles data persistence, API interactions, and user interface access. You can use the same **Central** instance to **secure multiple** OpenShift or Kubernetes clusters.
 
-- Scanner, which is a vulnerability scanner for scanning container images. It analyzes all image layers to check known vulnerabilities from the Common Vulnerabilities and Exposures (CVEs) list. Scanner also identifies vulnerabilities in packages installed by package managers and in dependencies for multiple programming languages.
+- Scanner, which is a vulnerability scanner for scanning container images. It analyzes all image layers for known vulnerabilities from the Common Vulnerabilities and Exposures (CVEs) list. Scanner also identifies vulnerabilities in packages installed by package managers and in dependencies for multiple programming languages.
 
 To actually do and see anything you need to add a **SecuredCluster** (be it the same or another OpenShift cluster). For effect go to the **ACS Portal**, the Dashboard should by pretty empty, click on the **Compliance** link in the menu to the left, lots of zero's and empty panels, too.
 
@@ -117,9 +117,9 @@ This is because you don't have a monitored and secured OpenShift cluster yet.
 
 Now we'll add your OpenShift cluster as **Secured Cluster** to ACS.
 
-First you have to generate an init bundle which contains certificates and is used to authenticate a **SecuredCluster** to the **Central** instance, regardless if it's the same cluster as the Central instance or a remote/other cluster.
+First, you have to generate an init bundle which contains certificates and is used to authenticate a **SecuredCluster** to the **Central** instance, regardless if it's the same cluster as the Central instance or a remote/other cluster.
 
-We are using the API to create the init bundle in this workshop because we use the Web Terminal and can't upload a downloaded file to it. For the steps to create the init bundle in the ACS Portal see the appendix.
+We are using the API to create the init bundle in this workshop, because we use the Web Terminal and can't upload a downloaded file to it. For the steps to create the init bundle in the ACS Portal see the appendix.
 
 Let's create the init bundle using the ACS **API** on the commandline:
 
@@ -148,7 +148,7 @@ cat bundle.json | jq -r '.kubectlBundle'  | base64 -d > kube-secrets.bundle
 
 You should now have two files in your Web Terminal session: `bundle.json` and `kube-secrets.bundle`.
 
-The init bundle needs to be applied on all OpenShift clusters you want to secure & monitor.
+The init bundle needs to be applied to all OpenShift clusters you want to secure and monitor.
 
 {{% notice info %}}
 As said, you can create an init bundle in the ACS Portal, download it and apply it from any terminal where you can run `oc` against your cluster. We did it the API way to show you how to do it and to enable you to use the Web Terminal.
@@ -185,7 +185,7 @@ You are ready to install the **SecuredClusters** instance, this will deploy the 
 <!-- - Under **Per Node Settings** -> **Collector Settings** change the value for **Collection** form `EBPF` to `KernelModule`. This is a workaround for a known issue. -->
 - Click **Create**
 
-Now go to your **ACS Portal** again, after a couple of minutes you should see you secured cluster under **Platform Configuration->Clusters**. Wait until all **Cluster Status** indicators become green.
+Now go to your **ACS Portal** again, after a couple of minutes you should see your secured cluster under **Platform Configuration->Clusters**. Wait until all **Cluster Status** indicators become green.
 
 ## Configure Quay Integrations in ACS
 
