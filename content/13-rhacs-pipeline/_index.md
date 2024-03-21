@@ -9,15 +9,15 @@ weight = 30
 There are basically two ways to interface with ACS. The UI, which focuses on the needs of the security team, and a separate "interface" for developers to integrate into their existing toolset (CI/CD pipeline, consoles, ticketing systems etc): The `roxctl` commandline tool. This way ACS provides a familiar interface to understand and address issues that the security team considers important.
 {{% /notice %}}
 
-ACS policies can act during the CI/CD pipeline to identify security risk in images before they are run as a container.
+ACS policies can act during the CI/CD pipeline to identify security risk in container images before they are started.
 
 ## Integrate Image Scan into the Pipeline
 
-You should have created and build a custom policy in ACS and tested it for triggering violations. Now you will integrate it into the build pipeline.
+You should have created and build a custom policy in ACS and tested it to trigger violations. Now you will integrate it into the build pipeline.
 
 ### Let's go: Prepare `roxctl`
 
-Build-time policies require the use of the `roxctl` command-line tool which is available for download from the ACS Central UI, in the upper right corner of the dashboard. `Roxctl` needs to authenticate to **ACS Central** to do anything. It can use either username and password API tokens to authenticate against Central. It's good practice to use a token so that's what we'll do.
+Build-time policies require the use of the `roxctl` command-line tool which is available for download from the ACS Central UI, in the upper right corner of the dashboard. `Roxctl` needs to authenticate to **ACS Central** to do anything. You can use either username and password or API tokens to authenticate against ACS Central. It's good practice to use a token so that's what we'll do.
 
 ### Create the `roxctl` token
 
@@ -64,13 +64,13 @@ image.openshift.io/triggers: >-
   [{"from":{"kind":"ImageStreamTag","name":"workshop2:latest","namespace":"workshop-int"},"fieldPath":"spec.template.spec.containers[?(@.name==\"workshop2\")].image","pause":"false"
 ```
 
-This way we made sure that a new image won't be deployed automatically right after the `build` task which also updates the **ImageStream**.
+This way we make sure that a new image won't be deployed automatically right after the `build` task which also updates the **ImageStream**.
 
 ### Create a Scan Task
 
 You are now ready to create a new pipeline task that will use `roxctl` to scan the image build in your pipeline before the deploy step:
 
-- In the OCP UI, make sure you are still in the project with your pipeline and the secret `roxsecrets`
+- In the OpenShift UI, make sure you are still in the project with your pipeline and the secret `roxsecrets`
 - Go to **Pipelines->Tasks**
 - Click **Create-> ClusterTask**
 - Replace the YAML displayed with this:
@@ -131,9 +131,9 @@ spec:
 
 Take your time to **understand** the Tekton task definition:
 
-- First some parameters are defined, it's important to understand some of these are taken or depend on the build task that run before.
+- First, some parameters are defined, it's important to understand some of these are taken or depend on the build task that run before.
 - The script action pulls the `roxctl` binary into the pipeline workspace so you'll always have a version compatible with your ACS version.
-- The most important bit is the `roxctl` execution, of course.
+- The most important bit is the `roxctl` execution, of course:
   - it executes the `image check` command
   - only checks against policies from category **Workshop** that was created above. This way you can check against a subset of policies!
   - defines the image to check and it's digest
@@ -200,7 +200,7 @@ The last step is to enforce the System Policy. If the policy is violated the pip
 - Expected results:
   - We are sure you know by now what to expect!
   - The pipeline should fail with the old image version and succeed with the latest image version!
-  - Make sure you run the pipeline once, otherwise your application will not have valid image tag when you kill the running pod in the next chapter
+  - Make sure you run the pipeline once, otherwise your application will not have a valid image tag when you kill the running pod in the next chapter
 
 {{< figure src="../images/acs-enforce-policy.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 

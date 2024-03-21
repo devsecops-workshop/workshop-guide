@@ -55,7 +55,7 @@ Now trigger the policy again by opening a terminal into the pod in the **OpenShi
 
 - Runtime enforcement will kill the pod immediately (via k8s).
 - OpenShift will scale it up again automatically
-  - This is to be expected and allows to contain a potential compromise while not causing a production outage.
+  - This is expected and allows to contain a potential compromise while not causing a production outage.
 
 ## Architecture recap
 

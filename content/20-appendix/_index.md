@@ -5,7 +5,7 @@ weight = 45
 
 ## Create ACS init bundle in ACS Portal
 
-Creating the init bundle using the **ACS Portal**:
+Create the init bundle using the **ACS Portal**:
 
 - Navigate to **Platform Configuration → Integrations**.
 - Under the **Authentication Tokens** section, click on **Cluster Init Bundle**.
