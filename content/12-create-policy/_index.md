@@ -9,14 +9,14 @@ You should have one or more pipelines to build your application from the first w
 
 **We want to scan our application image for the Red Hat Security Advisory RHSA-2021:4904 concerning openssl-lib.**
 
-If this RHSA is found in an image we don't want to deploy the application using it.
+If this RHSA is found in an image we don't want to deploy the application.
 
 These are the steps you will go through:
 
 - Create a custom **Security Policy** to check for the advisory
 - Test if the policy is triggered in non-enforcing mode
   - with an older image version that contains the issue
-  - and then with a newer version with the issue fixed.
+  - and then with a newer version with the issue fixed
 - The final goal is to integrate the policy into the build pipeline
 
 ## Create a Custom System Policy
@@ -37,14 +37,14 @@ First create a new policy category and the system policy. In the **ACS Portal** 
   - **Response method**: Inform
   - Click **Next**
 - **Policy Criteria**
-  - Find the **CVE** policy criterium under **Drag out policy fields** in **Image contents**
+  - Find the **CVE** policy criteria under **Drag out policy fields** in **Image contents**
   - Drag & drop it on the drop zone of Policy Section 1
   - Put `RHSA-2021:4904` into the **CVE identifier** field
   - Click **Next**
 - **Policy Scope**
-  - You could limit the scope the policy is applied in, do nothing for now.
+  - You could limit the scope the policy is applied in, do nothing for now
 - **Review Policy**
-  - Have a quick look around, if the policy would create a violation you get a preview here.
+  - Have a quick look around, if the policy would create a violation you get a preview here
   - Click **Save**
 
 {{< figure src="../images/custom-policy.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
@@ -74,7 +74,7 @@ Now start the pipeline with the fixed image version that doesn't contain the CVE
 - Follow the **Violations** in the **ACS Portal**
 - Expected result:
   - You'll see the build deployments come up and go
-  - When the final build is deployed you'll see the policy violation for `Workshop RHSA-2021:4904` for your deployment is gone because the image no longer contains it.
+  - When the final build is deployed you'll see the policy violation for `Workshop RHSA-2021:4904` for your deployment is gone because the image no longer contains it
 
 This shows how ACS is automatically scanning images when they become active against all enabled policies. But we don't want to just **admire a violation** after the image has been deployed, we want to disable the deployment during build time! So the next step is to integrate the check into the build pipeline and enforce it (don't deploy the application).
 
