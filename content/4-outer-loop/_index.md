@@ -7,7 +7,7 @@ Now that you have seen how a developer can quickly start to code using modern cl
 
 ## Install OpenShift Pipelines
 
-To create and run the build pipeline you'll use OpenShift Pipelines based on project Tekton. The first step is to install it:
+To create and run the build pipeline you'll use OpenShift Pipelines based on project [Tekton](https://https://tekton.dev). The first step is to install it:
 
 - Install the `Red Hat OpenShift Pipelines` Operator
   - In the **OpenShift Web Console** select **Operators > OperatorHub**
@@ -19,7 +19,7 @@ Since the Piplines assets are installed asynchronously it is possible that the `
 
 ## Create App Deployment and Build Pipeline
 
-After installing the Operator create a new deployment of your game-changing application:
+After installing the Operator, create a new deployment of your game-changing application:
 
 - Create a new OpenShift project called `workshop-int` (e.g. using the **Projects** menu item at the top)
 - In the left menu at the top switch to the **OpenShift Developer Console** by clicking on **Administrator > Developer**
@@ -27,6 +27,7 @@ After installing the Operator create a new deployment of your game-changing appl
 - Make sure you are still in the `workshop-int` project by verifying in the top **Project** menu
 - Click the **+Add** menu entry to the left and choose the **Import from Git** card
 - As **Git Repo URL** enter the clone URL for the `quarkus-build-options` repo in your `Gitea` instance
+{{< figure src="../images/gitea_clone_icon.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
   - There might be a warning about the repo url that you can ignore
   - Leave **Git type** set to `other`
 - Click **Show advanced Git options** and for **Git reference** enter `master`
@@ -49,13 +50,15 @@ If you don't have the checkbox **Add pipeline** and get the message `There are n
 
 The current Pipeline deploys to the Internal Registry by default. The image that was just created by the first run was pushed there.
 
-To leverage our brand new **Quay** registry we need to modify the Pipeline in order to push the images to the **Quay** registry. In addition the \*_OpenShift ImageStream_ must be modified to point to the Quay registry, too.
+To leverage our brand new **Quay** registry we need to modify the Pipeline in order to push the images to the **Quay** registry. In addition the **OpenShift ImageStream** must be modified to point to the **Quay** registry, too.
 
 ### Create a new `s2i-java` ClusterTask
 
 The first thing is to create a new **Source-To-Image Pipeline Task** to automatically update the **ImageStream** to point to **Quay**. You could of course copy and modify the default `s2i-java` task using the built-in YAML editor of the **OpenShift Web Console**. But to make this as painless as possible we have prepared the needed YAML object definition for you already.
 
-- Open a Web Terminal by clicking the **>\_** in the upper right of the web console, from here you can run `oc` commands
+- Open a Web Terminal by clicking the **>\_** in the upper right of the web console, 
+- Click **Start** and wait for the terminal to initialize
+- From here you can run `oc` commands
 - The YAML object definitions for this lab are in the repo `https://github.com/devsecops-workshop/yaml.git`, go there and review the YAML definition.
 - Apply the YAML for the new ClusterTask:
 
@@ -130,7 +133,7 @@ To make this easier we again provide you with a full YAML definition for the Pip
 
 Do the following:
 
-- Go to your Web Terminal (if it timed out just start it again)
+- Go to your **Web Terminal** (if it timed out just start it again)
 
 {{% notice tip %}}
 If you use this lab guide with your domain as query parameter (see [here](https://devsecops-workshop.github.io/1-intro/#and-finally-a-sprinkle-of-javascript-magic)), you are good to go with the command below because your domain was already inserted into the command.
@@ -220,7 +223,7 @@ In the **Start Pipeline** window that opens, but **before (!)** starting the act
 
 - Switch to the **Quay Web Portal** and click on the `openshift_workshop-int / workshop` repository
 - On the left click on **Settings**
-- Click on the `openshift_workshop-int+builder` **Robot Account** and copy the username and token
+- Click on the `openshift_workshop-int+builder` **Robot Account** and copy the token
   {{< figure src="../images/quay_robot_account.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - Back in the **Start Pipeline** form
   - At the buttom, click on **Show credential options** and then **Add secret**
