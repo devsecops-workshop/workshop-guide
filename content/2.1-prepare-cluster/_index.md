@@ -34,7 +34,7 @@ Now create a new secret for the Quay Bridge to access Quay. In the OpenShift web
   - Go to **Workloads->Secrets** and click **Create->Key/value secret**
     - **Secret name**: quay-credentials
     - **Key**: token
-    - **Value**: paste the Access Token you generated in the Quay Portal in the shite text field below the grey _Value_ field
+    - **Value**: paste the Access Token you generated in the Quay Portal in the text field below the grey _Value_ field
     - Click **Create**
 
 And you are done with the installation and integration of Quay as your registry!  
