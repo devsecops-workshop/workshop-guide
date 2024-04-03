@@ -10,7 +10,7 @@ In this part of the workshop you'll experience how modern software development u
 
 **OpenShift Dev Spaces** is a browser-based IDE for Cloud Native Development. All the heavy lifting is done through a container running your workspace on OpenShift. All you really need is a laptop. You can easily switch and setup a customized environment, plugin, build tools and runtimes. So switching from one project context to another is as easy a switching a website. No more endless installation and configuration marathons on your dev laptop. It is already part of your OpenShift subscription. If you want to find out more have a look [here](https://developers.redhat.com/products/openshift-dev-spaces/overview)
 
-- Install the **Red Hat OpenShift Dev Spaces** Operator from OperatorHub (not the previous Codeready Workspaces versions!) with default settings
+- Install the **Red Hat OpenShift Dev Spaces** Operator from OperatorHub with default settings
 - Go to **Installed Operators -> Red Hat OpenShift Dev Spaces** and create a new instance (**Red Hat OpenShift Dev Spaces instance Specification**) using the default settings in the project `openshift-operators`
 - Wait until deployment has finished. This may take a couple of minutes as several components will be deployed.
 - Once the instance status is ready (You can check the YAML of the instance: `status > chePhase: Active`), look up the `devspaces` Route in the `openshift-workspaces` project (If you can see the `openshift-workspaces`, you may need to toggle the **Show default project** button).
@@ -21,18 +21,30 @@ In this part of the workshop you'll experience how modern software development u
 We could create a workspace from one of the templates that come with Dev Spaces, but we want to use a customized workspace with some additionally defined plugins in a [v2 devfile](https://devfile.io/) in our git repo. With devfiles you can share a complete workspace setup and with the click of a link and you will end up in a fully configured project in your browser.
 {{% /notice %}}
 
+You will now need to access the Gitea repository where your Quarkus app resides and specifically get the path to the devfile.
+- Find the Gitea URL by selecting the `git` project in openshift and then **Networking > Routes**
+- Click on the URL and login to Gitea with
+  - username : gitea
+  - password : gitea
+- On the right side click on the repository `gitea/quarkus-build-options`
+- Then click on the devfile `devspaces_devfile.yml`
+- Now click on button **Raw** (or **Originalversion** in German) and copy this URL
+
+It is important that you have the URL to the Raw version, otherwise DevSpace will recieve a website that it cannot parse.
+
+Now back in your DevSpaces Workspace :
 - In the left menu click on **Create Workspace**
-- Copy the **raw URL** of the `devfile.yaml` file in your `Gitea` repository by clicking on the file and then on the **Raw** button (or **Originalversion** in German).
-- Paste the full URL into the **Git Repo URL** field and click **Create & Open**
+- Paste the full URL of the devfile that you just copied into the **Git Repo URL** field and click **Create & Open**
 
 {{< figure src="../images/crw.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 - You'll get into the **Creating a workspace ...** view, give the workspace containers some time to spin up.
+- If a popup appears asking you to "trust the authors of the files" click `Yes, I trust the authors` {{< figure src="../images/trust.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 When your workspace has finally started, have a good look around in the UI. It should look familiar if you have ever worked with VSCode or similar IDEs.
 
 {{% notice tip %}}
-While working with Dev Spaces make sure you have AdBlockers disabled, you are not on a VPN and a have good internet connection to ensure a stable setup. If you are facing any issues try to reload the Browser window. If that doesn't help restart the workspace in the main Dev Spaces site under **Workspaces** and then menu **Restart Workspace**
+While working with Dev Spaces make sure you have AdBlockers disabled, you are not on a VPN and a have good internet connection to ensure a stable setup. If you are facing any issues try to reload the Browser window. If that doesn't help restart the workspace in the main DevSpaces Web Console under **Workspaces** and then menu **Restart Workspace**
 {{% /notice %}}
 
 ## Clone the Quarkus Application Code
@@ -47,21 +59,17 @@ We will use a Java application based on the [Quarkus](https://quarkus.io/) stack
 Let's clone our project into our workspace :
 
 - Bring up your `OpenShift DevSpaces` in your browser
-- If a popup appears asking you to wether you "Do you truste the authors ...", check **Trust the authors of all files ...** and click on **Yes, I trust the authors**
-  {{< figure src="../images/vscode_trust.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - Click on the the "Hamburger" menu in the top left, then **View > Command Palette**
   - In the **Command Palette** prompt that appears on the top, start typing `git clone` until you can select the **Git: Clone** item
     {{< figure src="../images/vscode_clone.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
   - Enter the `Git URL` to your **Gitea** Repository (You can copy the URL by clicking on the clipboard icon in **Gitea**) and press enter
     {{< figure src="../images/gitea_clone_icon.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-- In the following dialog **Choose a folder to clone ...**
-  - Navigate up 2 directories by clicking `..` twice
-  - Select the folder **projects**
-    {{< figure src="../images/vscode_git_folder.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-  - Click the button **OK**
+- In the following dialog **Choose a folder to clone ...** Click the button **OK**
 - In the following dialog when asked how to open the code, click on **Open**
   {{< figure src="../images/vscode_open_folder.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - The windows will briefly reload and then you will be in the cloned project folder
+- You may have to check "Trust the authors ..." and click `Yes, I trust the authors` again. Last time, promise :)
+{{< figure src="../images/vscode_trust.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Access OpenShift and Create the Development Stage Project
 
