@@ -3,15 +3,15 @@ title = "Install and Configure ACS"
 weight = 15
 +++
 
-During the workshop you went through the OpenShift developer experience starting from software development using Quarkus and `odo`, moving on to automating build and deployment using Tekton pipelines and finally using GitOps for production deployments.
+During the workshop you went through the OpenShift developer experience starting from software development using Quarkus and **odo**, moving on to automating build and deployment using Tekton pipelines and finally using GitOps for production deployments.
 
 Now it's time to add another extremely important piece to the setup: enhancing application security in a containerized world. Using **Red Hat Advanced Cluster Security for Kubernetes**, of course!
 
 ## Install RHACS
 
-### Install the Operator
+### RHCAS Operator
 
-Install the "Advanced Cluster Security for Kubernetes" operator from OperatorHub:
+Install the **Advanced Cluster Security for Kubernetes** operator from the OperatorHub:
 
 - Switch **Update approval** to `Manual`
 - Apart from this use the default settings
@@ -21,7 +21,7 @@ Install the "Advanced Cluster Security for Kubernetes" operator from OperatorHub
 Red Hat recommends installing the Red Hat Advanced Cluster Security for Kubernetes Operator in the **rhacs-operator** namespace. This will happen by default..
 {{% /notice %}}
 
-### Install the main component **Central**
+### Installing the main component **Central**
 
 {{% notice info %}}
 You must install the ACS Central instance in its own project and not in the **rhacs-operator** and **openshift-operator** projects, or in any project in which you have installed the ACS Operator!
@@ -43,7 +43,22 @@ metadata:
   name: stackrox-central-services
   namespace: stackrox
 spec:
+  monitoring:
+    openshift:
+      enabled: true
   central:
+    notifierSecretsEncryption:
+      enabled: false
+    exposure:
+      loadBalancer:
+        enabled: false
+        port: 443
+      nodePort:
+        enabled: false
+      route:
+        enabled: true
+    telemetry:
+      enabled: true
     db:
       isEnabled: Default
       persistence:
@@ -55,20 +70,30 @@ spec:
           memory: 6Gi
         requests:
           cpu: 500m
-          memory: 1Gi
-    exposure:
-      loadBalancer:
-        enabled: false
-        port: 443
-      nodePort:
-        enabled: false
-      route:
-        enabled: true
+          memory: 1Gi    
     persistence:
       persistentVolumeClaim:
         claimName: stackrox-db
   egress:
     connectivityPolicy: Online
+  scannerV4:
+    db:
+      persistence:
+        persistentVolumeClaim:
+          claimName: scanner-v4-db
+    indexer:
+      scaling:
+        autoScaling: Disabled
+        maxReplicas: 2
+        minReplicas: 1
+        replicas: 1
+    matcher:
+      scaling:
+        autoScaling: Disabled
+        maxReplicas: 2
+        minReplicas: 1
+        replicas: 1
+    scannerComponent: Default
   scanner:
     analyzer:
       scaling:
@@ -76,15 +101,16 @@ spec:
         maxReplicas: 2
         minReplicas: 1
         replicas: 1
-    scannerComponent: Enabled
+
 ```
 - Click **Create**
 
 After the deployment has finished (**Status** `Conditions: Deployed, Initialized` in the Operator view on the **Central** tab), it can take some time until the application is completely up and running. One easy way to check the state, is to switch to the **Developer** console view on the upper left. Then make sure you are in the **stackrox** project and open the **Topology** map. You'll see the three deployments of the **Central** instance:
 
-- **scanner-db**
 - **scanner**
-- **centrals**
+- **scanner-db**
+- **central**
+- **central-db**
 
 Wait until all Pods have been scaled up properly.
 
@@ -109,7 +135,7 @@ RHACS setup:
 
 - Scanner, which is a vulnerability scanner for scanning container images. It analyzes all image layers for known vulnerabilities from the Common Vulnerabilities and Exposures (CVEs) list. Scanner also identifies vulnerabilities in packages installed by package managers and in dependencies for multiple programming languages.
 
-To actually do and see anything you need to add a **SecuredCluster** (be it the same or another OpenShift cluster). For effect go to the **ACS Portal**, the Dashboard should by pretty empty, click on the **Compliance** link in the menu to the left, lots of zero's and empty panels, too.
+To actually do and see anything you need to add a **SecuredCluster** (be it the same or another OpenShift cluster). For effect go to the **ACS Portal**, the Dashboard should by pretty empty, click on either of the **Compliance** link in the menu to the left, lots of zero's and empty panels, too.
 
 This is because you don't have a monitored and secured OpenShift cluster yet.
 
@@ -119,13 +145,13 @@ Now we'll add your OpenShift cluster as **Secured Cluster** to ACS.
 
 First, you have to generate an init bundle which contains certificates and is used to authenticate a **SecuredCluster** to the **Central** instance, regardless if it's the same cluster as the Central instance or a remote/other cluster.
 
-We are using the API to create the init bundle in this workshop, because we use the Web Terminal and can't upload a downloaded file to it. For the steps to create the init bundle in the ACS Portal see the appendix.
+We are using the API to create the init bundle in this workshop, because if we use the Web Terminal we can't upload and downloaded file to it. For the steps to create the init bundle in the ACS Portal see the appendix.
 
 Let's create the init bundle using the ACS **API** on the commandline:
 
 Go to your Web Terminal (if it timed out just start it again), then paste, edit and execute the following lines:
 
-- Set the ACS API endpoint, replace `<central_url>` with the URL of your ACS portal
+- Set the ACS API endpoint, replace `<central_url>` with the URL of your ACS portal (without 'https://' e.g. central-stackrox.apps.cluster-cqtsh.cqtsh.example.com )
 ``` bash
 export ROX_ENDPOINT=<central_url>:443
 ```
@@ -143,10 +169,11 @@ curl -k -o bundle.json -X POST -u "admin:$PASSWORD" -H "Content-Type: applicatio
 ```
 - Convert it to the needed format
 ``` bash
-cat bundle.json | jq -r '.kubectlBundle'  | base64 -d > kube-secrets.bundle
+cat bundle.json | jq -r '.kubectlBundle' > bundle64
+base64 -d bundle64 > kube-secrets.bundle
 ```
 
-You should now have two files in your Web Terminal session: `bundle.json` and `kube-secrets.bundle`.
+You should now have these two files in your Web Terminal session: `bundle.json` and `kube-secrets.bundle`.
 
 The init bundle needs to be applied to all OpenShift clusters you want to secure and monitor.
 
