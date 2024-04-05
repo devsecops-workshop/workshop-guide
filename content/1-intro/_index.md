@@ -65,8 +65,9 @@ This workshop was last tested with these versions :
 - Red Hat Quay: 3.8.15
 - Red Hat Quay Bridge Operator: 3.7.14
 - Red Hat Data Foundation : 4.14.6
-- Gitea Operator: 1.3.0
 - Web Terminal: 1.9.0
+- Gitea Operator: 1.3.0
+
 
 ## Workshop Flow
 
