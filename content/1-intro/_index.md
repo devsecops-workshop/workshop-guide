@@ -42,30 +42,31 @@ The easiest way to provide this environment is through the Red Hat Demo System. 
 
 ### Self Hosted
 
-While the workshop is designed to be run on Red Hat Demo System you should be able to run the workshop on a 4.10 cluster of your own.
+While the workshop is designed to be run on Red Hat Demo System (RHDS) and the environment **AWS with OpenShift Open Environment**, you should be able to run the workshop on a 4.14 cluster of your own.
 
 Just make sure :
 
 - You have cluster admin privileges
 - Sizing
   - 3 Controlplane Nodes (Similar to AWS m5.2x.large)
-  - 2 Worker (Similar to AWS m5.4x.large)
+  - 3 Worker (Similar to AWS m5.4x.large)
 - Authentication htpasswd enabled
 - For the ACM chapter you will need AWS credentials to automatically deploy a SingleNode OpenShift
-- Some names in the workshop may need to be customized for your environment (e.g. storage naming)
+- Some configurations in the workshop may need to be customized for your environment (e.g. storage types for ODF)
 
-This workshop was tested with these versions :
+This workshop was last tested with these versions :
 
-- Red Hat OpenShift : 4.12.12
-- Red Hat Advanced Cluster Security for Kubernetes: 3.74.1
-- Red Hat OpenShift Dev Spaces : 3.6.0
-- Red Hat OpenShift Pipelines: 1.10.3
-- Red Hat OpenShift GitOps: 1.8.3
-- Red Hat Quay: 3.8.8
-- Red Hat Quay Bridge Operator: 3.7.11
-- Red Hat Data Foundation : 4.12.03
+- Red Hat OpenShift : 4.14.18
+- Red Hat Advanced Cluster Security for Kubernetes: 3.74.9
+- Red Hat Advanced Cluster Management for Kubernetes: 2.10
+- Red Hat OpenShift Dev Spaces : 3.12.0
+- Red Hat OpenShift Pipelines: 1.14.3
+- Red Hat OpenShift GitOps: 1.12.3
+- Red Hat Quay: 3.8.15
+- Red Hat Quay Bridge Operator: 3.7.14
+- Red Hat Data Foundation : 4.14.6
 - Gitea Operator: 1.3.0
-- Web Terminal: 1.7.0
+- Web Terminal: 1.9.0
 
 ## Workshop Flow
 

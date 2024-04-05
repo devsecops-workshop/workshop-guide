@@ -36,7 +36,7 @@ Change to the **OpenShift Web Console** and create a secret with the API token i
 - In the UI switch to your `workshop-int` Project
 - Create a new key/value `Secret` named **roxsecrets**
 - Introduce these key/values into the secret:
-  - **rox_central_endpoint**: \<the URL to your **ACS Portal**>
+  - **rox_central_endpoint**: \<the URL to your **ACS Portal**> (without https:// but adding the port, e.g. entral-stackrox.apps.cluster-cqtsh.cqtsh.example.com:443)
     - If the `DOMAIN` placeholder was automatically replaced it should be: central-stackrox.apps.\<DOMAIN>:443
     - If not, replace it manually with your DOMAIN
   - **rox_api_token**: \<the API token you generated>
@@ -57,7 +57,7 @@ Have a look for yourself:
 - Switch to the YAML view
 - Near the top under **annotations** (around lines 11-12) you'll find an annotation `image.openshift.io/triggers`.
 
-Remove exactly these two lines and click **Save**:
+Remove exactly this lines and click **Save**:
 
 ```yaml
 image.openshift.io/triggers: >-
@@ -176,6 +176,7 @@ To fix this we will add a new **oc client Task** that updates the **Deployment**
 - Click on **Add Task**
 - In the search window enter `openshift`and select the **openshift-client** from Red Hat
 - Click on **Add**
+- Click on the new `openshift-client` Task
 - In Task form on the right enter
   - Display name : update-deploy
   - SCRIPT : `oc patch deploy/workshop -p '{"spec":{"template":{"spec":{"containers":[{"name":"workshop","image":"$(params.QUAY_URL)/openshift_workshop-int/workshop@$(tasks.build.results.IMAGE_DIGEST)"}]}}}}'`

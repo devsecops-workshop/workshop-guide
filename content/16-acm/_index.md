@@ -198,9 +198,11 @@ Now edit the application in the ACM console and change the label to `environment
 
 In this simple example you have seen how to deploy an application to an OpenShift cluster using ACM. All manifests defining the application where kept in a Git repo, ACM then used the manifests to deploy the required objects into the target cluster.
 
-## Pre/Post Tasks with Ansible Automation Platform 2
+## Bonus Chapter : Pre/Post Tasks with Ansible Automation Platform 2
 
 You can integrate Ansible Automation Platform and the Automation Controller (formerly known as Ansible Tower) with ACM to perform pre / post tasks within the application lifecycle engine. The prehook and posthook task allows you to trigger an Ansible playbook before and after the application is deployed, respectively.
+
+Notice that you will need a Red Hat Account with a valid Ansible subscription for this part.
 
 ### Install Automation Controller
 
