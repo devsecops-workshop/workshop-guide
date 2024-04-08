@@ -3,22 +3,23 @@ title = "Outer Loop"
 weight = 8
 +++
 
-Now that you have seen how a developer can quickly start to code using modern cloud native tooling, it's time to learn how to proceed with the application towards production. The first step is to implement a CI/CD pipeline to automate new builds. Let's call this stage `int` for integration.
+Now that you have seen how a developer can quickly start to code using modern cloud native tooling, it's time to learn how to push the application towards a production environment. The first step is to implement a CI/CD pipeline to automate new builds. Let's call this stage `int` for integration.
 
 ## Install OpenShift Pipelines
 
-To create and run the build pipeline you'll use OpenShift Pipelines based on project Tekton. The first step is to install it:
+To create and run the build pipeline you'll use OpenShift Pipelines based on project [Tekton](https://https://tekton.dev). The first step is to install it:
 
-- Install the `Red hat OpenShift Pipelines` Operator
+- Install the `Red Hat OpenShift Pipelines` Operator
   - In the **OpenShift Web Console** select **Operators > OperatorHub**
-  - Find the `Red hat OpenShift Pipelines` Operator and install it with default settings
-    {{% notice warning %}}
-    Since the Piplines assets are installed asynchronously it is possible that the `Pipeline Templates` are not yet setup when proceeding immedately to the next step. So now is good time to grab a coffee.
-    {{% /notice %}}
+  - Find the `Red Hat OpenShift Pipelines` Operator and install it with the default settings
+
+{{% notice warning %}}
+Since the Piplines assets are installed asynchronously it is possible that the `Pipeline Templates` are not yet setup when proceeding immedately to the next step. So now is good time to grab a coffee.
+{{% /notice %}}
 
 ## Create App Deployment and Build Pipeline
 
-After installing the Operator create a new deployment of your game-changing application:
+After installing the Operator, create a new deployment of your game-changing application:
 
 - Create a new OpenShift project called `workshop-int` (e.g. using the **Projects** menu item at the top)
 - In the left menu at the top switch to the **OpenShift Developer Console** by clicking on **Administrator > Developer**
@@ -26,6 +27,7 @@ After installing the Operator create a new deployment of your game-changing appl
 - Make sure you are still in the `workshop-int` project by verifying in the top **Project** menu
 - Click the **+Add** menu entry to the left and choose the **Import from Git** card
 - As **Git Repo URL** enter the clone URL for the `quarkus-build-options` repo in your `Gitea` instance
+{{< figure src="../images/gitea_clone_icon.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
   - There might be a warning about the repo url that you can ignore
   - Leave **Git type** set to `other`
 - Click **Show advanced Git options** and for **Git reference** enter `master`
@@ -41,20 +43,22 @@ If you don't have the checkbox **Add pipeline** and get the message `There are n
 {{% /notice %}}
 
 - Click **Create**
-- In the main menu left, click on **Pipelines** and then the instance in column **Last run** and observe how the Pipeline is run
+- In the main menu left, click on **Pipelines** and then the instance in column **Last run** and observe how the Pipeline is executed
   {{< figure src="../images/pipeline_initial.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Adjust the Pipeline to Deploy to Quay
 
-The current Pipeline deploys to the Internal Registry by default, so the image that was created by the first run was pushed there.
+The current Pipeline deploys to the Internal Registry by default. The image that was just created by the first run was pushed there.
 
-To leverage our brand new **Quay** registry we need to modify the Pipeline so it pushes images to the **Quay** registry. In addition the \*_OpenShift ImageStream_ must be modified to point to the Quay registry, too.
+To leverage our brand new **Quay** registry we need to modify the Pipeline in order to push the images to the **Quay** registry. In addition the **OpenShift ImageStream** must be modified to point to the **Quay** registry, too.
 
 ### Create a new `s2i-java` ClusterTask
 
 The first thing is to create a new **Source-To-Image Pipeline Task** to automatically update the **ImageStream** to point to **Quay**. You could of course copy and modify the default `s2i-java` task using the built-in YAML editor of the **OpenShift Web Console**. But to make this as painless as possible we have prepared the needed YAML object definition for you already.
 
-- Open a Web Terminal by clicking the **>\_** in the upper right of the web console, from here you can run `oc` commands
+- Open a Web Terminal by clicking the **>\_** in the upper right of the web console, 
+- Click **Start** and wait for the terminal to initialize
+- From here you can run `oc` commands
 - The YAML object definitions for this lab are in the repo `https://github.com/devsecops-workshop/yaml.git`, go there and review the YAML definition.
 - Apply the YAML for the new ClusterTask:
 
@@ -63,14 +67,6 @@ oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/s2i-
 ```
 
 {{< figure src="../images/web-terminal2.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-
-There is an issue with the delivered version of the **Skopeo Pipeline Task**, so we will also import an updated version. This may not be necessary in the future
-
-- Apply the YAML to import it:
-
-```bash
-oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/skopeo-update.yml
-```
 
 {{% notice tip %}}
 To make this lab pretty much self-contained, we run `oc` commands from the OCP Web Terminal. But of course you can do the above steps from any Linux system where you set up the `oc` command.
@@ -125,11 +121,11 @@ Now that we have our new build tasks we need to modify the pipeline to:
 - Introduce the new parameters into the **Pipeline** configuration
 - Use the new `s2i-java-workshop` task
 
-To make this easier we again provide you with a full YAML definition of the Pipeline.
+To make this easier we again provide you with a full YAML definition for the Pipeline.
 
 Do the following:
 
-- Go to your Web Terminal (if it timed out just start it again)
+- Go to your **Web Terminal** (if it timed out just start it again)
 
 {{% notice tip %}}
 If you use this lab guide with your domain as query parameter (see [here](https://devsecops-workshop.github.io/1-intro/#and-finally-a-sprinkle-of-javascript-magic)), you are good to go with the command below because your domain was already inserted into the command.
@@ -179,7 +175,7 @@ The preexisting parameter **IMAGE_NAME** now points to your local **Quay** regis
       type: string
 ```
 
-And finally the `build` task was modified work with the two new parameters:
+And finally the `build` task was modified to work with the two new parameters:
 
 ```yaml
 tasks:
@@ -192,7 +188,7 @@ tasks:
           value: $(params.IMAGESTREAMTAG)
 ```
 
-- The name of the `taskRef` was changed to `s2i-java-workshop`, so we are using our custom **Pipeline Task**:
+- The name of the `taskRef` was changed to `s2i-java-workshop`, in order to use our custom **Pipeline Task**:
 
 ```yaml
 taskRef:
@@ -206,7 +202,7 @@ We are ready to give it a try, but first let's have quick look at our target **Q
 
 - Go to the **Quay** portal and there to the `openshift_workshop-int` organization.
 - In the `openshift_workshop-int / workshop` repository access the **Tags** in the menu to the left.
-- There should be no image (yet)
+- There should be no container image (yet)
   {{< figure src="../images/quay_empty_repo.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 Now it's time to configure and start the Pipeline.
@@ -215,11 +211,11 @@ Now it's time to configure and start the Pipeline.
 - Open the `workshop` Pipeline
 - Go to the top right menu and choose **Actions -> Start**
 
-In the **Start Pipeline** window that opens, but **before (!)** starting the actual pipeline, we need to add a **Secret** so the pipeline can authenticate and push against the **Quay** repo:
+In the **Start Pipeline** window that opens, but **before (!)** starting the actual pipeline, we need to add a **Secret** so the pipeline can authenticate and push to the **Quay** repository:
 
 - Switch to the **Quay Web Portal** and click on the `openshift_workshop-int / workshop` repository
 - On the left click on **Settings**
-- Click on the `openshift_workshop-int+builder` **Robot Account** and copy the username and token
+- Click on the `openshift_workshop-int+builder` **Robot Account** and copy the token
   {{< figure src="../images/quay_robot_account.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - Back in the **Start Pipeline** form
   - At the buttom, click on **Show credential options** and then **Add secret**
@@ -234,9 +230,11 @@ In the **Start Pipeline** window that opens, but **before (!)** starting the act
   - The secret has just been added and will be mounted automatically everytime the pipeline runs
 - Hit **Start**
 
+If the pipeline fails you may have to recheck the Secret `quay-workshop-int-token` directly if the username and password are set correctly. 
+
 Once the Pipeline run has finished, go to the **Quay Portal** and check the **Repository** `openshift_workshop-int/workshop` again. Under **Tags** you should now see a new `workshop` Image version that was just pushed by the pipeline.
 
-Congratulations : **Quay** is now a first level citizen of your pipeline build strategy.
+Congratulations: **Quay** is now a first level citizen of your pipeline build strategy.
 
 ## Create an ImageStream Tag with an Old Image Version
 

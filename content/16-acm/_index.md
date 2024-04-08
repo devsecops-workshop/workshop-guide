@@ -19,9 +19,9 @@ Clusters and applications are visible and managed from a single console, with bu
 
 Before you can start using ACM, you have to install it using an Operator on your OpenShift cluster.
 
-- Login to the OpenShift Webconsole with you cluster admin credentials
+- Login to the OpenShift Web Console with you cluster admin credentials
 - In the Web Console, go to **Operators > OperatorHub** and search for the `Advanced Cluster Management for Kubernetes` operator.
-- Install the operator with default settings
+- Install the operator with the default settings
 - It will install into a new **Project** `open-cluster-management` by default.
 
 After the operator has been installed it will inform you to create a `MultiClusterHub`, the central component of ACM.
@@ -34,7 +34,7 @@ Click **Create**.
 
 At some point you will be asked to refresh the web console. Do this, you'll notice a new drop-down menu at the top of the left menu bar. If left set to `local-cluster` you get the standard console view, switching to `All Clusters` takes you to a view provided by ACM covering all your clusters.
 
-Okay, right now you'll only see one, your `local-cluster` listend here.
+Okay, right now you'll only see one, your `local-cluster` listed here.
 
 ## A first look at Advanced Cluster Management
 
@@ -44,8 +44,7 @@ Now let's change to the full ACM console:
 - Go to **Operators**->**Installed operators** and click the **Advanced Cluster Management for Kubernetes** operator
 - In the operator overview page choose the **MultiClusterHub** tab.
 - The `multiclusterhub` instance you deployed should be in **Status** `Running` by now.
-- Look up the route for the `multicloud-console` and access it.
-- Click the **Log in with OpenShift** button and login with your OpenShift account.
+- Switch back to the `All Clusters`
 
 You are now in your ACM dashboard!
 
@@ -63,7 +62,7 @@ Have a look around:
 One of the main features of Advanced Cluster Management is cluster lifecycle management. ACM can help to:
 
 - manage credentials
-- deploy clusters to different cloud providers and on-premise
+- deploy clusters to various cloud providers and on-premises
 - import existing clusters
 - use labels on clusters for management purposes
 
@@ -71,7 +70,7 @@ Let's give this a try!
 
 ## Deploy an OpenShift Cluster
 
-Okay, to not overstress our cloud ressources and for the fun of it we'll deploy a Single Node OpenShift to the same AWS account your lab cluster is running in.
+Okay, do not overstress our cloud ressources and for the fun of it we'll deploy a Single Node OpenShift (SNO) cluster to the same AWS account your lab cluster is running in.
 
 ### Create Cloud Credentials
 
@@ -91,7 +90,7 @@ You'll get the `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` needed to deploy 
   - Now you need to enter the AWS credentials, enter the `Access key ID` and `Secret access key` as provided.
   - Click **Next**
   - Click **Next** again for proxy settings
-  - Now you need to enter an OpenShift Pull Secret, copy it from your OCP cluster:
+  - Now you need to enter an OpenShift Pull Secret, copy it from your OpenShift cluster:
     - Switch to the project `openshift-config` and copy the content of the secret `pull-secret`
   - To connect to the managed SNO you need to enter a SSH private key (`$HOME/.ssh/<LABID>key.pem`) and public key (`$HOME/.ssh/<LABID>key.pub`).
     - Use the respective keys from your lab environments bastion host, the access details will be provided.
@@ -108,10 +107,11 @@ Now you'll deploy a new OpenShift instance:
 - In the ACM console, navigate to **Infrastructure** -> **Clusters** and click **Create cluster**.
 - As provider choose **Amazon Web Services**
 - **Infrastructure provider credential**: Select the `sno` credential you created.
+- **Control plane type - AWS**: Standalone  
 - **Cluster name**: aws-sno
 - **Cluster set**: Leave empty ...
 - **Base DNS Domain**: Set automatically from the credentials
-- **Release name**: Use the latest **4.10** release available
+- **Release name**: Use the latest **4.14.19** release available
 - **Additional Label**: sno=true
 - Click **Next**
 - On the Node pools view leave the **Region** set to `us-east-1`
@@ -135,14 +135,14 @@ It's time to deploy your cluster, click **Create**!
 ACM monitors the installation of the new cluster and finally imports it. Click **View logs** under **Cluster install** to follow the installation log.
 
 {{% notice tip %}}
-Installation of a SNO take around 30 minutes in our lab environment.
+Installation of a SNO takes around 30 minutes in our lab environment.
 {{% /notice %}}
 
-After installation has finished, access the **Clusters** section in the ACM portal again.
+After the installation has finished, access the **Clusters** section in the ACM portal again.
 
 {{< figure src="../images/acm-clusters.png?width=70pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-Explore the information ACM is providing, including the Console URL and the access credentials of your shiny new SNO instance. Use them to login to the SNO console.
+Explore the information ACM is providing, including the Console URL and the access credentials of your shiny new SNO instance. Use them to login to the SNO Web Console.
 
 ## Application Lifecycle Management
 
@@ -150,7 +150,7 @@ In the previous lab, you explored the Cluster Lifecycle functionality of RHACM b
 
 Application Lifecycle management is used to manage applications on your clusters. This allows you to define a single or multi-cluster application using Kubernetes specifications, but with additional automation of the deployment and lifecycle management of resources to individual clusters. An application designed to run on a single cluster is straightforward and something you ought to be familiar with from working with OpenShift fundamentals. A multi-cluster application allows you to orchestrate the deployment of these same resources to multiple clusters, based on a set of rules you define for which clusters run the application components.
 
-The naming of the different components of the Application Lifecycle model in RHACM is as follows:
+The naming convention of the different components of the Application Lifecycle model in RHACM is as follows:
 
 - **Channel**: Defines a place where deployable resources are stored, such as an object store, Kubernetes namespace, Helm repository, or GitHub repository.
 - **Subscription**: Definitions that identify deployable resources available in a Channel resource that are to be deployed to a target cluster.
@@ -178,13 +178,15 @@ Then in the ACM console navigate to **Applications**:
 - **URL**: https://github.com/devsecops-workshop/book-import.git
 - **Branch**: master
 - **Path**: book-import
-- Select **Deploy application resources only on clusters matching specified labels**
+- Select **Deploy application resources only on clusters with all specified labels**
+- **Cluster sets**: default
 - **Label**: environment
 - **Value**: dev
 
-{{< figure src="../images/acm-application2.png?width=20pc&classes=border,shadow" title="Click image to enlarge" >}}
+{{< figure src="../images/acm_placement.png?width=40pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-Click **Create**, after a few minutes you will see the application available in ACM. Click the application and have a look at the topology view:
+
+Click **Create** and then the topology tab to view the application being deployed:
 
 {{< figure src="../images/acm-application3.png?width=20pc&classes=border,shadow" title="Click image to enlarge" >}}
 
@@ -196,9 +198,11 @@ Now edit the application in the ACM console and change the label to `environment
 
 In this simple example you have seen how to deploy an application to an OpenShift cluster using ACM. All manifests defining the application where kept in a Git repo, ACM then used the manifests to deploy the required objects into the target cluster.
 
-## Pre/Post Tasks with Ansible Automation Platform 2
+## Bonus Chapter : Pre/Post Tasks with Ansible Automation Platform 2
 
 You can integrate Ansible Automation Platform and the Automation Controller (formerly known as Ansible Tower) with ACM to perform pre / post tasks within the application lifecycle engine. The prehook and posthook task allows you to trigger an Ansible playbook before and after the application is deployed, respectively.
+
+Notice that you will need a Red Hat Account with a valid Ansible subscription for this part.
 
 ### Install Automation Controller
 

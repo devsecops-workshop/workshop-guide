@@ -42,13 +42,13 @@ jobs:
       with:
         submodules: true
     - name: Edit Toml baseurl
-      uses: ciiiii/toml-editor@1.0.0
+      uses: sandstromviktor/toml-editor@2.0.0
       with:
         file: "config.toml"
         key: "baseurl"
         value: "https://devsecops-workshop.github.io/devsecops-workshop.github.io-dev/"
     - name: Edit Toml title
-      uses: ciiiii/toml-editor@1.0.0
+      uses: sandstromviktor/toml-editor@2.0.0
       with:
         file: "config.toml"
         key: "title"

@@ -13,7 +13,7 @@ But fear not, all are managed by Kubernetes [Operators](https://cloud.redhat.com
 
 Let's install [OpenShift Data Foundation](https://www.redhat.com/en/technologies/cloud-computing/openshift-data-foundation) which you might know under the old name `OpenShift Container Storage`. It is engineered as the data and storage services platform for OpenShift and provides software-defined storage for containers.
 
-- Login to the OpenShift Webconsole with you cluster admin credentials
+- Login to the OpenShift Webconsole with your cluster admin credentials
 - In the Web Console, go to **Operators > OperatorHub** and search for the `OpenShift Data Foundation` operator
   {{< figure src="../images/odf-operator.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - Install the operator with default settings
@@ -27,11 +27,11 @@ After the operator has been installed it will inform you to install a `StorageSy
 - **Security and network**: Leave set to `Default (SDN)`
 - Click **Next**
 
-You'll see a review of your settings, hit `Create StorageSystem`. Don't worry if you see a temporary _404 Page_. Just releod the browser page once and your will see the System Overview
+You'll see a review of your settings, hit `Create StorageSystem`. Don't worry if you see a temporary _404 Page_. Just releod the browser page once and you will see the System Overview
 
 {{< figure src="../images/odf-systems.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-As mentioned already this takes some time so go ahead and install the other prerequisites. We'll come back later.
+As mentioned already this takes some time, so go ahead and install the other prerequisites. We'll come back later.
 
 ## Prepare to run oc commands
 
@@ -41,11 +41,11 @@ You will be asked to run `oc` (the OpenShift commandline tool) commands a couple
 
 To extend OpenShift with the Web Terminal option, install the **Web Terminal** operator:
 
-- Login to the OpenShift Webconsole with you cluster admin credentials
+- Login to the OpenShift Webconsole with your cluster admin credentials
 - In the Web Console, go to **Operators > OperatorHub** and search for the **Web Terminal** operator
-- Install the operator with default settings
+- Install the operator with the default settings
 
-This will take some time and installs another operator as dependency.
+This will take some time and installs another operator as a dependency.
 
 After the operator has installed, reload the OCP Web Console browser window. You will now have a new button (**>\_**) in the upper right. Click it to start a new web terminal. From here you can run the `oc` commands when the lab guide requests it (copy/paste might depend on your laptop OS and browser settings, e.g. try `Ctrl-Shift-V` for pasting).
 
@@ -73,9 +73,9 @@ We'll need Git repository services to keep our app and infrastructure source cod
 To integrate the `Gitea` operator into your Operator catalog you need to access your cluster with the `oc` client. You can do this in two ways:
 
 - If you don't already have the oc client installed, you can download the matching version for your operating system [here](https://mirror.openshift.com/pub/openshift-v4/clients/ocp/stable/)
-- Login to the OpenShift Webconsole with you cluster admin credentials
+- Login to the OpenShift Web Console with you cluster admin credentials
 - On the top right click on your username and then **Copy login command** to copy your login token
-- On you local machine open a terminal and login with the `oc` command you copied above
+- On you local machine open a terminal and login with the `oc` command you copied above, you may need to add **--insecure-skip-tls-verify** at the end of the line
 
 Or, if working on a Red Hat RHPDS environment:
 
@@ -162,7 +162,7 @@ The image that we have just deployed was pushed to the internal OpenShift Regist
 Quay installation is done through an operator, too:
 
 - In **Operators->OperatorHub** filter for `Quay`
-- Install the **Red Hat Quay** operator with default settings
+- Install the **Red Hat Quay** Operator with the default settings
 - Create a new project called `quay` at the top Project selection menu
 - While in the project `quay` go to **Administration->LimitRanges** and delete the `quay-core-resource-limits`
   {{< figure src="../images/delete-limit-range.png?width=45pc&classes=border,shadow" title="Click image to enlarge" >}}
@@ -181,7 +181,7 @@ Now that the Registry is installed you have to configure a superuser:
 - Click **Create Account**
   - As username put in `quayadmin`, a (fake) email address and and `quayadmin` as password.
 - Click **Create Account** again
-- In the OpenShift web console open **Workloads->Secrets**
+- In the OpenShift Web Console open **Workloads->Secrets**
 - Search for `quay-config-editor-credentials-...`, open the secret and copy the values, you'll need them in a second.
 - Go back to the **Routes** and open the `quay-quay-config-editor` route
 - Login with the values of the secret from above
