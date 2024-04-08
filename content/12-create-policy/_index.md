@@ -49,6 +49,12 @@ First create a new policy category and the system policy. In the **ACS Portal** 
 
 {{< figure src="../images/custom-policy.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
 
+Currently there is an issue with persisting the group change to the central instance. As a workaround run this in your Web Terminal zu restart the central instance:
+
+``` bash
+oc delete pod -n stackrox -l app=central
+```
+
 ## Test the Policy
 
 Start the pipeline with the affected image version:

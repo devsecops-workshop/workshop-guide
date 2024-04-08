@@ -3,15 +3,15 @@ title = "Configure GitOps"
 weight = 10
 +++
 
-Now that our CI/CD build and integration stage is ready we could promote the app version directly to a production stage. But with the help of the GitOps approach, we can leverage our Git System to handle promotion that is tracked through commits and can deploy and configure the whole production environment. This stage is just too critical to configure manually and without audit.
+Now that our CI/CD build and integration stage is ready we could promote the app version directly to a production stage. But with the help of the GitOps approach, we can leverage our Git system to handle promotion that is tracked through commits and can deploy and configure the whole production environment. This stage is just too critical to configure manually and without an audit.
 
 ## Install OpenShift GitOps
 
-So let's start be installing the OpenShift GitOps Operator based on project ArgoCD.
+So let's start be installing the OpenShift GitOps Operator based on the project [ArgoCD](https://argo-cd.readthedocs.io/en/stable/).
 
 - Install the **Red Hat OpenShift GitOps** Operator from OperatorHub with the default settings
   {{% notice tip %}}
-  The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod namespaces we will create another ArgoCD in that specific namespace.
+  The installation of the GitOps Operator will give you a clusterwide ArgoCD instance available at the link in the top right menu, but since we want to have an instance to manage just our prod project we will create another ArgoCD instance in that specific project.
   {{% /notice %}}
 - You should already have created an OpenShift **Project** `workshop-prod`
 - With the project `workshop-prod` selected in the top menu click on **Installed Operators** and then **Red Hat OpenShift GitOps**.
@@ -42,31 +42,30 @@ Let's setup the project that tells ArgoCD to watch our configuration repository 
 - Don't login with OpenShift but with username and password
   - User is `admin` and password will be in **Secret** `argocd-cluster` in the **Project** `workspace-prod`
 
-ArgoCD works with the concept of **Applications**. We will create an App and point it to the configuration Git repository. ArgoCD will look for Kubernetes yaml files in the repository and path and deploy them to the defined namespace. Additionally, ArgoCD will also react to changes to the repository and reflect these to the namespace. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/container-platform/4.10/cicd/gitops/understanding-openshift-gitops.html).
+ArgoCD works with the concept of **Applications**. We will create an Application and point it to the configuration Git repository. ArgoCD will look for Kubernetes yaml files in the repository and path and deploy them to the defined project. Additionally, ArgoCD will also react to changes to the repository and reflect these to the project. You can also enable self-healing to prevent configuration drift. If you want find out more about OpenShift GitOps have look [here](https://docs.openshift.com/gitops/1.12/understanding_openshift_gitops/about-redhat-openshift-gitops.html).
 
-- Create App
-  - Click the **Manage your applications** icon on the left
+- Create Application
+  - Click the **Applications** icon on the left
   - Click **Create Application**
   - **Application Name**: workshop
   - **Project**: default
   - **SYNC POLICY**: Automatic
-  - **Repository URL**: Copy the URL of your config repo from Gitea
+  - **Repository URL**: Copy the URL of your config repo `openshift-gitops-getting-started` from Gitea
   - **Path**: environments/dev
   - **Cluster URL**: https://kubernetes.default.svc
   - **Namespace**: workshop-prod
   - Click **Create**
   - Click on **Sync** and then **Synchronize** to manually trigger the first sync
-  - Click on the `workshop` to show the deployment graph
 
-Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice, we have also scaled our app to 2 pods in the production stage as we want some high availability.
+Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice, we also scaling our app to 2 pods in the production stage as we want some high availability. But the actual deployment will not succeed as shown by the 'broken heart' icons! 
 
 {{% notice info %}}
-Since we have not published our image to the Quay `workshop-prod` repository the initial Deployment will roll out a defined dummy image from the public quay.io Registry. This is just to ensure a initial succesful sync in ArgoCD for the woorkshop. Once the first pipeline run is complete, our newly built image will be deployed.
+Since we have not published our image to the Quay `workshop-prod` repository the initial Deployment will try to roll out non existant image from Quay. Once the first pipeline run is complete, our newly built image will be replaced in the Deployment and rolled out.
 {{% /notice %}}
 
 Our complete production stage is now configured and controlled through GitOps. But how do we tell ArgoCD that there is a new version of our app to deploy? Well, we will add a step to our build pipeline updating the configuration repository.
 
-As we do not want to modify our original repository file we will use a tool called [Kustomize](https://kustomize.io/) that can add incremental change layers to YAML files. Since ArgoCD permanently watches this repository it will pick up these Kustomize changes.
+As we do not want to modify our original repository file we will use a tool called [Kustomize](https://kustomize.io/) that can add incremental change layers to YAML files. Since ArgoCD permanently watches this repository, it will pick up these Kustomize changes.
 
 {{% notice tip %}}
 It is also possible to update the repository with a Pull request. Then you have an approval process for your production deployment.
@@ -80,7 +79,7 @@ We will need to initialize the `workshop-prod/workshop` in Quay so the robo user
 - Click on **+ Create New Repository** on the top left
   {{< figure src="../images/quay-create-repo.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - Make sure to select `openshift_workshop-prod` as Organization
-- Enter `workshop`as repo name
+- Enter `workshop` as repo name
 - Set the repo to **Public**
 - Click **Create Public Repository**
   {{< figure src="../images/quay-create-repo2.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
@@ -104,7 +103,7 @@ oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/tekt
 
 So now we have a new Tekton Task in our task catalog to update a GitOps Git repository, but we still need to promote the actual image from out `workshop-int` to `workshop-prod` project. Otherwise the image will not be available for our deployment.
 
-- Go to **Pipelines > Pipelines > workshop** and then YAML
+- In the ẁorkshop_int` project, go to **Pipelines > Pipelines > workshop** and then YAML
 
 {{% notice tip %}}
 You can edit pipelines either directly in YAML or in the visual **Pipeline Builder**. We will see how to use the Builder later on so let's edit the YAML for now.
@@ -112,7 +111,7 @@ You can edit pipelines either directly in YAML or in the visual **Pipeline Build
 
 Add the new Task to your Pipeline by adding it to the YAML like this:
 
-- First we will add a new Pipeline Parameter 'GIT_CONFIG_REPO' at the beginning of the Pipeline and set it by default to our GitOps configuration repository (This will be updated by the Pipeline and then trigger ArgoCD to deploy to Production)
+- First we will add a new Pipeline Parameter 'GIT_CONFIG_REPO' at the beginning of the pipeline and set it by default to our GitOps configuration repository (This will be updated by the Pipeline and then trigger ArgoCD to deploy to Production)
 - So in the YAML view at the end of the `spec > params` section add the following (if the `<DOMAIN>` placeholder hasn't been replaced automatically, do it manually):
 
 ```yaml
@@ -145,7 +144,7 @@ In the OpenShift YAML viewer/editor you can mark multiple lines and use **tab** 
     - build
   taskRef:
     kind: ClusterTask
-    name: skopeo-copy-updated
+    name: skopeo-copy
   workspaces:
     - name: images-url
       workspace: workspace
@@ -190,7 +189,7 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
     - **Authentication type:** Basic Authentication
     - **Server URL:** quay-quay-quay.apps.&lt;DOMAIN&gt;/openshift_workshop-prod
     - **Username:** openshift_workshop-prod+builder
-    - **Password** : (Retrieve this from the Quay organization openshift_workshop-prod robo account `openshift_workshop-prod+builder` as before)
+    - **Password** : (Retrieve this from the Quay organization `openshift_workshop-prod` robo account `openshift_workshop-prod+builder` as before)
     - Click the checkmark
   - Then click **Add Secret** again
     - **Secret name :** gitea-secret
@@ -207,7 +206,7 @@ Now the pipeline is set. The last thing we need is authentication against the Gi
   {{% /notice %}}
 
 - This will tell ArgoCD to update the **Deployment** with this new image version
-- Check that the new image is rolled out (you may need to sync manually in ArgoCD to speed things up)
+- Check that the new image is rolled out sucessfully now (you may need to sync manually in ArgoCD to speed things up)
 
 ## Architecture recap
 

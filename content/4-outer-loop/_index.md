@@ -68,14 +68,6 @@ oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/s2i-
 
 {{< figure src="../images/web-terminal2.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-There is an issue with the delivered version of the **Skopeo Pipeline Task**, so we will also import an updated version. This may not be necessary in the future
-
-- Apply the YAML to import it:
-
-```bash
-oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/skopeo-update.yml
-```
-
 {{% notice tip %}}
 To make this lab pretty much self-contained, we run `oc` commands from the OCP Web Terminal. But of course you can do the above steps from any Linux system where you set up the `oc` command.
 {{% /notice %}}
@@ -237,6 +229,8 @@ In the **Start Pipeline** window that opens, but **before (!)** starting the act
   - Then click on the checkmark below to add the secret
   - The secret has just been added and will be mounted automatically everytime the pipeline runs
 - Hit **Start**
+
+If the pipeline fails you may have to recheck the Secret `quay-workshop-int-token` directly if the username and password are set correctly. 
 
 Once the Pipeline run has finished, go to the **Quay Portal** and check the **Repository** `openshift_workshop-int/workshop` again. Under **Tags** you should now see a new `workshop` Image version that was just pushed by the pipeline.
 

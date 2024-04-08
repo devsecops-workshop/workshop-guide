@@ -42,14 +42,14 @@ The easiest way to provide this environment is through the Red Hat Demo System. 
 
 ### Self Hosted
 
-While the workshop is designed to be run on Red Hat Demo System you should be able to run the workshop on a 4.10 cluster of your own.
+While the workshop is designed to be run on Red Hat Demo System (RHDS) and the environment **AWS with OpenShift Open Environment**, you should be able to run the workshop on a 4.14 cluster of your own.
 
 Just make sure :
 
 - You have cluster admin privileges
 - Sizing
   - 3 Controlplane Nodes (Similar to AWS m5.2x.large)
-  - 2 Worker (Similar to AWS m5.4x.large)
+  - 3 Worker (Similar to AWS m5.4x.large)
 - Authentication htpasswd enabled
 - For the ACM chapter you will need AWS credentials to automatically deploy a SingleNode OpenShift
 - Some names in the workshop may need to be customized for your environment (e.g. storage naming)
