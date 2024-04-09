@@ -151,7 +151,7 @@ Let's create the init bundle using the ACS **API** on the commandline:
 
 Go to your Web Terminal (if it timed out just start it again), then paste, edit and execute the following lines:
 
-- Set the ACS API endpoint, replace `<central_url>` with the URL of your ACS portal (without 'https://' e.g. central-stackrox.apps.cluster-cqtsh.cqtsh.example.com )
+- Set the ACS API endpoint, replace `<central_url>` with the URL of your ACS portal (without 'https://' e.g. central-stackrox.apps.cluster-cqtsh.cqtsh.example.com)
 ``` bash
 export ROX_ENDPOINT=<central_url>:443
 ```
