@@ -15,11 +15,13 @@ ACS policies can act during the CI/CD pipeline to identify security risk in cont
 
 You should have created and build a custom policy in ACS and tested it to trigger violations. Now you will integrate it into the build pipeline.
 
-### Let's go: Prepare `roxctl`
+### Our task will use the `roxctl` cli
 
-Build-time policies require the use of the `roxctl` command-line tool which is available for download from the ACS Central UI, in the upper right corner of the dashboard. `Roxctl` needs to authenticate to **ACS Central** to do anything. You can use either username and password or API tokens to authenticate against ACS Central. It's good practice to use a token so that's what we'll do.
+Build-time policies require the use of the `roxctl` command-line tool which is available for download from the ACS Central UI, in the upper right corner of the dashboard. You don't need to to download this now as our Tekton task will do this automatically.
 
-### Create the `roxctl` token
+`roxctl` needs to authenticate to **ACS Central** to do anything. You can use either username and password or API tokens to authenticate against ACS Central. It's good practice to use a token so that's what we'll do.
+
+### Let's Go : Create the `roxctl` token
 
 In the **ACS portal**:
 

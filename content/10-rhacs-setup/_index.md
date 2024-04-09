@@ -178,6 +178,9 @@ curl -k -o bundle.json -X POST -u "admin:$PASSWORD" -H "Content-Type: applicatio
 
 ```bash
 cat bundle.json | jq -r '.kubectlBundle' > bundle64
+```
+
+```bash
 base64 -d bundle64 > kube-secrets.bundle
 ```
 
@@ -212,6 +215,7 @@ You are ready to install the **SecuredClusters** instance, this will deploy the 
 
 - In the **OpenShift Web Console** go to the **ACS Operator** in **Operators->Installed Operators**
 - Using the Operator create an instance of the **Secured Cluster** type **in the Project you created** (should be stackrox)
+- If you are in the **YAML** view switch to the **Form** view
 - Change the **Cluster Name** for the cluster if you want, it'll appear under this name in the **ACS Portal**
 - And most importantly for **Central Endpoint** enter the address and port number of your **Central** instance, this is the same as the **ACS Portal**.
   - If your **ACS Portal** is available at `https://central-stackrox.apps.<DOMAIN>` the endpoint is `central-stackrox.apps.<DOMAIN>:443`.
