@@ -32,7 +32,7 @@ You must install the ACS Central instance in its own project and not in the **rh
 - You should now be in the **rhacs-operator** project the Operator created, create a new OpenShift **Project** for the **Central** instance:
   - Create a new project called **stackrox** (Red Hat recommends using **stackrox** as the project name.) by selecting **Projects: Create project**
 - In the Operator view under **Provided APIs** on the tile **Central** click **Create Instance**
-- Switch to the YAMl View.
+- Switch to the YAML View.
 - Replace the YAML content with the following:
 
 ```yaml
@@ -150,7 +150,7 @@ Let's create the init bundle using the ACS **API** on the commandline:
 
 Go to your Web Terminal (if it timed out just start it again), then paste, edit and execute the following lines:
 
-- Set the ACS API endpoint, replace `<central_url>` with the URL of your ACS portal (without 'https://' e.g. central-stackrox.apps.cluster-cqtsh.cqtsh.example.com )
+- Set the ACS API endpoint, replace `<central_url>` with the base URL of your ACS portal (without 'https://' e.g. central-stackrox.apps.cluster-cqtsh.cqtsh.example.com )
 
 ```bash
 export ROX_ENDPOINT=<central_url>:443
