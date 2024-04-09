@@ -30,13 +30,12 @@ You must install the ACS Central instance in its own project and not in the **rh
 - Navigate to **Operators → Installed Operators**
 - Select the ACS operator
 - You should now be in the **rhacs-operator** project the Operator created, create a new OpenShift **Project** for the **Central** instance:
-  - Select **Project: rhacs-operator → Create project**
-  - Create a new project called **stackrox** (Red Hat recommends using **stackrox** as the project name.)
+  - Create a new project called **stackrox** (Red Hat recommends using **stackrox** as the project name.) by selecting **Projects: Create project**
 - In the Operator view under **Provided APIs** on the tile **Central** click **Create Instance**
 - Switch to the YAMl View.
 - Replace the YAML content with the following:
 
-``` yaml
+```yaml
 apiVersion: platform.stackrox.io/v1alpha1
 kind: Central
 metadata:
@@ -70,7 +69,7 @@ spec:
           memory: 6Gi
         requests:
           cpu: 500m
-          memory: 1Gi    
+          memory: 1Gi
     persistence:
       persistentVolumeClaim:
         claimName: stackrox-db
@@ -101,8 +100,8 @@ spec:
         maxReplicas: 2
         minReplicas: 1
         replicas: 1
-
 ```
+
 - Click **Create**
 
 After the deployment has finished (**Status** `Conditions: Deployed, Initialized` in the Operator view on the **Central** tab), it can take some time until the application is completely up and running. One easy way to check the state, is to switch to the **Developer** console view on the upper left. Then make sure you are in the **stackrox** project and open the **Topology** map. You'll see the three deployments of the **Central** instance:
@@ -152,23 +151,32 @@ Let's create the init bundle using the ACS **API** on the commandline:
 Go to your Web Terminal (if it timed out just start it again), then paste, edit and execute the following lines:
 
 - Set the ACS API endpoint, replace `<central_url>` with the URL of your ACS portal (without 'https://' e.g. central-stackrox.apps.cluster-cqtsh.cqtsh.example.com )
-``` bash
+
+```bash
 export ROX_ENDPOINT=<central_url>:443
 ```
+
 - Set the admin password (same as for the portal, look up the secrets again)
-``` bash
+
+```bash
 export PASSWORD=<password>
 ```
+
 - Give the init bundle a name
-``` bash
+
+```bash
 export DATA={\"name\":\"my-init-bundle\"}
 ```
+
 - Finally run the `curl` command against the API to create the init bundle using the variables set above
-``` bash
+
+```bash
 curl -k -o bundle.json -X POST -u "admin:$PASSWORD" -H "Content-Type: application/json" --data $DATA https://${ROX_ENDPOINT}/v1/cluster-init/init-bundles
 ```
+
 - Convert it to the needed format
-``` bash
+
+```bash
 cat bundle.json | jq -r '.kubectlBundle' > bundle64
 base64 -d bundle64 > kube-secrets.bundle
 ```
@@ -188,6 +196,7 @@ For this workshop we run **Central** and **SecuredCluster** on one OpenShift clu
 **Apply the init bundle**
 
 Again in the web terminal:
+
 - Run `oc create -f kube-secrets.bundle -n stackrox` pointing to the init bundle you downloaded from the Central instance or created via the API as above.
 - This will create a number of secrets, the output should be:
 
@@ -209,7 +218,7 @@ You are ready to install the **SecuredClusters** instance, this will deploy the 
 - Under **Admission Control Settings** make sure
   - **listenOnCreates**, **listenOnUpdates** and **ListenOnEvents** is enabled
   - Set **Contact Image Scanners** to **ScanIfMissing**
-<!-- - Under **Per Node Settings** -> **Collector Settings** change the value for **Collection** form `EBPF` to `KernelModule`. This is a workaround for a known issue. -->
+  <!-- - Under **Per Node Settings** -> **Collector Settings** change the value for **Collection** form `EBPF` to `KernelModule`. This is a workaround for a known issue. -->
 - Click **Create**
 
 Now go to your **ACS Portal** again, after a couple of minutes you should see your secured cluster under **Platform Configuration->Clusters**. Wait until all **Cluster Status** indicators become green.
@@ -221,6 +230,7 @@ Now go to your **ACS Portal** again, after a couple of minutes you should see yo
 To enable scanning of images in your Quay registry, you'll have to configure an **Integration** with valid credentials, so this is what you'll do.
 
 Now create a new Integration:
+
 - Access the **RHACS Portal** and configure the already existing integrations of type **Generic Docker Registry**.
 - Go to **Platform Configuration -> Integrations -> Generic Docker Registry**.
 - Click the **New integration** button
@@ -233,6 +243,3 @@ Now create a new Integration:
 ## Architecture recap
 
 {{< figure src="../images/workshop_architecture_stackrox.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-
-
-
