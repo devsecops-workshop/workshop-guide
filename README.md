@@ -7,7 +7,7 @@ The markdown source lives in /content, this repo is rendered with a Hugo static 
 
 ## Running the Guide locally
 
-The guide is based on the static content framework hugo. Make sure to install hugo on your system, then run
+The guide is based on the static content framework hugo. Make sure to install hugo on your system, then run:
 
 ```
 hugo server
