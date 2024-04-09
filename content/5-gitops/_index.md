@@ -57,7 +57,7 @@ ArgoCD works with the concept of **Applications**. We will create an Application
   - Click **Create**
   - Click on **Sync** and then **Synchronize** to manually trigger the first sync
 
-Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the namespace `workshop-prod`. Notice, we also scaling our app to 2 pods in the production stage as we want some high availability. But the actual deployment will not succeed as shown by the 'broken heart' icons! 
+Watch the resources (`Deployment`, `Service`, `Route`) get rolled out to the project `workshop-prod`. Notice, we also scaling our app to 2 pods in the production stage as we want some high availability. But the actual deployment will not succeed as shown by the 'broken heart' icons!
 
 {{% notice info %}}
 Since we have not published our image to the Quay `workshop-prod` repository the initial Deployment will try to roll out non existant image from Quay. Once the first pipeline run is complete, our newly built image will be replaced in the Deployment and rolled out.
@@ -86,7 +86,7 @@ We will need to initialize the `workshop-prod/workshop` in Quay so the robo user
 
 ## Add Kustomize and Git Push Tekton Task
 
-Let's add a new custom Tekton task that can update the Image `tag` via Kustomize after the build and then push the change to our git configuration repository.
+Let's add a new custom Tekton task to the `workshop-int` project that can update the Image `tag` via Kustomize after the build and then push the change to our git configuration repository.
 
 We could add this through the OpenShift Web Console as well but to save time we will apply the file directly via the `oc` command.
 
@@ -97,7 +97,7 @@ We could add this through the OpenShift Web Console as well but to save time we 
 oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/tekton-kustomize.yml
 ```
 
-- In the OpenShift Web Console go to **Pipelines > Tasks > Tasks** and have a look at the just imported task `git-update-deployment`. You should see the git commands how the configuration repository will be cloned, patched by **Kustomize** and then pushed again.
+- In the OpenShift Web Console switch back to project `workshop-int` and then go to **Pipelines > Tasks > Tasks** and have a look at the just imported task `git-update-deployment`. You should see the git commands how the configuration repository will be cloned, patched by **Kustomize** and then pushed again.
 
 ## Add Tekton Tasks to your Pipeline to Promote your Image to workshop-prod
 
