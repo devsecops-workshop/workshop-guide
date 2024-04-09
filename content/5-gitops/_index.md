@@ -25,9 +25,9 @@ So let's start be installing the OpenShift GitOps Operator based on the project 
 
 ## Check the GitOps Config Repository
 
-We already have a second repository in Gitea that holds the required Gitops yaml resources. We will use this repo to push changes to our `workshop-dev` enivronment.
+We already have a second repository, called `openshift-gitops-getting-started` in Gitea that holds the required Gitops yaml resources. We will use this repo to push changes to our `workshop-prod` enivronment.
 
-Have a quick look at the structure of this project:
+Have a quick look at the structure of this git project:
 
 **app** - contains yaml files for the deployment, service and route resources needed by our application. These will be applied to the cluster. There is also a `kustomization.yaml` defining that kustomize layers will be applied to all yamls
 
