@@ -25,9 +25,9 @@ So let's start be installing the OpenShift GitOps Operator based on the project 
 
 ## Check the GitOps Config Repository
 
-We already have a second repository in Gitea that holds the required Gitops yaml resources. We will use this repo to push changes to our `workshop-dev` enivronment.
+We already have a second repository, called `openshift-gitops-getting-started` in Gitea that holds the required Gitops yaml resources. We will use this repo to push changes to our `workshop-prod` enivronment.
 
-Have a quick look at the structure of this project:
+Have a quick look at the structure of this git project:
 
 **app** - contains yaml files for the deployment, service and route resources needed by our application. These will be applied to the cluster. There is also a `kustomization.yaml` defining that kustomize layers will be applied to all yamls
 
@@ -103,7 +103,7 @@ oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/tekt
 
 So now we have a new Tekton Task in our task catalog to update a GitOps Git repository, but we still need to promote the actual image from out `workshop-int` to `workshop-prod` project. Otherwise the image will not be available for our deployment.
 
-- In the ẁorkshop_int` project, go to **Pipelines > Pipelines > workshop** and then YAML
+- In the `workshop_int` project, go to **Pipelines > Pipelines > workshop** and then YAML
 
 {{% notice tip %}}
 You can edit pipelines either directly in YAML or in the visual **Pipeline Builder**. We will see how to use the Builder later on so let's edit the YAML for now.
