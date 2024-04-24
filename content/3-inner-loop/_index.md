@@ -22,17 +22,19 @@ We could create a workspace from one of the templates that come with Dev Spaces,
 {{% /notice %}}
 
 You will now need to access the Gitea repository where your Quarkus app resides and specifically get the path to the devfile.
+
 - Find the Gitea URL by selecting the `git` project in openshift and then **Networking > Routes**
 - Click on the URL and login to Gitea with
   - username : gitea
   - password : gitea
 - On the right side click on the repository `gitea/quarkus-build-options`
 - Then click on the devfile `devspaces_devfile.yml`
-- Now click on button **Raw** (or **Originalversion** in German) and copy this URL
+- Now click on button **Raw** (or **Originalformat** in German) and copy this URL
 
 It is important that you have the URL to the Raw version, otherwise DevSpace will recieve a website that it cannot parse.
 
 Now back in your DevSpaces Workspace :
+
 - In the left menu click on **Create Workspace**
 - Paste the full URL of the devfile that you just copied into the **Git Repo URL** field and click **Create & Open**
 
@@ -64,12 +66,12 @@ Let's clone our project into our workspace :
     {{< figure src="../images/vscode_clone.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
   - Enter the `Git URL` to your **Gitea** Repository (You can copy the URL by clicking on the clipboard icon in **Gitea**) and press enter
     {{< figure src="../images/gitea_clone_icon.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
-- In the following dialog **Choose a folder to clone ...** Click the button **OK**
+- In the following dialog **Choose a folder to clone ...**, move up the dirs and select the `/projects` dir, then click the button **OK**
 - In the following dialog when asked how to open the code, click on **Open**
   {{< figure src="../images/vscode_open_folder.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - The windows will briefly reload and then you will be in the cloned project folder
 - You may have to check "Trust the authors ..." and click `Yes, I trust the authors` again. Last time, promise :)
-{{< figure src="../images/vscode_trust.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
+  {{< figure src="../images/vscode_trust.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 
 ## Access OpenShift and Create the Development Stage Project
 
@@ -117,7 +119,7 @@ odo dev
 
 This will compile the app, start a pod in the OpenShift project and inject the app.
 
-There will be a couple of popups in the bottom right corner
+There will be a couple of popups in the bottom right corner (Click on all of them as explained below)
 
 ![DevSpaces Popups](../images/devspaces_popup.png)
 
@@ -125,9 +127,9 @@ There will be a couple of popups in the bottom right corner
 - "Redirect is not enabled ..." --> Click on **Open in New Tab**
 - "Do you want VS Code - Open Source to open an external website" --> Choose **Open**
 
-A new tab will open and show the webpage of your app. You may have to wait a reload in a few seconds.
+New tabs will open. One with the DevFile Editor and one showing the Quarkus webpage of your app. You may have to wait a reload in a few seconds.
 
-To test the app:
+To test the app in the Quarkus App tab:
 
 Your app should be displayed as a simple web page. In the `RESTEasy JAX-RS` section click the `@Path` endpoint `/hello` to see the result.
 
