@@ -43,6 +43,7 @@ First create a new policy category and the system policy. In the **ACS Portal** 
   - Click **Next**
 - **Policy Scope**
   - You could limit the scope the policy is applied in, do nothing for now
+  - Click **Next**
 - **Review Policy**
   - Have a quick look around, if the policy would create a violation you get a preview here
   - Click **Save**
@@ -71,7 +72,7 @@ To make it easier spotting the violations for this deployment you can filter the
   - When the final build is deployed you'll see a violation in **ACS Portal** for policy `Workshop RHSA-2021:4904` (Check the Time of the violation)
 
 {{% notice tip %}}
-There will be other policy violations listed, triggered by default policies, have a look around. Note that none of the policies is enforced (so that the pipeline build would be stopped) yet!
+There will be other policy violations listed, triggered by default policies, have a look around. Note that none of the policies are enforced (so that the pipeline build would be stopped) yet!
 {{% /notice %}}
 
 Now start the pipeline with the fixed image version that doesn't contain the CVE anymore:

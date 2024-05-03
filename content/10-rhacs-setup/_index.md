@@ -189,7 +189,7 @@ You should now have these two files in your Web Terminal session: `bundle.json` 
 The init bundle needs to be applied to all OpenShift clusters you want to secure and monitor.
 
 {{% notice info %}}
-As said, you can create an init bundle in the ACS Portal, download it and apply it from any terminal where you can run `oc` against your cluster. We did it the API way to show you how to do it and to enable you to use the Web Terminal.
+As said, you can create an init bundle in the ACS Portal, download it and apply it from any terminal where you can run `oc` against your cluster. We used the API method to show you how to use it and to enable you to use the Web Terminal.
 {{% /notice %}}
 
 ### Prepare the Secured Cluster
@@ -233,7 +233,7 @@ Now go to your **ACS Portal** again, after a couple of minutes you should see yo
 
 To enable scanning of images in your Quay registry, you'll have to configure an **Integration** with valid credentials, so this is what you'll do.
 
-Now create a new Integration:
+Now, create a new Integration:
 
 - Access the **RHACS Portal** and configure the already existing integrations of type **Generic Docker Registry**.
 - Go to **Platform Configuration -> Integrations -> Generic Docker Registry**.
