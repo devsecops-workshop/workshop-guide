@@ -86,7 +86,7 @@ We will need to initialize the `workshop-prod/workshop` in Quay so the robo user
 
 ## Add Kustomize and Git Push Tekton Task
 
-Let's add a new custom Tekton task to the `workshop-int` project that can update the Image `tag` via Kustomize after the build and then push the change to our git configuration repository.
+Let's add a new custom Tekton task to the `workshop-int` project that can update the Image `tag` via Kustomize after the build process completed and then push the change to our git configuration repository.
 
 We could add this through the OpenShift Web Console as well but to save time we will apply the file directly via the `oc` command.
 
@@ -101,12 +101,12 @@ oc create -f https://raw.githubusercontent.com/devsecops-workshop/yaml/main/tekt
 
 ## Add Tekton Tasks to your Pipeline to Promote your Image to workshop-prod
 
-So now we have a new Tekton Task in our task catalog to update a GitOps Git repository, but we still need to promote the actual image from out `workshop-int` to `workshop-prod` project. Otherwise the image will not be available for our deployment.
+So now we have a new Tekton Task in our task catalog to update a GitOps Git repository, but we still need to promote the actual image from our `workshop-int` to `workshop-prod` project. Otherwise the image will not be available for our deployment.
 
 - In the `workshop_int` project, go to **Pipelines > Pipelines > workshop** and then YAML
 
 {{% notice tip %}}
-You can edit pipelines either directly in YAML or in the visual **Pipeline Builder**. We will see how to use the Builder later on so let's edit the YAML for now.
+You can edit pipelines either directly in YAML or in the visual **Pipeline Builder**. We will see how to use the Builder later on, so let's edit the YAML for now.
 {{% /notice %}}
 
 Add the new Task to your Pipeline by adding it to the YAML like this:
@@ -176,7 +176,7 @@ The `Pipeline` should now look like this. Notice that the new **tasks** runs in 
 
 {{< figure src="../images/pipeline1.png?width=40pc&classes=border,shadow" title="Click image to enlarge" >}}
 
-Now the pipeline is set. The last thing we need is authentication against the Gitea repository and the workshop-prod Quay org. We will add those from the **_start pipeline_** form next. Make sure to replace the <DOMAIN> placeholder if required.
+Now, the pipeline is set. The last thing we need is authentication against the Gitea repository and the workshop-prod Quay org. We will add those from the **_start pipeline_** form next. Make sure to replace the <DOMAIN> placeholder if required.
 
 ## Update our Prod Stage via Pipeline and GitOps
 

@@ -49,9 +49,10 @@ Even if the form says **Drag and drop file with your value here...** you can jus
 
 ### Remove ImageStream Change Trigger
 
-There is one more thing you have to do before integrating the image scanning into your build pipeline: When you created your deployment, a `trigger` was automatically added that will deploy a new version when the image referenced by the `ImageStream` changes.
+There is one more thing you have to do before integrating the image scanning into your build pipeline:  
+When you created your deployment, a `trigger` was automatically added that deploys a new version when the image referenced by the `ImageStream` changes.
 
-This is not what we want! Because this way a newly build image would be deployed immediately even if the `roxctl` scan finds a policy violation and terminates the pipeline.
+This is not what we want! Because this way a newly build image would be deployed immediately even if the `roxctl` scan detects a policy violation and terminates the pipeline.
 
 Have a look for yourself:
 
@@ -150,7 +151,7 @@ Now add the **rox-image-check** task to your pipeline between the **build** and 
 Remember how we edited the pipeline directly in yaml before? OpenShift comes with a graphical Pipeline editor that we will use this time.
 {{% /notice %}}
 
-- Hover your mouse over `build` task and click the **+** at the right side side of it, to add a task
+- Hover your mouse over `build` task and click the **+** at the right side of it, to add a task
 - Click on **Add task**
 - Then enter **rox-image-check** in the search box
   {{< figure src="../images/pipeline-select-roxctl-task.png?width=30pc&classes=border,shadow" title="Click image to enlarge" >}}
@@ -169,7 +170,7 @@ Remember how we edited the pipeline directly in yaml before? OpenShift comes wit
 
 ### Add the oc patch Task to the Pipeline
 
-As you remember we removed the **trigger** that updates the **Deployment** on **ImageStream** chnages. Now the **Deployment** will never be updated and our new Image version will never be deployed to `workshop-int`.
+As you remember we removed the **trigger** that updates the **Deployment** on **ImageStream** changes. Now the **Deployment** will never be updated and our new Image version will never be deployed to `workshop-int`.
 
 To fix this we will add a new **oc client Task** that updates the **Deployment**, only after the **Scan Task** has run.
 
