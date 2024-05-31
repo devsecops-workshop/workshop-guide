@@ -18,13 +18,15 @@ Let's install [OpenShift Data Foundation](https://www.redhat.com/en/technologies
   {{< figure src="../images/odf-operator.png?width=50pc&classes=border,shadow" title="Click image to enlarge" >}}
 - Install the operator with default settings
 
-After the operator has been installed it will inform you to install a `StorageSystem`. From the operator overview page click `Create StorageSystem` with the following settings:
+After the operator has been installed it will inform you to install a `StorageSystem` and to refresh the web console view. From the operator overview page click `Create StorageSystem` with the following settings:
 
-- **Backing storage**: Leave `Deployment Type` `Full deployment` and for `Backing storage type` make sure `gp2` is selected.
+- **Backing storage**: Leave `Deployment Type` `Full deployment` and for `Backing storage type` make sure `gp2-csi` is selected.
 - Click **Next**
 - **Capacity and nodes**: Leave the `Requested capacity` as is (2 TiB) and select all nodes.
 - Click **Next**
-- **Security and network**: Leave set to `Default (SDN)`
+- **Security and network**: Leave set to `Default (OVN)`.
+- Click **Next**
+- - **Data protection**: Leave default (unselected).
 - Click **Next**
 
 You'll see a review of your settings, hit `Create StorageSystem`. Don't worry if you see a temporary _404 Page_. Just releod the browser page once and you will see the System Overview
