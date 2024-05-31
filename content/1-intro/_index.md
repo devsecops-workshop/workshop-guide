@@ -38,7 +38,7 @@ You'll get all access details for your lab cluster from the facilitators. This i
 
 #### For Facilitators
 
-The easiest way to provide this environment is through the Red Hat Demo System. Provision catalog item **Red Hat OpenShift Container Platform 4 Demo** for the the attendees.
+The easiest way to provide this environment is through the [Red Hat Demo System](https://demo.redhat.com/). Provision catalog item **AWS with OpenShift Open Environment** for the the attendees. Make sure to provision 3 controlplane nodes (similar to m6a.2xlarge) and 3 worker nodes (similar to m6a.4xlarge).
 
 ### Self Hosted
 
