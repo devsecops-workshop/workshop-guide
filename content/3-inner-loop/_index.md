@@ -109,7 +109,7 @@ odo init
 - You can then opt-into telemetry **(Y/n)**
 - A matching Quarkus DevFile is found in the odo repository. Choose **Y** to download
 - You can select a container in which odo will be started. Hit **Enter** (None)
-- As componenten name keep the suggestion. Hit **Enter**
+- As component name keep the suggestion. Hit **Enter**
 
 **odo** is now intialized for your app. Let's deploy the app to openshift in odo dev mode
 
@@ -134,7 +134,7 @@ To test the app in the Quarkus App tab:
 Your app should be displayed as a simple web page. In the `RESTEasy JAX-RS` section click the `@Path` endpoint `/hello` to see the result.
 
 Now for the fun part:  
-Using `odo` you can dynamically change your code and push it again without the need t o build a new container image! No dev magic involved:
+Using `odo` you can dynamically change your code and push it again without the need to build a new container image! No dev magic involved:
 
 - In your DevWorkspace on the left, expand the file tree to open file `src/main/java/org/acme/GreetingRessource.java` and change the string "Hello RESTEasy" to "Hello Workshop" (DevSpaces auto saves every edit directly. No need to save the file manually.)
 
